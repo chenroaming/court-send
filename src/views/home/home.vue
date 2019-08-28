@@ -577,6 +577,8 @@ export default {
                                 smallAry1.push(addAry);
                             }
                         }
+                        
+                        
                         lastAry.push(smallAry1);
                         smallAry1 = [];
                         for (var j = 0; j < newDateAry.length; j++) {
@@ -597,11 +599,79 @@ export default {
                             }
                         }
                         lastAry.push(smallAry1);
+                        
+                        let ddex = 8;
+                        if(allAry.length - 8 > 4 && allAry.length - 8 <= 8){
+                            smallAry1 = [];
+                            for (var j = 0; j < newDateAry.length; j++) {
+                                var dateSmallAry = [];
+                                var fi = 1;
+                                for (var i = 8; i < 12; i++) {
+                                    if (allAry[i].date == newDateAry[j]) {
+                                        fi = 0;
+                                        dateSmallAry.push(allAry[i]);
+                                    }
+                                }
+                                if (fi == 0) {
+                                    var addAry = {
+                                        date: newDateAry[j],
+                                        data: dateSmallAry
+                                    };
+                                    smallAry1.push(addAry);
+                                }
+                            }
+                            lastAry.push(smallAry1);
+                            ddex = 12;
+                        }
+                        if(allAry.length - 8 > 8 && allAry.length - 8 <= 12){
+                            smallAry1 = [];
+                            for (var j = 0; j < newDateAry.length; j++) {
+                                var dateSmallAry = [];
+                                var fi = 1;
+                                for (var i = 12; i < 16; i++) {
+                                    if (allAry[i].date == newDateAry[j]) {
+                                        fi = 0;
+                                        dateSmallAry.push(allAry[i]);
+                                    }
+                                }
+                                if (fi == 0) {
+                                    var addAry = {
+                                        date: newDateAry[j],
+                                        data: dateSmallAry
+                                    };
+                                    smallAry1.push(addAry);
+                                }
+                            }
+                            lastAry.push(smallAry1);
+                            ddex = 16;
+                        }
+                        if(allAry.length - 8 > 12 && allAry.length - 8 <= 16){
+                            smallAry1 = [];
+                            for (var j = 0; j < newDateAry.length; j++) {
+                                var dateSmallAry = [];
+                                var fi = 1;
+                                for (var i = 16; i < 20; i++) {
+                                    if (allAry[i].date == newDateAry[j]) {
+                                        fi = 0;
+                                        dateSmallAry.push(allAry[i]);
+                                    }
+                                }
+                                if (fi == 0) {
+                                    var addAry = {
+                                        date: newDateAry[j],
+                                        data: dateSmallAry
+                                    };
+                                    smallAry1.push(addAry);
+                                }
+                            }
+                            lastAry.push(smallAry1);
+                            ddex = 20;
+                        }
                         smallAry1 = [];
                         for (var j = 0; j < newDateAry.length; j++) {
                             var dateSmallAry = [];
                             var fi = 1;
-                            for (var i = 8; i < allAry.length; i++) {
+                            for (var i = ddex; i < allAry.length; i++) {
                                 if (allAry[i].date == newDateAry[j]) {
                                     fi = 0;
                                     dateSmallAry.push(allAry[i]);
@@ -619,6 +689,8 @@ export default {
                     }
                 }
                 this.courtPlans = lastAry;
+                console.log(1111)
+                console.log(this.courtPlans)
             } else if (res.data.result.state == 101) {
                 this.$Message.error(res.data.result.message);
             }
