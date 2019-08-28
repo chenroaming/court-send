@@ -2,8 +2,8 @@
     <div>
       <Modal  style="margin-bottom: 16px;width:800px" width="760" v-model="cardStateModal"
             title="修改案件状态"
-            @on-ok="save"
-            @on-cancel="cancel" >
+           footer-hide 
+            >
             <p slot="title">
                 修改案件状态
             </p>
@@ -35,9 +35,10 @@
             </div>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
+                    <Button @click="cardStateModal = false" type="text" size="large">取消</Button>
                     <Button v-show="cardState === 1" @click="cardState = 3" type="warning" size="large">修改</Button>
                     <Button v-show="cardState > 1" @click="save" :loading="saved" type="success" size="large">保存</Button>
-                    <Button @click="cardState = 0" type="text" size="large">取消</Button>
+                    
                 </div>
             </div>
         </Modal>
@@ -124,7 +125,7 @@
             title="修改案号"
             @on-ok="ok"
             @on-cancel="cancel">
-            <input type="text" v-model="caseNoUpdate">
+            <Input  type="text" v-model="caseNoUpdate" />
         </Modal>
     </div>
 </template>
@@ -397,9 +398,11 @@ export default {
                         }
                       }
                       this.cardState = 3;
-                      this.cardStateModal=true
+                      
                       this.info = JSON.parse(JSON.stringify(this.info));
                       this.processtList = JSON.parse(JSON.stringify(this.processtList));
+                      console.log(this.processtList)
+                      this.cardStateModal=true
                     }
                   }
                 },
@@ -530,6 +533,7 @@ export default {
         .catch(err => {});
     },
     save(){
+      console.log(this.info.process)
       this.saved = true;
       updateLawCaseState(this.lawcaseId,this.info.process).then(res => {
       this.saved = false;     
