@@ -1805,7 +1805,7 @@ export default {
                         content: "文书生成中，请稍候",
                         duration: item.dipChecked.length * 0.6, // 按照文书数量给后台一点生成pdf文件的时间
                         onClose: () => {
-                        window.open("/" + data.result);
+                        window.open(data.result);
                         }
                     });
                     } else {
@@ -1895,7 +1895,7 @@ export default {
                         }
                     }
                     this.selModel = false;
-                    window.open("/" + data.html);
+                    window.open( data.html);
                     
                 } else {
                     for(let t=0;t<this.info.length;t++){
@@ -1965,7 +1965,7 @@ export default {
                             el.dipChecked.splice(i,1)
                         }
                     }
-                    window.open("/" + data.html);
+                    window.open(data.html);
                 } else {
                     for(var i=0;i<el.dipChecked.length;i++){
                         if(el.dipChecked[i] == el.other){
@@ -3142,7 +3142,7 @@ export default {
                             el.print = 1;
                             el.sendId = mm[m].sendId;
                         }
-                        window.open("/" + mm[m].diplomsPathList);
+                        window.open(mm[m].diplomsPathList);
                     }
                     // if(mm[0].diplomsPathList != ""){
                     //     window.open("/" + mm[0].diplomsPathList);
@@ -3277,7 +3277,7 @@ export default {
                                     content: '文书生成中，请稍候',
                                     duration: 1, // 按照文书数量给后台一点生成pdf文件的时间
                                     onClose: () => {
-                                        window.open('/' + data.result);
+                                        window.open(data.result);
                                     }
                                 });
                                 item.buttonP = true;
@@ -3357,7 +3357,7 @@ export default {
                                     content: '文书生成中，请稍候',
                                     duration: 1, // 按照文书数量给后台一点生成pdf文件的时间
                                     onClose: () => {
-                                        window.open('/' + data.result);
+                                        window.open(data.result);
                                     }
                                 });
                                 this.RequestContentItem.buttonP = true;
@@ -3443,7 +3443,7 @@ export default {
                 content: '文书生成中，请稍候',
                 duration: 0.6, // 按照文书数量给后台一点生成pdf文件的时间
                 onClose: () => {
-                    window.open('/' + result);
+                    window.open(result);
                 }
             });
             console.log(value+111111111)
@@ -3526,7 +3526,7 @@ export default {
                         content: '文书生成中，请稍候',
                         duration: 3, // 给后台一点生成pdf文件的时间
                         onClose: () => {
-                            window.open('/' + data.result);
+                            window.open(data.result);
                         }
                     });
                     that.diplist.spin = false;
