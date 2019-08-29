@@ -53,13 +53,13 @@
             </Col> -->
             <Col :md="24" :lg="24" style="height:45%;margin-bottom:10px">
                 <Row class-name="home-page-row1" style="height:100%" :gutter="10">
-                    <Col :md="16" :lg="16" :style="{marginBottom: '10px'}" style="height:100%">
+                    <Col :md="17" :lg="17" :style="{marginBottom: '10px'}" style="height:100%">
                         <Card style="height:100%">
                             <div id="charts-m" :style="{width: '100%',height: '100%',backgroundColor: '#F7F7F7'}">
                             </div>
                         </Card>
                     </Col>
-                    <Col :md="8" :lg="8" :style="{marginBottom: '10px',backgroundColor: '#F7F7F7'}" style="height:100%">
+                    <Col :md="7" :lg="7" :style="{marginBottom: '10px',backgroundColor: '#F7F7F7'}" style="height:100%">
                         <Card style="height:100%">
                             <div  :style="{lineHeight: '20px', paddingBottom: '10px',borderBottom:'1px solid #ccc'}"><span :style="{fontSize:'18px'}">庭审排期</span> <a href="#"  v-on:click="showCourtDate" :style="{float: 'right',fontSize:'18px'}">查看更多>></a></div>
                             <div  :style="{height: '95%',textAlign:'center'}">
@@ -446,7 +446,11 @@ export default {
                     value: res.data.result.allCaseCount,
                     name: '受理案件'
                 };
-                var caseAry = [ary4, ary1, ary2, ary3];
+                var ary6 = {
+                    value: res.data.result.endOpenCount,
+                    name: '已完结案件数'
+                };
+                var caseAry = [ary4, ary1, ary2, ary3, ary6];
                 var waitshCase = [ary5];
                 this.drawChart1(waitshCase, caseAry);
             } else if (res.data.result.state == 101) {
@@ -753,13 +757,14 @@ export default {
                 },
                 legend: {
                     y: 'top',
-                    right: 40,
+                    right: 20,
                     data: [
                         '受理案件',
                         '待排期案件数',
                         '待送达案件数',
                         '已送达案件数',
-                        '已开庭案件数'
+                        '已开庭案件数',
+                        '已完结案件数'
                     ]
                 },
                 series: [

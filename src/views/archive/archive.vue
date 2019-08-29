@@ -236,7 +236,17 @@ export default {
           title: "文件名",
           key: "name",
           align: "center",
-          ellipsis: true
+          ellipsis: true,
+          render:(h,params)=>{
+                return h('p',{
+                  style:{
+                    cursor:'pointer'
+                  },
+                  domProps: {
+                    title: params.row.name,
+                  },
+                },params.row.name)
+          }
         },
         {
           title: "页数",
@@ -274,9 +284,19 @@ export default {
         },
         {
           title: "文件名",
-          key: "name",
+          key: "name1",
           align: "center",
-          ellipsis: true
+          ellipsis: true,
+          render:(h,params)=>{
+                return h('p',{
+                  style:{
+                    cursor:'pointer'
+                  },
+                  domProps: {
+                    title: params.row.name,
+                  },
+                },params.row.name)
+          }
         },
         {
           title: "页数",
