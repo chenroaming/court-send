@@ -1021,6 +1021,7 @@ export default {
             nist:[],
             otherfileNlist:[],
             userCourtName:this.$store.state.app.courtName,
+            userName:this.$store.state.name,
             otherLoading:false,
             fileNameShen2:"",
             onlineEAIdShen2:"",
@@ -1192,7 +1193,6 @@ export default {
                 this.getInfo(caseId);
             }
         }
-        console.log(this.lawCaseId)
         if (this.caseNo != '') {
             this.queryCase()
         
@@ -2186,7 +2186,7 @@ export default {
             this.nist = [];
             this.otherfileNlist = [];
             getUserInfo().then(res => {
-                console.log(res.data)
+                this.userName = res.data.result.name;
                 if (res.data.state==100) {
                     this.courtId=res.data.court.id
                     console.log(this.courtId)
@@ -2282,7 +2282,7 @@ export default {
                                     edit:false,
                                 });
                                 if (el.litigationStatusName == '原告') {
-                                    if (ee == '传票' || ee == '传票(存根)') {
+                                    if(ee == '传票'){
                                         el.dipChecked.push(ee);
                                         el.defoultChecked.push(ee);
                                         if(el.dipChecked.length > 1){
@@ -2291,7 +2291,24 @@ export default {
                                             strs =strs + ee + ",";
                                         }
                                     }
-
+                                    if(ee == '传票(存根)' && this.userName != '沈春福'){
+                                        el.dipChecked.push(ee);
+                                        el.defoultChecked.push(ee);
+                                        if(el.dipChecked.length > 1){
+                                            strs =strs + ee;
+                                        }else{
+                                            strs =strs + ee + ",";
+                                        }
+                                    }
+                                    // if (ee == '传票' || ee == '传票(存根)' && this.userName != '沈春福') {
+                                    //     el.dipChecked.push(ee);
+                                    //     el.defoultChecked.push(ee);
+                                    //     if(el.dipChecked.length > 1){
+                                    //         strs =strs + ee;
+                                    //     }else{
+                                    //         strs =strs + ee + ",";
+                                    //     }
+                                    // }
                                 }
                                 // else if(el.litigationStatusName == "第三人"){
                                 //     if (ee == '送达地址确认书' || ee == '诉讼权利义务告知书' || ee == "应诉通知书" || ee == "传票" || ee == "廉政监督卡" || ee == "举证通知书" || ee == "送达地址有关事项告知书") {
