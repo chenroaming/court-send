@@ -103,8 +103,8 @@
                     </tr>
                 </table>
             </Card>
-            <litigantInfo @refreshList="onRefreshList" title="原告信息" type="plaintiff" :lowCaseId="caseInfo.id" :data="plaintiffList" :changeCaseInfo="changeCaseInfo" :caseLoading="caseLoading" ref="revertsList1" />
-            <litigantInfo @refreshList="onRefreshList" title="被告信息" type="defendant" :lowCaseId="caseInfo.id" :data="defendantList" :changeCaseInfo="changeCaseInfo" :caseLoading="caseLoading" ref="revertsList2" />
+            <litigantInfo @refreshList="onRefreshList" :title="this.caseInfo.brief == '申请支付令'? '申请人信息':'原告信息'" type="plaintiff" :lowCaseId="caseInfo.id" :data="plaintiffList" :changeCaseInfo="changeCaseInfo" :caseLoading="caseLoading" ref="revertsList1" />
+            <litigantInfo @refreshList="onRefreshList" :title="this.caseInfo.brief == '申请支付令'? '被申请人信息':'被告信息'" type="defendant" :lowCaseId="caseInfo.id" :data="defendantList" :changeCaseInfo="changeCaseInfo" :caseLoading="caseLoading" ref="revertsList2" />
             <litigantInfo @refreshList="onRefreshList" title="第三人信息" type="third" :lowCaseId="caseInfo.id" :data="thirdList" :changeCaseInfo="changeCaseInfo" :caseLoading="caseLoading" ref="revertsList3" />
         </div>
         <Modal
@@ -488,7 +488,9 @@ export default {
             ocrData: {
                 plaintiff: [],
                 defendant: []
-            }
+            },
+            // plaintiff:'原告信息',
+            // defendant:'被告信息',
         };
     },
     created: function () {
@@ -678,6 +680,10 @@ export default {
                         if (res.data.state === 100) {
                             this.$Message.success(res.data.message);
                             clerk: '', (this.changeCaseInfo = false);
+                            // if(this.caseInfo.brief == '申请支付令'){//判断为申请支付令时改变标题栏内容
+                            //     this.plaintiff = '申请人信息';
+                            //     this.defendant = '被申请人信息';
+                            // }
                         } else {
                             this.$Message.error(res.data.message);
                         }
@@ -828,6 +834,13 @@ export default {
                         this.caseInfo.filingDate = caseInfo.filingDate;
                         this.caseInfo.expireDate = caseInfo.expireDate;
                         this.caseInfo.brief = caseInfo.brief.name;
+                        // if(this.caseInfo.brief == '申请支付令'){//判断为申请支付令时改变标题栏内容，不好的写法，直接用三目表达式即可
+                        //     this.plaintiff = '申请人信息';
+                        //     this.defendant = '被申请人信息';
+                        // }else{
+                        //     this.plaintiff = '原告信息';
+                        //     this.defendant = '被告信息';
+                        // }
                         this.caseInfo.applyStandard = caseInfo.applyStandard;
                         this.caseInfo.allMembers =
               caseInfo.allMembers == null ? '' : caseInfo.allMembers;
@@ -969,6 +982,13 @@ export default {
                             this.caseInfo.filingDate = caseInfo.filingDate;
                             this.caseInfo.expireDate = caseInfo.expireDate;
                             this.caseInfo.brief = caseInfo.brief.name;
+                            // if(this.caseInfo.brief == '申请支付令'){//判断为申请支付令时改变标题栏内容，其实直接用三目即可
+                            //     this.plaintiff = '申请人信息';
+                            //     this.defendant = '被申请人信息';
+                            // }else{
+                            //     this.plaintiff = '原告信息';
+                            //     this.defendant = '被告信息';
+                            // }                 
                             this.caseInfo.applyStandard = caseInfo.applyStandard;
                             this.caseInfo.allMembers =
                 caseInfo.allMembers == null ? '' : caseInfo.allMembers;
