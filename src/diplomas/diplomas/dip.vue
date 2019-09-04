@@ -1180,7 +1180,8 @@ export default {
             RequestContentShow:false,
             RequestContentItem:{},
 
-            courtId:''
+            courtId:'',
+            // dipCheckedList:[],
         };
     },
     mounted () {
@@ -2498,7 +2499,7 @@ export default {
             //         item.dipChecked.push(item.disabledGroup[i])
             //     }
             // }
-            console.log(item.dipChecked);
+            // console.log(item.dipChecked);
             var str = "";
             for(let i = 0;i<item.dipChecked.length;i++){
                 if(item.dipChecked[i] != "证据材料" && item.dipChecked[i] != "起诉状" && item.dipChecked[i] != "答辩状" && item.dipChecked[i] != "上诉状"&& item.dipChecked[i] != "民事裁定书" ){
@@ -2511,7 +2512,7 @@ export default {
             }
             queryDiplomsIsAdd(item.litigantId,str).then(res => {
                 if(res.data.state == 100){
-                    console.log(res.data.result.length)
+                    // console.log(res.data.result.length)
                     if(res.data.result.length == 0 || res.data.result[0] == ""){
                         for(var i = 0;i<this.info.length;i++){
                             if(this.info[i].litigantId == item.litigantId){
@@ -2531,17 +2532,19 @@ export default {
                     }
                 }else if(res.data.state == 101 && res.data.message == '请选择要查询的文书!'){
                     for(var i = 0;i<this.info.length;i++){
-                        if(this.info[i].litigantId == item.litigantId){
+                        if(this.info[i].litigantId == item.litigantId && item.disabledGroup.length == 0 && item.otherGroup.length == 0){
                             this.info[i].buttonP = false;
                             this.info[i].buttonpf = false;
+                            Vue.set(this.info, i, this.info[i]);
+                        }else{
+                            this.info[i].buttonP = true;
+                            this.info[i].buttonpf = true;
                             Vue.set(this.info, i, this.info[i]);
                         }
                     }
                 }
             })
             this.info = JSON.parse(JSON.stringify(this.info));
-
-
         },
         wxTpChange(data){
             for(let i=0;i<this.emailModelList.length;i++){
@@ -2666,7 +2669,7 @@ export default {
             }
             data.emsAdressList.push(da);
             data.adId = data.adId+1;
-            console.log(data)
+            // console.log(data)
             this.info = JSON.parse(JSON.stringify(this.info));
         },
         otherdipCheckedChange(data){
@@ -2676,30 +2679,44 @@ export default {
                     p = p - 1;    //改变循环变量
                 }
             }
-            console.log(data.disabledGroup)
+            console.log(data.disabledGroup);
+            console.log(data.buttonP);
+            console.log(data.dipChecked);
+            if(data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0){
+                data.buttonP = true;
+            }else{
+                data.buttonP = false;
+            }
             // for(let i = 0;i<data.disabledGroup.length;i++){
             //     if(data.disabledGroup[i] != ""){
             //         data.dipChecked.push(data.disabledGroup[i]);
             //     }
             // }
-            console.log(data.dipChecked)
+            // console.log(data.dipChecked)
             // vue对象数据更新
             this.info = JSON.parse(JSON.stringify(this.info));
         },
         dipOtherGroupChange(data){
-            console.log(data)
-            console.log(data.otherGroup)
-            if(data.otherGroup.length != 0){
+            // console.log(data);
+            // console.log(data.otherGroup);
+            //  console.log(data.dipChecked);
+            if(data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0){
                 data.buttonP = true;
-            }else if(data.otherGroup.length == 0 && data.buttonpf == false){
+            }else{
                 data.buttonP = false;
             }
+            // if(data.otherGroup.length != 0){
+            //     data.buttonP = true;
+            // }else if(data.otherGroup.length == 0 && data.buttonpf == false){
+            //     data.buttonP = false;
+            // }
             this.info = JSON.parse(JSON.stringify(this.info));
         },
         isCheckeds(e){
             console.log(e)
         },
         dipCheckedChange (data,e) {
+            
             if(data.dipChecked.length > 0){
                let aryss =  R.difference(data.oldCkecked,data.dipChecked);
                 if(aryss.length != 0 && aryss[0] == "外出传票"){
@@ -2712,8 +2729,7 @@ export default {
                         let arrr  = ["传票","传票(存根)","外出传票(存根)"]
                         data.dipChecked.push(...arrr)
                     }
-                }
-                
+                }   
             }
             this.editss = '';
             var str = "";
@@ -2778,7 +2794,7 @@ export default {
             }
             queryDiplomsIsAdd(data.litigantId,str).then(res => {
                 if(res.data.state == 100){
-                    console.log(res.data.result.length)
+                    // console.log(res.data.result.length)
                     if(res.data.result.length == 0 || res.data.result[0] == ""){
                         for(var i = 0;i<this.info.length;i++){
                             if(this.info[i].litigantId == data.litigantId){
@@ -2797,6 +2813,18 @@ export default {
                         }
                         // data.buttonP = false;
                         // this.info = JSON.parse(JSON.stringify(this.info));
+                    }
+                }else if(res.data.state == 101 && res.data.message == '请选择要查询的文书!'){
+                    for(var i = 0;i<this.info.length;i++){
+                        if(this.info[i].litigantId == data.litigantId && data.disabledGroup.length == 0 && data.otherGroup.length == 0){
+                            this.info[i].buttonP = false;
+                            this.info[i].buttonpf = false;
+                            Vue.set(this.info, i, this.info[i]);
+                        }else{
+                            this.info[i].buttonP = true;
+                            this.info[i].buttonpf = true;
+                            Vue.set(this.info, i, this.info[i]);
+                        }
                     }
                 }
             })
