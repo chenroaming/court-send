@@ -1181,7 +1181,7 @@ export default {
             RequestContentItem:{},
 
             courtId:'',
-            // dipCheckedList:[],
+            buttonPstatus:false,
         };
     },
     mounted () {
@@ -2518,6 +2518,7 @@ export default {
                             if(this.info[i].litigantId == item.litigantId){
                                 this.info[i].buttonP = true;
                                 this.info[i].buttonpf = true;
+                                this.buttonPstatus = true;
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2526,6 +2527,7 @@ export default {
                             if(this.info[i].litigantId == item.litigantId){
                                 this.info[i].buttonP = false;
                                 this.info[i].buttonpf = false;
+                                this.buttonPstatus = false;
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2536,9 +2538,11 @@ export default {
                             this.info[i].buttonP = false;
                             this.info[i].buttonpf = false;
                             Vue.set(this.info, i, this.info[i]);
+                            this.buttonPstatus = false;
                         }else{
                             this.info[i].buttonP = true;
                             this.info[i].buttonpf = true;
+                            this.buttonPstatus = false;
                             Vue.set(this.info, i, this.info[i]);
                         }
                     }
@@ -2679,10 +2683,11 @@ export default {
                     p = p - 1;    //改变循环变量
                 }
             }
-            console.log(data.disabledGroup);
-            console.log(data.buttonP);
-            console.log(data.dipChecked);
-            if(data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0){
+            // console.log(data.disabledGroup);
+            // console.log(data.buttonP);
+            // console.log(data.dipChecked);
+            console.log(this.buttonPstatus);
+            if((data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0) && this.buttonPstatus == true){
                 data.buttonP = true;
             }else{
                 data.buttonP = false;
@@ -2700,7 +2705,8 @@ export default {
             // console.log(data);
             // console.log(data.otherGroup);
             //  console.log(data.dipChecked);
-            if(data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0){
+            console.log(this.buttonPstatus);
+            if((data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0) && this.buttonPstatus == true){
                 data.buttonP = true;
             }else{
                 data.buttonP = false;
@@ -2800,6 +2806,7 @@ export default {
                             if(this.info[i].litigantId == data.litigantId){
                                 this.info[i].buttonP = true;
                                 this.info[i].buttonpf = true;
+                                this.buttonPstatus = true;
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2808,21 +2815,22 @@ export default {
                             if(this.info[i].litigantId == data.litigantId){
                                 this.info[i].buttonP = false;
                                 this.info[i].buttonpf = false;
+                                this.buttonPstatus = false;
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
-                        // data.buttonP = false;
-                        // this.info = JSON.parse(JSON.stringify(this.info));
                     }
                 }else if(res.data.state == 101 && res.data.message == '请选择要查询的文书!'){
                     for(var i = 0;i<this.info.length;i++){
                         if(this.info[i].litigantId == data.litigantId && data.disabledGroup.length == 0 && data.otherGroup.length == 0){
                             this.info[i].buttonP = false;
                             this.info[i].buttonpf = false;
+                            this.buttonPstatus = false;
                             Vue.set(this.info, i, this.info[i]);
                         }else{
                             this.info[i].buttonP = true;
                             this.info[i].buttonpf = true;
+                            this.buttonPstatus = true;
                             Vue.set(this.info, i, this.info[i]);
                         }
                     }
