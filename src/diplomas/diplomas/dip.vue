@@ -2112,6 +2112,7 @@ export default {
                         this.info[i].disabledGroup = [];
                         this.info[i].buttonP = true;
                         this.info[i].buttonpf = true;
+                        // this.buttonPstatus = true;
                         this.info = JSON.parse(JSON.stringify(this.info));
                     }
                 }
@@ -2359,10 +2360,12 @@ export default {
                                     that.info[i].buttonP = true;
                                     that.info[i].buttonpf = true;
                                     Vue.set(that.info, i, that.info[i]);
+                                    // that.buttonPstatus = true;
                                 }else{
                                     that.info[i].buttonP = false;
                                     that.info[i].buttonpf = false;
                                     Vue.set(that.info, i, that.info[i]);
+                                    // that.buttonPstatus = false;
                                 }
                             }
                         })
@@ -2519,6 +2522,7 @@ export default {
                                 this.info[i].buttonP = true;
                                 this.info[i].buttonpf = true;
                                 this.buttonPstatus = true;
+                                // console.log(this.buttonPstatus);
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2528,6 +2532,7 @@ export default {
                                 this.info[i].buttonP = false;
                                 this.info[i].buttonpf = false;
                                 this.buttonPstatus = false;
+                                // console.log(this.buttonPstatus);
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2539,12 +2544,14 @@ export default {
                             this.info[i].buttonpf = false;
                             Vue.set(this.info, i, this.info[i]);
                             this.buttonPstatus = false;
-                        }else{
-                            this.info[i].buttonP = true;
-                            this.info[i].buttonpf = true;
-                            this.buttonPstatus = false;
-                            Vue.set(this.info, i, this.info[i]);
+                            // console.log(this.buttonPstatus);
+                            break;
                         }
+                        this.info[i].buttonP = true;
+                        this.info[i].buttonpf = true;
+                        this.buttonPstatus = true;
+                        // console.log(this.buttonPstatus);
+                        Vue.set(this.info, i, this.info[i]);
                     }
                 }
             })
@@ -2683,15 +2690,21 @@ export default {
                     p = p - 1;    //改变循环变量
                 }
             }
+            if(data.disabledGroup.length > 0 && data.dipChecked.length == 0){
+                this.buttonPstatus = true;
+            }
             // console.log(data.disabledGroup);
-            // console.log(data.buttonP);
+            // console.log(data.otherGroup);
             // console.log(data.dipChecked);
-            console.log(this.buttonPstatus);
+            // console.log(this.buttonPstatus);
             if((data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0) && this.buttonPstatus == true){
                 data.buttonP = true;
+                // this.buttonPstatus = true;
             }else{
                 data.buttonP = false;
+                // this.buttonPstatus = false;
             }
+            // console.log(data.buttonP);
             // for(let i = 0;i<data.disabledGroup.length;i++){
             //     if(data.disabledGroup[i] != ""){
             //         data.dipChecked.push(data.disabledGroup[i]);
@@ -2705,11 +2718,16 @@ export default {
             // console.log(data);
             // console.log(data.otherGroup);
             //  console.log(data.dipChecked);
-            console.log(this.buttonPstatus);
+            // console.log(this.buttonPstatus);
+            if(data.otherGroup.length > 0 && data.dipChecked.length == 0){
+                this.buttonPstatus = true;
+            }
             if((data.disabledGroup.length > 0 || data.otherGroup.length > 0 || data.dipChecked.length > 0) && this.buttonPstatus == true){
                 data.buttonP = true;
+                // this.buttonPstatus = true;
             }else{
                 data.buttonP = false;
+                // this.buttonPstatus = false;
             }
             // if(data.otherGroup.length != 0){
             //     data.buttonP = true;
@@ -2807,6 +2825,7 @@ export default {
                                 this.info[i].buttonP = true;
                                 this.info[i].buttonpf = true;
                                 this.buttonPstatus = true;
+                                console.log(this.buttonPstatus);
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2816,6 +2835,7 @@ export default {
                                 this.info[i].buttonP = false;
                                 this.info[i].buttonpf = false;
                                 this.buttonPstatus = false;
+                                console.log(this.buttonPstatus);
                                 Vue.set(this.info, i, this.info[i]);
                             }
                         }
@@ -2826,11 +2846,13 @@ export default {
                             this.info[i].buttonP = false;
                             this.info[i].buttonpf = false;
                             this.buttonPstatus = false;
+                            console.log(this.buttonPstatus);
                             Vue.set(this.info, i, this.info[i]);
                         }else{
                             this.info[i].buttonP = true;
                             this.info[i].buttonpf = true;
                             this.buttonPstatus = true;
+                            console.log(this.buttonPstatus);
                             Vue.set(this.info, i, this.info[i]);
                         }
                     }
