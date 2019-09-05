@@ -532,7 +532,7 @@ export default {
                         content: '封皮生成中，请稍候',
                         duration: 1, // 给后台一点生成pdf文件的时间
                         onClose: () => {
-                            window.open('/' + data.result);
+                            window.open(data.result);
                         }
                     });
                 }else{
@@ -825,6 +825,7 @@ export default {
                         const caseInfo = res.data.result.caseInfo;
                         const defendantList = res.data.result.defendantList;
                         const plaintiffList = res.data.result.plaintiffList;
+                        
                         const thirdList = res.data.result.thirdList;
                         this.caseInfo.id = caseInfo.id.toString();
                         this.caseInfo.caseNo = caseInfo.caseNo;
