@@ -987,6 +987,10 @@ export default {
                         }
                     }
                 },
+                grid:{
+                    x:'10%',
+                    y:'5%',
+                },
                 series: [
                     {
                         data: seriesdata,
@@ -1012,7 +1016,7 @@ export default {
                                 },
                                 barBorderRadius: [5, 5, 5, 5]
                             }
-                        }
+                        },
                     }
                 ]
             });
