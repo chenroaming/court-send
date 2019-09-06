@@ -2566,7 +2566,7 @@ export default {
             }
             data = JSON.parse(JSON.stringify(data))
         },
-        wxNumberChange(data){
+        wxNumberChange(data){   
 
             data.wechatList.map(item => {
                 if(item.admin == data.wechatNumber){

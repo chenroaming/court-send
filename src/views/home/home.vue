@@ -51,7 +51,7 @@
                     </Col>
                 </Row>
             </Col> -->
-            <Col :md="24" :lg="24" style="height:45%;margin-bottom:10px">
+            <Col :md="24" :lg="24" style="height:50%;margin-bottom:10px">
                 <Row class-name="home-page-row1" style="height:100%" :gutter="10">
                     <Col :md="17" :lg="17" :style="{marginBottom: '10px'}" style="height:100%">
                         <Card style="height:100%">
@@ -210,7 +210,7 @@
                   </Col>
               </Row>
           </Modal>
-            <Col :md="12" :lg="12" style="height:45%">
+            <Col :md="12" :lg="12" style="height:60%">
                 <Row class-name="home-page-row1" :gutter="10" style="height:100%">
                     
                     <Col :md="24" :lg="24" :style="{marginBottom: '10px'}"  style="height:100%">
@@ -255,7 +255,7 @@
                     </Col>               
                 </row>
             </Col>
-            <Col :md="12" :lg="12" style="height:45%">
+            <Col :md="12" :lg="12" style="height:60%">
                 <Row class-name="home-page-row1" :gutter="10"  style="height:100%">                    
                     <Col :md="24" :lg="24" :style="{marginBottom: '10px'}"  style="height:100%">
                         <Card  style="height:100%">
@@ -448,7 +448,7 @@ export default {
                 };
                 var ary6 = {
                     value: res.data.result.endOpenCount,
-                    name: '已完结案件数'
+                    name: '已结案件数'
                 };
                 var caseAry = [ary4, ary1, ary2, ary3, ary6];
                 var waitshCase = [ary5];
@@ -764,7 +764,7 @@ export default {
                         '待送达案件数',
                         '已送达案件数',
                         '已开庭案件数',
-                        '已完结案件数'
+                        '已结案件数'
                     ]
                 },
                 series: [
@@ -781,6 +781,7 @@ export default {
                                 fontWeight: 600
                             }
                         },
+                        center: ['50%', '60%'],
                         data: waitshCase
                     },
                     {
@@ -817,6 +818,7 @@ export default {
                                 }
                             }
                         },
+                        center: ['50%', '60%'],
                         data: aryData
                     }
                 ]
