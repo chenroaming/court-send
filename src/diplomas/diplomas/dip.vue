@@ -273,44 +273,81 @@
                 <div v-if="item.diplist" style="border-top:1px solid #e9eaec;" >
                         <Row>
                             <CheckboxGroup v-model="item.disabledGroup" @on-change="otherdipCheckedChange(item)">
-                                <Col span="4" class="maininfo-col">
-                                    <Checkbox label="证据材料" ></Checkbox>
+                                <Row style="margin-bottom:10px;">
+                                <Col span="6" class="otherCol">
+                                    <div>
+                                        <Checkbox label="证据材料" ></Checkbox>
+                                        <span class="selDipcs" @click="selectArc(item,'证据材料')">选择</span>
+                                    </div>
+                                    
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.zjclfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'证据材料')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
-                                <Col span="4" class="maininfo-col">
+                                <Col span="6" class="otherCol">
                                     <Checkbox label="起诉状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'起诉状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.qsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'起诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
-                                <Col span="4" class="maininfo-col">
+                                <Col span="6" class="otherCol">
                                     <Checkbox label="反诉状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'反诉状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.fsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'反诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
-                                <Col span="4" class="maininfo-col">
+                                <Col span="6" class="otherCol">
                                     <Checkbox label="答辩状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'答辩状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.dbfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'答辩状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
-                                <Col span="4" class="maininfo-col">
+                                </Row>
+                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
                                     <Checkbox label="上诉状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'上诉状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.ssfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'上诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
-                                <Col span="4" class="maininfo-col">
+                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
                                     <Checkbox label="民事裁定书" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'民事裁定书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.mscdsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'民事裁定书')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
                                 </Col>
+                                
                             </CheckboxGroup>
-                            <Col span="4" class="maininfo-col">
-                                <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input></Checkbox>
-                            </Col>
+                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input>
+                                    </Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'其他')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.qtfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'其他')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                    </div>
+                                </Col>
                             <CheckboxGroup v-model="item.otherGroup"  @on-change="dipOtherGroupChange(item)">
-                            <Col span="6" class="otherCol">
+                            <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
                                 <Checkbox label="上传证据"></Checkbox>
                                 <Upload multiple :show-upload-list="false"  :on-success="uploadZhengJ" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
                                     <Button type="ghost" icon="ios-cloud-upload-outline">上传证据</Button>
                                 </Upload>
+                                <span class="selDipcs" @click="selectArc(item,'上传证据')">选择</span>
                                 <div style="display:block;text-align:right;padding-right:5px;">
                                     <p v-for="op in item.ZhengJfileNlist">{{op.name}}<span @click="delZhengJFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
                                 </div>
                             </Col>
+                            
                             </CheckboxGroup>
                         </Row>
 
                     <!-- <Row> -->
 
-                    <!-- </Row> -->
+                    <!-- </Row> -->`
                 </div>
                 <div style="line-height: 38px;border-right:1px solid #e9eaec;border-top:1px solid #e9eaec;" >
                      &nbsp;&nbsp; 裁判文书(上传文件格式支持：doc、docx、pdf)
@@ -1252,6 +1289,40 @@ export default {
                         d.cqfileNlist.push(item)
                     })
                 }
+
+                else if(st == '证据材料'){
+                    ary.map(item => {
+                        d.zjclfileNlist.push(item)
+                    })
+                }else if(st == '起诉状'){
+                    ary.map(item => {
+                        d.qsfileNlist.push(item)
+                    })
+                }else if(st == '反诉状'){
+                    ary.map(item => {
+                        d.fsfileNlist.push(item)
+                    })
+                }else if(st == '答辩状'){
+                    ary.map(item => {
+                        d.dbfileNlist.push(item)
+                    })
+                }else if(st == '上诉状'){
+                    ary.map(item => {
+                        d.ssfileNlist.push(item)
+                    })
+                }else if(st == '民事裁定书'){
+                    ary.map(item => {
+                        d.mscdsfileNlist.push(item)
+                    })
+                }else if(st == '其他'){
+                    ary.map(item => {
+                        d.qtfileNlist.push(item)
+                    })
+                }else if(st == '上传证据'){
+                    ary.map(item => {
+                        d.ZhengJfileNlist.push(item)
+                    })
+                }
                 this.viewDipmos = false;
                 break;
             }
@@ -1463,6 +1534,59 @@ export default {
                 if(data.ZhengJfileNlist[i].name == str){
                     data.ZhengJfileNlist.splice(i,1);
                     break;
+                }
+            }
+            this.info = JSON.parse(JSON.stringify(this.info));
+        },
+        delFileList(data,str,ob){
+            if(ob == '证据材料'){
+                for(let i=0;i<data.zjclfileNlist.length;i++){
+                    if(data.zjclfileNlist[i].name == str){
+                        data.zjclfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='起诉状'){
+                for(let i=0;i<data.qsfileNlist.length;i++){
+                    if(data.qsfileNlist[i].name == str){
+                        data.qsfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='反诉状'){
+                for(let i=0;i<data.fsfileNlist.length;i++){
+                    if(data.fsfileNlist[i].name == str){
+                        data.fsfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='答辩状'){
+                for(let i=0;i<data.dbfileNlist.length;i++){
+                    if(data.dbfileNlist[i].name == str){
+                        data.dbfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='上诉状'){
+                for(let i=0;i<data.ssfileNlist.length;i++){
+                    if(data.ssfileNlist[i].name == str){
+                        data.ssfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='民事裁定书'){
+                for(let i=0;i<data.mscdsfileNlist.length;i++){
+                    if(data.mscdsfileNlist[i].name == str){
+                        data.mscdsfileNlist.splice(i,1);
+                        break;
+                    }
+                }
+            }else if(ob =='其他'){
+                for(let i=0;i<data.qtfileNlist.length;i++){
+                    if(data.qtfileNlist[i].name == str){
+                        data.qtfileNlist.splice(i,1);
+                        break;
+                    }
                 }
             }
             this.info = JSON.parse(JSON.stringify(this.info));
@@ -2260,6 +2384,16 @@ export default {
                         el.qifileNlist = [];
                         el.cqfileNlist = [];
                         el.minShifileNlist=[];
+
+                        el.zjclfileNlist=[];    //证据材料文件列表
+                        el.qsfileNlist=[];      //起诉状文件列表
+                        el.fsfileNlist=[];      //反诉状文件列表
+                        el.dbfileNlist=[];      //答辩状文件列表
+                        el.ssfileNlist=[];      //上诉状文件列表
+                        el.mscdsfileNlist=[];      //民事裁定书文件列表
+                        el.qtfileNlist=[];      //其他文件列表
+                        // el.sczjfileNlist=[];      //上传证据文件列表
+
                         el.otherGroup = [];
                         el.adId = 1;
                         el.defoultChecked=[];   //缓存默认选择的
@@ -2566,7 +2700,7 @@ export default {
             }
             data = JSON.parse(JSON.stringify(data))
         },
-        wxNumberChange(data){   
+        wxNumberChange(data){
 
             data.wechatList.map(item => {
                 if(item.admin == data.wechatNumber){
@@ -2684,6 +2818,9 @@ export default {
             this.info = JSON.parse(JSON.stringify(this.info));
         },
         otherdipCheckedChange(data){
+            if(data.dipChecked.length > 0){
+                return;
+            }
             for(var p = 0;p<data.dipChecked.length;p++){
                 if(data.dipChecked[p] == "证据材料" || data.dipChecked[p] == "起诉状" || data.dipChecked[p] == "答辩状" || data.dipChecked[p] == "上诉状" || data.dipChecked[p] == "民事裁定书" || data.dipChecked[p] == ""){
                     data.dipChecked.splice(p,1)
@@ -2715,6 +2852,9 @@ export default {
             this.info = JSON.parse(JSON.stringify(this.info));
         },
         dipOtherGroupChange(data){
+            if(data.dipChecked.length > 0){
+                return;
+            }
             // console.log(data);
             // console.log(data.otherGroup);
             //  console.log(data.dipChecked);
@@ -2912,13 +3052,16 @@ export default {
             if(el.checkBo ==true){
                 el.disabledGroup.push(el.other)
             }
-            for(let o=0;o<el.disabledGroup.length;o++){
-                if(el.otherGroup.length == 0 && o == el.disabledGroup.length - 1){
-                    evidenceListStr = evidenceListStr + el.disabledGroup[o];
-                }else{
-                    evidenceListStr = evidenceListStr + el.disabledGroup[o] + ",";
-                }
-            }
+            evidenceListStr = this.getevStr(el.disabledGroup,el);
+            // return false;
+            // for(let o=0;o<el.disabledGroup.length;o++){
+            //     // 
+            //     if(el.otherGroup.length == 0 && o == el.disabledGroup.length - 1){
+            //         evidenceListStr = evidenceListStr + el.disabledGroup[o];
+            //     }else{
+            //         evidenceListStr = evidenceListStr + el.disabledGroup[o] + ",";
+            //     }
+            // }
             console.log(el.disabledGroup)
             if(el.sendType == 0 || el.sendType == 3 || el.sendType == 4){
                 isReturn = 0;
@@ -3250,6 +3393,90 @@ export default {
                     this.$Message.error(res.data.message);
                 }
             })
+        },
+        getevStr(ary,data){
+            let allStr = "";
+            for(let i=0;i<ary.length;i++){
+               let strTest = ''; 
+               if(ary[i] == "证据材料"){
+                   if(data.zjclfileNlist.length != 0){
+                       for(let u=0;u<data.zjclfileNlist.length;u++){
+                            if(u == data.zjclfileNlist.length - 1){
+                                strTest = strTest + data.zjclfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.zjclfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == "起诉状"){
+                   if(data.qsfileNlist.length != 0){
+                       for(let u=0;u<data.qsfileNlist.length;u++){
+                            if(u == data.qsfileNlist.length - 1){
+                                strTest = strTest + data.qsfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.qsfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == "反诉状"){
+                   if(data.fsfileNlist.length != 0){
+                       for(let u=0;u<data.fsfileNlist.length;u++){
+                            if(u == data.fsfileNlist.length - 1){
+                                strTest = strTest + data.fsfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.fsfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == "答辩状"){
+                   if(data.dbfileNlist.length != 0){
+                       for(let u=0;u<data.dbfileNlist.length;u++){
+                            if(u == data.dbfileNlist.length - 1){
+                                strTest = strTest + data.dbfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.dbfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == "上诉状"){
+                   if(data.ssfileNlist.length != 0){
+                       for(let u=0;u<data.ssfileNlist.length;u++){
+                            if(u == data.ssfileNlist.length - 1){
+                                strTest = strTest + data.ssfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.ssfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == "民事裁定书"){
+                   if(data.mscdsfileNlist.length != 0){
+                       for(let u=0;u<data.mscdsfileNlist.length;u++){
+                            if(u == data.mscdsfileNlist.length - 1){
+                                strTest = strTest + data.mscdsfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.mscdsfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }else if(ary[i] == data.other){
+                   if(data.qtfileNlist.length != 0){
+                       for(let u=0;u<data.qtfileNlist.length;u++){
+                            if(u == data.qtfileNlist.length - 1){
+                                strTest = strTest + data.qtfileNlist[u].urlName;
+                            }else{
+                                strTest = strTest + data.qtfileNlist[u].urlName + ";"
+                            }
+                        }
+                   }
+               }
+               if(i == ary.length -1){
+                   allStr = allStr + ary[i] + ";" + strTest;
+               }else{
+                   allStr = allStr + ary[i] + ";" + strTest + ',';
+               }
+            }
+            console.log(allStr)
+            return allStr;
         },
         otherSend(){
             if(this.name == ''){
