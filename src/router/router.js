@@ -422,6 +422,12 @@ export const appRouter = [
                 name: 'timeStatistics',
                 component: () => import('@/views/financeCase/timeStatistics.vue')
             },
+            {
+                path: 'callRecord2',
+                title: '电话通知记录',
+                name: 'callRecord2',
+                component: () => import('@/views/callRecord/callRecord2.vue')
+            },
         ]
     },
     {

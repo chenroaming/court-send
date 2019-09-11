@@ -322,18 +322,15 @@ export default {
                                   this.noAnswerReason="";
                                   this.Phoneremark="";
                                   this.phoneModal = true;
-                                      this.callPhone =
-                                  // "../../src/components/webPhone/testconnect.htm?phone=" +
-                                  "/testconnect.htm?phone=" +
-                                    // "/testconnect.htm?phone=" +
-
-                                  item+'&&litigantId='+params.row.id;
                                   localStorage.setItem("caseNo",this.caseInfo.caseNo);
                                   localStorage.setItem("litigantName",params.row.litigantName);
                                   localStorage.setItem("phoneNums",item);
                                   localStorage.setItem("litigantId",params.row.id);
                                   localStorage.setItem("lawcaseId",this.schedulingId);
                                   localStorage.setItem("systemId",1);
+                                  this.callPhone ="/testconnect.htm?phone=" +item+'&&litigantId='+params.row.id+'&&lawCaseId='+localStorage.getItem("lawcaseId");
+                                  // "../../src/components/webPhone/testconnect.htm?phone=" +
+                                    // "/testconnect.htm?phone=" +
                                   let date = new Date(+new Date() + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
                                   console.log(date)
                                   let ary = [];

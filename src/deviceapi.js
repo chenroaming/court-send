@@ -63,7 +63,8 @@ function sendCmd(cmd_name,paraObj,resultCallback)
 			console.log("incmd....2")
 			console.log(nResult)
 			if(resultCallback!="" && resultCallback != null)
-				resultCallback(nResult);
+			resultCallback(nResult);
+			console.log(data);
 			return nResult;
 			
 		}, 

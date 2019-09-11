@@ -1336,7 +1336,6 @@ export default {
       let d = new Date(this.selfAccessTime[index]); 
       let datetime=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
       this.subLoad = true;
-      console.log(this.isAnswer[index]);
       if(this.isAnswer[index] == undefined){
           this.$Message.info("请选择电话是否接通");
           this.subLoad = false;
@@ -1378,7 +1377,7 @@ export default {
     },
 
     getSrc(src,id){
-        return '/testconnect.htm?phone='+src+'&&litigantId='+id;
+        return '/testconnect.htm?phone='+src+'&&litigantId='+id+'&&lawCaseId='+this.lawCaseId;
     },
 
     changeSendStatus (status){

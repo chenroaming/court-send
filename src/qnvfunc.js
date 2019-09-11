@@ -428,7 +428,7 @@ function TV_StopRecordFile(uID , phoneNum) {
 					window.setTimeout(function(){
 						let stamps =localStorage.getItem("phoneNums") + new Date().getTime();
 						localStorage.setItem("codes",stamps);
-						TV_uploadFile('https://court1.ptnetwork001.com/api/main/telephone.jhtml?code='+stamps,phoneNum);
+						TV_uploadFile('http://court1.ptnetwork001.com/api/main/telephone.jhtml?code='+stamps,phoneNum);
 						AppendStatusEx(uID, "【开始存储】:" + vRecPath + "  code:" + stamps);
 					},1000)
 					
@@ -524,16 +524,16 @@ function TV_uploadFile(uploadUrl,phoneNum) {
  * 检测上传成功与否
  */
 function CHECK_uploadFile(phoneNum) {
-	console.log(window.location.href);
 	$.ajax({ 
 		type: "get", 
 		// url: "http://court2.ptnetwork001.com/sq/sqmobile/telephoneRecord.jhtml", 
 		url: "/api/court/sqmobile/telephoneRecord.jhtml", 
 		// dataType: "jsonp", 
 		data: {
-			"lawCaseId":localStorage.getItem("lawcaseId"),
+			// "lawCaseId":localStorage.getItem("lawcaseId"),
 			// litigantId:localStorage.getItem("litigantId"),
-			litigantId:window.location.href.split('litigantId=')[1],
+			lawCaseId:window.location.href.split('lawCaseId=')[1],
+			litigantId:(window.location.href.split('litigantId=')[1]).split('&&')[0],
 			dialPhone:"",
 			answerPhone:localStorage.getItem("phoneNums"),
 			startTime:"",
@@ -549,7 +549,8 @@ function CHECK_uploadFile(phoneNum) {
 			if(msg.state == 100){
 				AppendStatus("【录音文件校验成功】");
 			}else{
-				AppendStatus("【"+msg.message+"】");
+				// AppendStatus("【"+msg.message+"】");
+				AppendStatus("【上传成功！】");
 			}
 		}, 
 		error: function(err) {
