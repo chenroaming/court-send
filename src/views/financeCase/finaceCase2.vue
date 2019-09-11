@@ -103,7 +103,7 @@
                 </Radio>
             </RadioGroup>
         </div>
-          <div v-for="item in defendantList" style="border-bottom: 1px solid #bbb;padding-bottom:5px;margin-bottom:15px">
+          <div v-for="(item,index) in defendantList" style="border-bottom: 1px solid #bbb;padding-bottom:5px;margin-bottom:15px">
             <Row>
               <Col span="3" style="text-align: right; padding-right: 5px">
                   被告姓名：
@@ -185,6 +185,75 @@
                 <!-- <Button v-show="item.print != 0" @click="printSend(item)" type="success" style="margin-right: 16px">打印</Button> -->
                 <Checkbox v-model="item.checked" @on-change="checkChange">选中</Checkbox>
             </div>
+          </Row>
+
+          <Row>
+            <iframe :src="getSrc(item.litigantPhone,item.id)" frameborder="0" width="600" height="200"></iframe>
+            <div>
+                <Row style="margin:10px 0 0 0">
+                    <span style="text-align:left;line-height:32px;float:left ">
+                        是否接通：
+                    </span>
+                    <span  style="text-align:left;line-height:36px;padding-left:5px;float:left ">
+                        <RadioGroup v-model="isAnswer[index]" @on-change="changeListenStatus(index)">
+                            <Radio v-for="(item,i) in dailList" :label="item.id">
+                                <span>{{item.name}}</span>
+                            </Radio>
+                        </RadioGroup>
+                    </span>
+                </Row>
+                <Row style="margin:10px 0 0 0">
+                    <span style="text-align:left;line-height:32px;float:left ">
+                        电话备注类型：
+                    </span>
+                    <span  style="text-align:left;line-height:36px;padding-left:5px;float:left ">
+                        <RadioGroup v-model="teleType[index]" @on-change="changeSendStatus">
+                            <Radio v-for="(item,i) in sendList" :label="item.id">
+                                <span>{{item.name}}</span>
+                            </Radio>
+                        </RadioGroup>
+                    </span>
+                </Row>
+                <Row style="margin:10px 0 0 0" v-show="isAnswer[index] == 2">
+                    <span  push='1' style="text-align:left;line-height:32px;float:left ">
+                        未接通原因：
+                    </span>
+                    <span  push='1' style="text-align:left;line-height:32px;padding-left:5px;float:left ">
+                        <RadioGroup v-model="noAnswerReason[index]" >
+                            <Radio v-for="(item,i) in callStatus" :label="item.id">
+                                <span>{{item.name}}</span>
+                            </Radio>
+                        </RadioGroup>
+                    </span>
+                </Row>
+                <Row style="margin:10px 0 0 0" v-show="teleType[index] == 1">
+                    <span  push='1' style="text-align:left;line-height:32px;float:left">
+                        自取时间：
+                    </span>
+                    <span  push='1' style="text-align:left;line-height:32px;padding-left:5px;float:left">
+                        <DatePicker v-model="selfAccessTime[index]" format="yyyy年MM月dd日" transfer type="date" placeholder="选择自取日期" style="width: 200px"></DatePicker>
+                    </span>
+                </Row>
+                <Row style="margin:10px 0 0 0" v-show="teleType[index] == 1">
+                    <span  push='1' style="text-align:left;line-height:32px;float:left">
+                        自取备注信息：
+                    </span>
+                    <span  push='1' style="text-align:left;line-height:32px;padding-left:5px;float:left;width:300px;">
+                        <Input v-model="selfRemark[index]" style="float:left;width:100%" placeholder="请输入备注信息"></Input>
+                    </span>
+                </Row>
+                <Row style="margin:10px 0 0 0">
+                    <span  push='1' style="text-align:left;line-height:32px;float:left">
+                        备注信息：
+                    </span>
+                    <span  push='1' style="text-align:left;line-height:32px;padding-left:5px;float:left;width:300px;">
+                        <Input v-model="Phoneremark[index]" style="float:left;width:100%" placeholder="请输入备注信息"></Input>
+                    </span>
+                </Row>
+            </div>
+            <Row>
+                <Button @click="saveInfo(item.id,item.litigantPhone,index)" :loading="subLoad"  type="primary" size="large">保存</Button> 
+            </Row>
           </Row>
           </div>
       </Card>
@@ -678,6 +747,7 @@
 <script>
 import { findAllCase, buildDiploms,getOneLitigant,getLawyerInfo, 
 sendmessage, emailList,getMediatedCase,deliveryDetails,handlingWithdrawal, createWord,sendDiploms,getJudgeBriefCourt,auditOnlineLawCase,printEMS,getOnlineLawCaseEdit,getLitigantInfo,getLitigantLawyerList,otherGetFiles,createEmsExcel,findOnlineCourt,findOnlineBrief,findWorkerNames,downloadExcel,setCase } from "../../api/finanseCase.js";
+import { telephoneRecord } from "@/api/courtDate";
 import { ClipLoader } from 'vue-spinner/dist/vue-spinner.min.js';
 import {  addressList,getWithdrawalInfo } from "../../api/templante.js";
 import uploadMultiple from '@/components/upload-multiple1';
@@ -696,6 +766,59 @@ export default {
   data() {
       var width = window.innerWidth - 430;
     return {
+        subLoad:false,
+        isAnswer:[],
+        teleRemarkType:'3',
+        teleType:[],
+        n:-1,
+        dailList:[
+            {
+                name:'接听',
+                id:'1'
+            },
+            {
+                name:'未接通',
+                id:'2'
+            }
+        ],
+        sendList:[
+            {
+                name:'自取',
+                id:'1'
+            },
+            {
+                name:'EMS送达',
+                id:'2'
+            },
+            {
+                name:'未确认',
+                id:'3'
+            }
+        ],
+        callStatus:[
+            {
+                name:'空号',
+                id:'0'
+            },
+            {
+                name:'未接',
+                id:'1'
+            },
+            {
+                name:'停机',
+                id:'2'
+            },
+            {
+                name:'关机',
+                id:'3'
+            },
+        ],
+
+
+        noAnswerReason:[],
+        selfAccessTime:[],
+        selfRemark:[],
+        Phoneremark:[],
         modalWidth:width,
         filePathAry:[],
         viewDipmos:false,
@@ -1057,7 +1180,7 @@ export default {
                     click: () => {
                       this.defendantList = params.row.defendantList;
                       this.lawCaseId = params.row.id;
-                      
+                      console.log(params.row);
                       this.wenmodal = true;
                       for(let i in this.defendantList){
                           let el = this.defendantList[i]
@@ -1209,6 +1332,62 @@ export default {
     
   },
   methods: {
+    saveInfo(litigantId,litigantPhone,index){
+      let d = new Date(this.selfAccessTime[index]); 
+      let datetime=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      this.subLoad = true;
+      console.log(this.isAnswer[index]);
+      if(this.isAnswer[index] == undefined){
+          this.$Message.info("请选择电话是否接通");
+          this.subLoad = false;
+          return false;
+      }
+      if(this.isAnswer[index] == '2'){
+          if(this.noAnswerReason[index] == undefined){
+              this.$Message.info("请选择未接通原因");
+               this.subLoad = false;
+              return false;
+          }
+      }
+      let pramas = {
+          lawCaseId:this.lawCaseId,
+          litigantId:litigantId,
+          dialPhone:"",
+          answerPhone:litigantPhone,
+          startTime:"",
+          endTime:"",
+          isAnswer:this.isAnswer[index].id == "接听" ? 1 :0,
+          systemId:2,
+          noAnswerReason:this.noAnswerReason[index] == "空号" ? 0 : (this.noAnswerReason[index] == "未接" ? 1 : (this.noAnswerReason == "停机" ? 2 : 3)),
+          remark:this.Phoneremark[index],
+          code:localStorage.getItem("codes"),
+          teleRemarkType:this.teleType[index],
+          selfAccessTime:datetime || '',
+          selfRemark:this.selfRemark[index]
+
+      }
+      telephoneRecord(pramas).then(res => {
+          if(res.data.state == 100){
+              this.$Message.success(res.data.message);
+              this.subLoad = false;           
+          }else{
+              this.$Message.info(res.data.message);
+              this.subLoad = false;
+          }
+      })
+    },
+
+    getSrc(src,id){
+        return '/testconnect.htm?phone='+src+'&&litigantId='+id;
+    },
+
+    changeSendStatus (status){
+        console.log(this.teleType);
+        this.i = status;
+    },
+    changeListenStatus (index){
+        this.n = index;
+    },
       showDipmos(path){
         this.filePathAry = [];
         this.filePathAry.push(path);

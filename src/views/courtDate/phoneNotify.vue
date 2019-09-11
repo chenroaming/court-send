@@ -305,6 +305,7 @@ export default {
             align: 'center',
              render: (h, params) => {
                 let hArr = [];
+                console.log(params.row);
                 params.row.litigantPhone.map(item => { 
                   hArr.push(h(
                             "p",
@@ -326,7 +327,7 @@ export default {
                                   "/testconnect.htm?phone=" +
                                     // "/testconnect.htm?phone=" +
 
-                                  item;
+                                  item+'&&litigantId='+params.row.id;
                                   localStorage.setItem("caseNo",this.caseInfo.caseNo);
                                   localStorage.setItem("litigantName",params.row.litigantName);
                                   localStorage.setItem("phoneNums",item);
