@@ -121,7 +121,7 @@
                   送达方式：
               </Col>
               <Col span="5">
-                  <Select v-model="item.sendType" :transfer="bodyt" style="width:100%">
+                  <Select v-model="item.sendType" :transfer="bodyt" style="width:100%" @on-change="sendTypeChange(index)">
                       <Option v-for="(st, key) in sendTypes" :value="key" :key="key">{{ st }}</Option>
                   </Select>
               </Col>
@@ -1178,9 +1178,14 @@ export default {
                     ],
                   on: {
                     click: () => {
+                      console.log(params.row.defendantList);
+                      for (const item of params.row.defendantList){
+                          console.log(item);
+                          item.sendType = '';
+                          item.checked = false;
+                      }
                       this.defendantList = params.row.defendantList;
                       this.lawCaseId = params.row.id;
-                      console.log(params.row);
                       this.wenmodal = true;
                       for(let i in this.defendantList){
                           let el = this.defendantList[i]
@@ -1329,7 +1334,7 @@ export default {
   mounted() {
     this.getList(1);
     this.getBList();
-    
+    localStorage.setItem("systemId",2);
   },
   methods: {
     saveInfo(litigantId,litigantPhone,index){
@@ -1348,27 +1353,34 @@ export default {
               return false;
           }
       }
+      if(localStorage.getItem("codes") == ''){
+        this.$Message.info("还未拨打该当事人的电话！");
+        this.subLoad = false;
+        return false;
+      }
       let pramas = {
           lawCaseId:this.lawCaseId,
           litigantId:litigantId,
           dialPhone:"",
-          answerPhone:litigantPhone,
+          answerPhone:localStorage.getItem("phoneNums"),
           startTime:"",
           endTime:"",
-          isAnswer:this.isAnswer[index].id == "接听" ? 1 :0,
+          isAnswer:this.isAnswer[index] == '1' ? 1 :0,
           systemId:2,
-          noAnswerReason:this.noAnswerReason[index] == "空号" ? 0 : (this.noAnswerReason[index] == "未接" ? 1 : (this.noAnswerReason == "停机" ? 2 : 3)),
+          noAnswerReason:this.noAnswerReason[index],
           remark:this.Phoneremark[index],
           code:localStorage.getItem("codes"),
+        // code:135995082581568107711258,
           teleRemarkType:this.teleType[index],
-          selfAccessTime:datetime || '',
+          selfAccessTime:datetime == 'NaN-NaN-NaN' ? '' : datetime,
           selfRemark:this.selfRemark[index]
-
       }
+      
       telephoneRecord(pramas).then(res => {
           if(res.data.state == 100){
               this.$Message.success(res.data.message);
-              this.subLoad = false;           
+              this.subLoad = false;
+              localStorage.setItem("codes",'');        
           }else{
               this.$Message.info(res.data.message);
               this.subLoad = false;
@@ -1386,6 +1398,12 @@ export default {
     },
     changeListenStatus (index){
         this.n = index;
+    },
+    sendTypeChange (index){
+        console.log(index,this.defendantList);
+        if(this.defendant != ''){
+            this.defendantList[index].checked = true;
+        }
     },
       showDipmos(path){
         this.filePathAry = [];

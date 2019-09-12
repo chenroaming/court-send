@@ -165,7 +165,7 @@ export default {
           width: 180,
           render: (h, params) => {
             return h("span", {
-            }, params.row.lawCase.caseNo)
+            }, params.row.onlineLawCase.caseNo)
           }
         },
         {
@@ -175,7 +175,7 @@ export default {
           width: 150,
           render: (h, params) => {
             return h("span", {
-            }, params.row.litigant.litigantName)
+            }, params.row.onlineLitigant.litigantName)
           }
         },
         {
@@ -185,7 +185,7 @@ export default {
           width: 170,
           render: (h, params) => {
             return h("span", {
-            }, params.row.litigant.identityCard)
+            }, params.row.onlineLitigant.identityCard)
           }
         },
         {
@@ -377,13 +377,14 @@ export default {
     getList(page) {
       var that = this;
       this.pageNumber = page;
-      if(this.formItem.handoverDate .length != 0 && this.formItem.handoverDate[0] != null){
+      if(this.formItem.handoverDate.length != 0 && this.formItem.handoverDate[0] != null){
         this.formItem.startTime =formatDate(new Date(this.formItem.handoverDate[0]),'yyyy-MM-dd');
         this.formItem.endTime =formatDate(new Date(this.formItem.handoverDate[1]),'yyyy-MM-dd');
       }else{
-        this.formItem.startTime = ""
-        this.formItem.endTime = ""
+        this.formItem.startTime = "";
+        this.formItem.endTime = "";
       }
+      console.log(this.formItem.startTime,this.formItem.endTime);
       var params = {
         lawCaseNum: this.formItem.lawCaseNum,
         litigantName: this.formItem.litigantName,
@@ -391,8 +392,8 @@ export default {
         noAnswerReason: this.formItem.noAnswerReason,
         isAnswer: this.formItem.isAnswer,
         // handoverDate:this.formItem.handoverDate ? formatDate(new Date(this.formItem.handoverDate),'yyyy-MM-dd') : "",
-        startTime:this.formItem.startTime || null,
-        endTime:this.formItem.endTime || null,
+        startTime:this.formItem.startTime == 'NaN-aN-aN'? '' : this.formItem.startTime,
+        endTime:this.formItem.endTime == 'NaN-aN-aN'? '' : this.formItem.endTime,
         systemId:2,
         pageNumber: page,
         pageSize: 10,

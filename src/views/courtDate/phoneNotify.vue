@@ -329,7 +329,7 @@ export default {
                                   localStorage.setItem("lawcaseId",this.schedulingId);
                                   localStorage.setItem("systemId",1);
                                   this.callPhone ="/testconnect.htm?phone=" +item+'&&litigantId='+params.row.id+'&&lawCaseId='+localStorage.getItem("lawcaseId");
-                                  // "../../src/components/webPhone/testconnect.htm?phone=" +
+                                  // "../../src/components/webPhone/testconnect2.htm?phone=" +
                                     // "/testconnect.htm?phone=" +
                                   let date = new Date(+new Date() + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
                                   console.log(date)
@@ -489,6 +489,11 @@ export default {
               return false;
           }
       }
+      if(localStorage.getItem("codes") == ''){
+        this.$Message.info("还未拨打该当事人的电话！");
+        this.subLoad = false;
+        return false;
+      }
       let pramas = {
           lawCaseId:localStorage.getItem("lawcaseId"),
           litigantId:localStorage.getItem("litigantId"),
@@ -501,6 +506,7 @@ export default {
           noAnswerReason:this.noAnswerReason == "空号" ? 0 : (this.noAnswerReason == "未接" ? 1 : (this.noAnswerReason == "停机" ? 2 : 3)),
           remark:this.Phoneremark,
           code:localStorage.getItem("codes"),
+          // code:"135995082581568107711258",
           teleRemarkType:this.teleRemarkType,
           selfAccessTime:datetime,
           selfRemark:this.selfRemark

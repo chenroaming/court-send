@@ -428,8 +428,7 @@ function TV_StopRecordFile(uID , phoneNum) {
 					window.setTimeout(function(){
 						let stamps =localStorage.getItem("phoneNums") + new Date().getTime();
 						localStorage.setItem("codes",stamps);
-						// TV_uploadFile('http://court1.ptnetwork001.com/api/main/telephone.jhtml?code='+stamps,phoneNum);
-						TV_uploadFile('http://dq.hlcourt.gov.cn/api/main/telephone.jhtml?code='+stamps,phoneNum);
+						TV_uploadFile('http://court1.ptnetwork001.com/api/main/telephone.jhtml?code='+stamps,phoneNum);
 						AppendStatusEx(uID, "【开始存储】:" + vRecPath + "  code:" + stamps);
 					},1000)
 					
@@ -526,36 +525,34 @@ function TV_uploadFile(uploadUrl,phoneNum) {
  */
 function CHECK_uploadFile(phoneNum) {
 	$.ajax({ 
-		type: "post", 
+		type: "get", 
 		// url: "http://court2.ptnetwork001.com/sq/sqmobile/telephoneRecord.jhtml", 
-		url: "/api/court/sqmobile/checkCode.jhtml", 
+		url: "/api/court/sqmobile/telephoneRecord.jhtml", 
 		// dataType: "jsonp", 
 		data: {
 			// "lawCaseId":localStorage.getItem("lawcaseId"),
 			// litigantId:localStorage.getItem("litigantId"),
-			// lawCaseId:window.location.href.split('lawCaseId=')[1],
-			// litigantId:(window.location.href.split('litigantId=')[1]).split('&&')[0],
-			// dialPhone:"",
-			// answerPhone:localStorage.getItem("phoneNums"),
-			// startTime:"",
-			// endTime:"",
-			// isAnswer:1,
-			// systemId:localStorage.getItem("systemId"),
-			// noAnswerReason:"",
-			code:localStorage.getItem("codes")
-			// code:"135995082581568107711258"
+			lawCaseId:window.location.href.split('lawCaseId=')[1],
+			litigantId:(window.location.href.split('litigantId=')[1]).split('&&')[0],
+			dialPhone:"",
+			answerPhone:localStorage.getItem("phoneNums"),
+			startTime:"",
+			endTime:"",
+			isAnswer:1,
+			systemId:localStorage.getItem("systemId"),
+			noAnswerReason:"",
+			// code:localStorage.getItem("codes")
+			code:"135995082581568107711258"
 		},
 		// timeout:1000,
 		success: function (data) { 
-			// let msg = JSON.parse(data);
-			// if(msg.state == 100){
-			// 	AppendStatus("【录音文件校验成功】");
-			// }else{
-			// 	AppendStatus("【"+msg.message+"】");
-			// 	// AppendStatus("【上传成功！】");
-			// }
-			console.log(data);
-			AppendStatus("【"+data.message+"】");
+			let msg = JSON.parse(data);
+			if(msg.state == 100){
+				AppendStatus("【录音文件校验成功】");
+			}else{
+				// AppendStatus("【"+msg.message+"】");
+				AppendStatus("【上传成功！】");
+			}
 		}, 
 		error: function(err) {
 			console.log(err)
