@@ -1178,7 +1178,6 @@ export default {
                     ],
                   on: {
                     click: () => {
-                      console.log(params.row.defendantList);
                       for (const item of params.row.defendantList){
                           console.log(item);
                           item.sendType = '';
@@ -1187,6 +1186,7 @@ export default {
                       this.defendantList = params.row.defendantList;
                       this.lawCaseId = params.row.id;
                       this.wenmodal = true;
+                      this.sendTo = '0';
                       for(let i in this.defendantList){
                           let el = this.defendantList[i]
                           let ary = [];
@@ -1399,10 +1399,15 @@ export default {
     changeListenStatus (index){
         this.n = index;
     },
-    sendTypeChange (index){
-        console.log(index,this.defendantList);
-        if(this.defendant != ''){
+    sendTypeChange (index){//选择下拉框选项后默认勾选
+        if(this.defendantList[index].sendType != '' && this.defendantList[index].sendType != undefined){
             this.defendantList[index].checked = true;
+        }
+        const isChecked = this.defendantList.every((res)=>{
+            return res.checked == true;
+        })
+        if(isChecked){
+            this.sendTo = '3';
         }
     },
       showDipmos(path){

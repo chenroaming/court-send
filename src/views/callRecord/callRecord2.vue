@@ -74,7 +74,7 @@
 <script>
 import myStep from "@/components/step";
 import mySteps from "@/components/steps";
-import { queryCallLog } from "../../api/emsRecord.js";
+import { queryCallLog,getLocalPath } from "../../api/emsRecord.js";
 import { formatDate } from "../../libs/date.js";
 export default {
   components: {
@@ -270,14 +270,50 @@ export default {
                                 title: '提示',
                                 content: '<p>确定要下载么</p>',
                                 onOk: () => {
-                                    // this.$Message.info('Clicked ok');
+                                  if(params.row.recordAddress.indexOf("http") != -1){
+                                    var msg = this.$Message.loading({
+                                      content: "准备下载中。。",
+                                      duration: 0
+                                    });
+                                    getLocalPath(params.row.recordAddress).then(res => {
+                                      msg();
+                                      if(res.data.state == 100){
+                                        const downloadLink = document.createElement('a');
+                                        const body = document.documentElement || document.body;
+                                        body.appendChild( downloadLink);
+                                        let str = res.data.path.substr(0,1);
+                                        if(str == '/'){
+                                        downloadLink.href =res.data.path;
+                                        }else{
+                                        downloadLink.href ='/' + res.data.path;
+                                        }
+                                        downloadLink.download = '';
+
+                                        downloadLink.click();
+                                        body.removeChild(downloadLink);
+                                      }
+                                    }).catch(error => {
+                                      this.$Message.info('网络错误');
+                                      msg();
+                                    })
+                                  }else{
+                                    const downloadLink = document.createElement('a');
+                                    const body = document.documentElement || document.body;
+                                    body.appendChild( downloadLink);
                                     let str = params.row.recordAddress.substr(0,1);
-                                    console.log(str)
                                     if(str == '/'){
-                                    window.open(params.row.recordAddress)
+                                    downloadLink.href =params.row.recordAddress;
                                     }else{
-                                    window.open('/'+params.row.recordAddress)
+                                    downloadLink.href ='/' + params.row.recordAddress;
                                     }
+                                    downloadLink.download = '';
+
+                                    downloadLink.click();
+                                    body.removeChild(downloadLink);
+                                    
+                                  }
+                                    // this.$Message.info('Clicked ok');
+                                    
                                 },
                                 onCancel: () => {
                                     // this.$Message.info('Clicked cancel');
