@@ -39,3 +39,17 @@ export function queryCallLog (params) {
         params
     });
 }
+
+/** 
+ * 转换下载链接
+ */
+export function getLocalPath (path) {
+    const params = {
+        path
+    };
+    return service({
+        url: '/main/getLocalPath.jhtml',
+        method: 'GET',
+        params
+    });
+}

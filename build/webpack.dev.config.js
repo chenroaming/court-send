@@ -33,7 +33,8 @@ module.exports = merge(webpackBaseConfig, {
             //匹配代理的url
             '/api': {
                 // 目标服务器地址
-                target: 'http://120.78.223.114:8688',
+                target: 'http://47.112.14.54:8688',
+                // target: 'http://120.78.223.114:8688',
                 // target: 'http://dq.hlcourt.gov.cn',
                 // target: 'http://114.115.133.183:8780',
                 // target: 'http://47.105.189.44:8780',

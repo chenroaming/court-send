@@ -11,6 +11,9 @@
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
                     <Form :model="formItem" inline :label-width="100" v-show="show1" @keydown.native.enter.prevent ="getList(1)" >
+                        <FormItem label="案号：">
+                            <Input style="width: 200px" v-model="formItem.caseNum"/>
+                        </FormItem>
                         <FormItem label="引调号：">
                             <Input style="width: 200px" v-model="formItem.caseNo"/>
                         </FormItem>
@@ -20,7 +23,6 @@
                         <FormItem label="当事人：">
                             <Input style="width: 200px" v-model="formItem.defendantName"/>
                         </FormItem>
-                        
                         <FormItem label="案件状态：">
                             <Select v-model="formItem.mediateType"  @on-foucus="changeyyyy" @on-change="changeyyyy" clearable style="width:170px">
                                 <Option value="1">文书生成中</Option>
@@ -32,6 +34,9 @@
                                 <Option value="7">已撤诉</Option>
                                 <Option value="8">驳回撤诉</Option>
                             </Select>
+                        </FormItem>
+                        <FormItem>
+                            <Checkbox v-model="formItem.is30Days">已满30天</Checkbox>
                         </FormItem>
                         <div style="display: inline-block;padding-right: 30px;float: right;">
                             <Button @click="getList(1)" type="ghost">查询</Button>
@@ -925,7 +930,7 @@ export default {
         align: "center",
         },
         {
-        title: "证明来源",
+        title: "证据来源",
         key: "where",
         align: "center",
         },
@@ -1008,10 +1013,12 @@ export default {
       errorNum:"",
       successNum:'',
       formItem: {
+        caseNum:'',
         id: "",
         caseNo:'',
         code:'',
         defendantName:"",
+        is30Days:false,
         mediateType:""
       },
       detailModal:false,
@@ -2098,7 +2105,9 @@ export default {
         caseNo:'',
         code:'',
         defendantName:"",
-        mediateType:""
+        mediateType:"",
+        is30Days:false,
+        caseNum:''
       }
       this.getList(1);
     },
@@ -2119,8 +2128,9 @@ export default {
             caseNo:this.formItem.caseNo,
             code:this.formItem.code,
             defendantName:this.formItem.defendantName,
-            mediateType:this.formItem.mediateType
-        
+            mediateType:this.formItem.mediateType,
+            is_mediate:this.formItem.is30Days,
+            formalCaseNo:this.formItem.caseNum
         }
         // if (this.select3=='引调号') {
         //     params.caseNo=this.value13
