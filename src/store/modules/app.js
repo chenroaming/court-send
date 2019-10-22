@@ -6,7 +6,7 @@ import { router } from '@/router/index';
 
 const app = {
     state: {
-        cachePage: [],
+        cachePage: ["homeCaseList_index"],
         idDraw:false,   //收缩菜单
         isCl:true,
         lang: '',
@@ -23,6 +23,7 @@ const app = {
         ],
         currentPageName: '',
         courtName:"",   //法庭
+        roleName:"",
         currentPath: [
             {
                 title: '首页',
@@ -31,6 +32,12 @@ const app = {
             }
         ], // 面包屑数组
         menuList: [],
+        caseStage:"0",//首页案件列表案件状态
+        casePage:1,
+        caseCourt:"全院",//首页部门
+        litigantBages:0,
+        calendarYear:new Date().getFullYear(),
+        calendarMonth:new Date().getMonth(),
         routers: [otherRouter, ...appRouter],
         tagsList: [...otherRouter.children],
         messageCount: 0,
@@ -46,8 +53,26 @@ const app = {
         updateDefaultRouter(state, routes) {
             router.addRoutes(routes);
         },
+        setCalYear(state, y){
+            state.calendarYear = y;
+        },
+        setlitigantBages(state,l){
+            state.litigantBages = l;
+        },
+        setroleName(state,r){
+            state.roleName = r;
+        },
+        setCalMonth(state, m){
+            state.calendarMonth = m;
+        },
         updateMenulist(state, routes) {
             state.menuList = routes;
+        },
+        setCasePage(state, p){
+            state.casePage = p;
+        },
+        setCaseStage(state, st) {
+            state.caseStage = st;
         },
         SET_ISDRAW: (state, idDraw) => {
             state.idDraw = idDraw;
@@ -57,6 +82,9 @@ const app = {
         },
         setCourtName:(state, name) => {
             state.courtName = name;
+        },
+        setcaseCourtName:(state, name) => {
+            state.caseCourt = name;
         },
         setTagsList (state, list) {
             state.tagsList.push(...list);

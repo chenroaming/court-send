@@ -9,6 +9,11 @@
         </div>
       </div>
       <Table stripe :columns="columns" :data="tableData"></Table>
+      <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+                <Page :total="pageData.total" show-total  :page-size="10" :current="pageData.pageNumber" @on-change="changePage"></Page>
+            </div>
+        </div>
     </Card>
     <Modal
         v-model="showStep"
@@ -34,7 +39,7 @@
             <ButtonGroup vertical>
                 <Button v-if="item.current.length != 0" v-for="(item,index) in litigantSendList" type="ghost" @click="selectLitigant(index)" :key="index">
                   {{ item.current.litigationStatusName }}: {{ item.current.litigantName }} <br>
-                  送达方式：{{ item.current.sendType | formatSendType }}
+                  送达方式：{{ sendTypes[item.current.sendType] ? sendTypes[item.current.sendType] : "" }}
                 </Button>
                 <Row v-if="item.current.length == 0" v-for="(item,index) in litigantSendList"> {{ item.other[0].litigantName }} 无当前送达详情</Row>
             </ButtonGroup>
@@ -57,7 +62,7 @@
                     送达方式：
                 </Col>
                 <Col span="5">
-                    {{ selectSendInfo.sendType | formatSendType }}
+                    {{sendTypes[selectSendInfo.sendType] ? sendTypes[selectSendInfo.sendType] : ""  }}
                 </Col>
             </Row>
             <Row>
@@ -112,7 +117,7 @@
                 <Col span="21">
                     <Row v-for="(sh, key) in selectSendInfo.sendHistory" :key="key">
                         <Col span="6">{{ sh.modifyDate | formatStartDate }}</Col>
-                        <Col span="5">{{ sh.sendType | formatSendType }}</Col>
+                        <Col span="5">{{ sendTypes[sh.sendType] ? sendTypes[sh.sendType] : "" }}</Col>
                         <Col span="7">{{ ((sh.sendState !== 0 && !sh.sendState) ? '未发送' : sendStates[sh.sendState + 1].s) }}</Col>
                     </Row>
                 </Col>
@@ -147,12 +152,17 @@ export default {
                 { s: '送达失败！', c: '#ed3f14' }
             ],
             sendTypes: [
-                '现场领取',
-                'ems送达',
-                '工作人员上门送达',
-                '电子邮件送达',
-                '公告',
-                'H5确认阅读'
+                "现场领取",
+                "EMS送达",
+                "工作人员上门送达",
+                "电子邮件送达",
+                "公告送达",
+                "H5确认阅读",
+                "委托送达",
+                "电话送达",
+                "微信送达",
+                "调解送达",
+                "平台送达"
             ],
             showStep: false,
             showSend: false,
@@ -162,7 +172,8 @@ export default {
             },
             pageData: {
                 pageNumber: 1,
-                pageSize: 10
+                pageSize: 10,
+                total:1
             },
             columns: [
                 {
@@ -351,6 +362,7 @@ export default {
             this.getList();
         },
         getList () {
+            this.tableData = [];
             litigantLawCaseList(this.searchData.caseNo, this.pageData).then(res => {
                 if (res.data.state == 100) {
                      res.data.result.content.map(item => {
@@ -386,10 +398,17 @@ export default {
                         data.phase = "";
                         this.tableData.push(data);
                     })
+                    this.pageData.total = res.data.result.total;
+                    this.pageData.pageNumber = res.data.result.pageNumber;
+                    // this.pageData.total = res.data.result.total;
                 } else {
                     this.$Message.error(res.data.message);
                 }
             });
+        },
+        changePage(num){
+            this.pageData.pageNumber = num;
+            this.getList();
         },
         selectLitigant (index) {
             this.selectSendInfo.litigantName = this.litigantSendList[
@@ -443,17 +462,20 @@ export default {
             return formatDate(date, 'yyyy-MM-dd hh:mm');
         },
         formatSendType (val) {
-            if (val == 0) {
-                return '现场领取';
-            } else if (val == 1) {
-                return 'EMS送达';
-            } else if (val == 2) {
-                return '工作人员上门送达';
-            } else if (val == 3) {
-                return '电子邮件送达';
-            } else {
-                return 'H5确认阅读';
-            }
+            // console.log(this.sendTypes)
+            // return   this.sendTypes[val];
+
+            // if (val == 0) {
+            //     return '现场领取';
+            // } else if (val == 1) {
+            //     return 'EMS送达';
+            // } else if (val == 2) {
+            //     return '工作人员上门送达';
+            // } else if (val == 3) {
+            //     return '电子邮件送达';
+            // } else {
+            //     return 'H5确认阅读';
+            // }
         }
     }
 };

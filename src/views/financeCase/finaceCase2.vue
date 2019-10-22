@@ -23,6 +23,7 @@
                         <FormItem label="当事人：">
                             <Input style="width: 200px" v-model="formItem.defendantName"/>
                         </FormItem>
+                        
                         <FormItem label="案件状态：">
                             <Select v-model="formItem.mediateType"  @on-foucus="changeyyyy" @on-change="changeyyyy" clearable style="width:170px">
                                 <Option value="1">文书生成中</Option>
@@ -120,7 +121,7 @@
                   联系电话：
               </Col>
               <Col span="5">
-                  <Input v-model='item.legalManPhone?item.legalManPhone:item.litigantPhone' placeholder="联系电话不能为空" style="width: 100%"></Input>
+                  <Input v-model='item.phones' placeholder="联系电话不能为空" style="width: 100%"></Input>
               </Col>
               <Col span="3" style="text-align: right; padding-right: 5px">
                   送达方式：
@@ -282,8 +283,8 @@
                 <FormItem label="案件编号:" style="width: 245px;" >
                     <Input v-model="addcaseNo" placeholder="请输入案件编号"></Input>
                 </FormItem>
-                <FormItem label="案由名称:" style="width: 245px;" >
-                    <Select v-model="briefId" filterable transfer placeholder="请选择">
+                <FormItem label="案由名称:" style="width: 245px;">
+                    <Select v-model="briefId" filterable transfer placeholder="请选择" @on-change="selectBriefName">
                         <Option v-for="item in bridfList" v-bind:value="item.name">{{item.name}}</Option>
                     </Select>
                 </FormItem>
@@ -306,7 +307,7 @@
                     <DatePicker type="date" transfer :value="filingDateStr" @on-change="changeDate2"></DatePicker>
                 </FormItem>
                 <FormItem label="当事人|事由:" style="width: 505px;" >
-                    <Input v-model="litigantContent" placeholder="请输入当事人|事由"></Input>
+                    <Input v-model="newLitigantContent" placeholder="请输入当事人|事由"></Input>
                 </FormItem>
                 <FormItem label="诉讼费:" style="width: 305px;" >
                     <!-- <Input v-model="payMoney" placeholder="诉讼费（单位元）"  ></Input> -->
@@ -326,6 +327,9 @@
     cursor: text;
     transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
 }" />元 
+                </FormItem>
+                <FormItem label="审限届满时间:" style="width: 245px;">
+                    <DatePicker type="date" transfer :value="expireTime" @on-change="changeDate3"></DatePicker>
                 </FormItem>
             </Form>
             <div style="margin-top:10px">
@@ -930,7 +934,7 @@ export default {
         align: "center",
         },
         {
-        title: "证据来源",
+        title: "证明来源",
         key: "where",
         align: "center",
         },
@@ -990,7 +994,9 @@ export default {
       clerkId:"",
       clerkList:[],
       filingDateStr:"",
+      expireTime:'',//审限届满时间
       litigantContent:"",
+      newLitigantContent:'',//拼接后的当事人被告事由
       payMoney:'',
       remark:"",
       zhuanmodal:false,
@@ -1185,15 +1191,20 @@ export default {
                     ],
                   on: {
                     click: () => {
+                      
                       for (const item of params.row.defendantList){
                           console.log(item);
                           item.sendType = '';
                           item.checked = false;
                       }
+                      
+                      params.row.defendantList.map(item => {
+                          item.phones = item.legalManPhone?item.legalManPhone:item.litigantPhone;
+                      })
+                      console.log(params.row.defendantList);
                       this.defendantList = params.row.defendantList;
                       this.lawCaseId = params.row.id;
                       this.wenmodal = true;
-                      this.sendTo = '0';
                       for(let i in this.defendantList){
                           let el = this.defendantList[i]
                           let ary = [];
@@ -1313,6 +1324,8 @@ export default {
                     click: () => {
                         this.lawCaseId = params.row.id;
                         this.litigantContent = '原告' + params.row.plaimInfo + '与被告' + params.row.defendantInfo;
+                        this.newLitigantContent = '原告' + params.row.plaimInfo + '与被告' + params.row.defendantInfo;
+                        console.log(this.newLitigantContent);
                         this.addcaseNo="";
                         this.briefId="";
                         this.courtId='';
@@ -1344,6 +1357,11 @@ export default {
     localStorage.setItem("systemId",2);
   },
   methods: {
+    selectBriefName(name){
+        if(name != undefined){
+            this.newLitigantContent = this.litigantContent + name;
+        }
+    },
     saveInfo(litigantId,litigantPhone,index){
       let d = new Date(this.selfAccessTime[index]); 
       let datetime=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
@@ -1406,7 +1424,8 @@ export default {
     changeListenStatus (index){
         this.n = index;
     },
-    sendTypeChange (index){//选择下拉框选项后默认勾选
+    sendTypeChange (index){
+        console.log(index,this.defendantList);
         if(this.defendantList[index].sendType != '' && this.defendantList[index].sendType != undefined){
             this.defendantList[index].checked = true;
         }
@@ -1474,7 +1493,7 @@ export default {
                 if (res.data.state==100) {
                     // this.createEmsExcelWindow=false
                     this.$Message.success(res.data.message);
-                    this.getList()
+                    this.getList(this.pageNumber)
                 }else{
                     this.$Message.info(res.data.message);
                 }
@@ -1880,6 +1899,7 @@ export default {
             this.$Message.info('诉讼费不能为空');
                 return false;
         }
+        let strTimes = new Date(this.filingDateStr).getTime()
         var params ={
             onlineLawCaseId:this.lawCaseId,
             auditStatus:1,
@@ -1889,16 +1909,19 @@ export default {
             courtId:this.courtId,
             judgeId:this.judgeId,
             clerkId:this.clerkId,
-            filingDate:this.filingDateStr,
+            filingDate:strTimes,
+            expireTime:this.expireTime,
             litigantContent:this.litigantContent,
             payMoney:parseInt(this.payMoney*100),
             files:this.fileNlistFormData
         }
+        console.log(this.filingDateStr)
         auditOnlineLawCase(params).then(res => {
             if(res.data.state == 100){
                 this.$Message.success('提交成功');
                 this.zhuanmodal = false;
                  this.changeLoading();
+                 this.getList(this.pageNumber);
             }else{
                 this.$Message.info(res.data.message);
                  this.changeLoading();
@@ -1992,15 +2015,16 @@ export default {
       var fileds = [];
       for (let i = 0; i < this.defendantList.length; i++){
         const el = this.defendantList[i];
-        let litigantPhoneSure=''
+        let litigantPhoneSure=el.phones
         
         if (el.checked === true) {
           var q = "'";
-          if (el.legalManPhone) {
-            litigantPhoneSure=el.legalManPhone
-        }else{
-            litigantPhoneSure=el.litigantPhone
-        }
+        //   if (el.legalManPhone) {
+        //     litigantPhoneSure=el.legalManPhone
+        // }else{
+        //     litigantPhoneSure=el.litigantPhone
+        // }
+        // phones
           var str =
           
           (el.litigantName || "") +
@@ -2105,9 +2129,7 @@ export default {
         caseNo:'',
         code:'',
         defendantName:"",
-        mediateType:"",
-        is30Days:false,
-        caseNum:''
+        mediateType:""
       }
       this.getList(1);
     },
@@ -2115,13 +2137,17 @@ export default {
       this.getList(num);
     },
     changeDate2(date){
-        this.filingDateStr = new Date(date).getTime();
+        this.filingDateStr = date;
+    },
+    changeDate3(date){
+        this.expireTime = date;
     },
     onOkF(){
 
     },
     getList(page) {
         var that = this;
+        this.pageNumber = page;
         let params={
             pageNumber: page,
             pageSize: 10,

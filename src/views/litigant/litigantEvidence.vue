@@ -9,6 +9,11 @@
         </div>
       </div>
       <Table stripe :columns="columns" :data="tableData"></Table>
+      <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+                <Page :total="pageData.total" show-total  :page-size="10" :current="pageData.pageNumber" @on-change="changePage"></Page>
+            </div>
+        </div>
     </Card>
     <Modal
         v-model="upEvidenceModal"
@@ -550,6 +555,10 @@ export default {
         search () {
             this.getList();
         },
+        changePage(num){
+            this.pageData.pageNumber = num;
+            this.getList();
+        },
         getList () {
             this.tableData = [];
             litigantLawCaseList(this.searchData.caseNo, this.pageData).then(res => {
@@ -587,6 +596,8 @@ export default {
                         data.phase = "";
                         this.tableData.push(data);
                     })
+                    this.pageData.total = res.data.result.total;
+                    this.pageData.pageNumber = res.data.result.pageNumber;
                 } else {
                     this.$Message.error(res.data.message);
                 }

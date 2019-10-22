@@ -500,11 +500,16 @@ export default {
                   },
                   on: {
                       click: () => {
-                          console.log(params.row.path)
+                        if(params.row.type == 'pdf'){
+                          window.open(params.row.path)
+                        }else{
                           let a = document.createElement("a");
                           a.href = params.row.path;
                           a.download =params.row.docNmae;
                           a.click();
+                        }
+                          console.log(params.row.path)
+                          
                           // document.body.removeChild(a);
                       }
                   }
@@ -679,7 +684,7 @@ export default {
                         res.data.result[i].litigantAddressId ==
                         this.batchCache[j].litigantAddressId
                   ) {
-                      alert(this.programType)
+                      // alert(this.programType)
                     res.data.result[i].programType = this.programType;
                     if (this.programType == 1) {
                       res.data.result[i].name = this.simpleDip.concat(this.EMSDip);
@@ -783,7 +788,8 @@ export default {
               if(st != 'fp'){
                 let data1 = {
                   docNmae:"批量公告稿(" + formatDate(new Date(), "MM-dd hh:mm:ss") + ")",
-                  path:res.data.path
+                  path:res.data.path,
+                  type:'pdf'
                 }
                 this.usualList.push(data1)
 
@@ -793,11 +799,14 @@ export default {
                 let name = xar[xar.length-1];
                 let data2 = {
                   docNmae:name + "." + type,
-                  path:res.data.docPath
+                  path:res.data.docPath,
+                  type:'docx'
                 }
                 this.usualList.push(data2);
                 this.selUsualLaw = true;
               }else{
+                window.open(res.data.path)
+                return false;
                 var a = document.createElement("a");
                 a.href = res.data.path;
                 a.download =
@@ -854,6 +863,8 @@ export default {
                 duration: 5
               });
             } else {
+              window.open(res.data.path);
+              return false;
               var a = document.createElement("a");
               a.href = res.data.path;
               a.download =
@@ -991,6 +1002,9 @@ deepClone(origin, target) {
             if (res.data.error != "") {
               this.$Message.error({ content: res.data.error, duration: 5 });
             }
+            console.log(res.data.path)
+            window.open(res.data.path)
+            return false;
             var a = document.createElement("a");
             a.href = res.data.path;
             a.download =

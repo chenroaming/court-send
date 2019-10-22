@@ -67,7 +67,7 @@
                 <Page :total="Number(pageData.total)" :page-size="pageData.pageSize" :current="pageData.pageNumber" :page-size-opts="[5,10,20]" @on-change="pageChange" @on-page-size-change="pageSizeChange" show-sizer></Page>
             </div>
         </Card>
-        <Modal v-model="connectModal" width="950" :ok-text="'确认'" @on-ok="" title="案件关联">
+        <Modal v-model="connectModal" width="950" :ok-text="'关闭'" @on-ok="" cancel-text="" title="案件关联">
 
             <div class="leftCon">
                 <div class="table-btn-group" style="border-bottom:1px solid #e9eaec;padding-bottom:20px;padding-left:5px">
@@ -81,7 +81,7 @@
             </div>
 
             <div class="rightCon">
-                <Form class="search-form" :label-width="60" inline style="border-bottom:1px solid #e9eaec;">
+                <Form class="search-form" :label-width="50" inline style="border-bottom:1px solid #e9eaec;">
                     <Button type="primary" @click="connection">关联绑定</Button>
                     <FormItem label="案号">
                         <Input placeholder="请输入案号" style="width: 150px" v-model="searchConnectData.caseNo" @keydown.native.enter.prevent ="searchConnectList" />
@@ -313,7 +313,7 @@ export default {
           title: "法庭",
           key: "tribunal",
           align: "center",
-          width: 150
+          width: 220
         },
         {
           title: "开庭时间",

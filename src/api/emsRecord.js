@@ -40,9 +40,6 @@ export function queryCallLog (params) {
     });
 }
 
-/** 
- * 转换下载链接
- */
 export function getLocalPath (path) {
     const params = {
         path

@@ -41,7 +41,7 @@ export function queryEvidence (searchData, pageData) {
         caseNo:searchData.caseNo || '',
         courtId:searchData.courtId || '',
         submitName: searchData.litigantName || '',
-        submitType: searchData.litigantType == '' ? '' : searchData.litigantType == 1 ? '被告' : '原告',
+        submitType: searchData.litigantType == '' ? '' : searchData.litigantType == 1 ? '被告' : (searchData.litigantType == 2 ? '第三人' :'原告'),
         auditStatus: searchData.state || '',
         pageNumber: pageData.pageNumber || '',
         pageSize: pageData.pageSize || ''

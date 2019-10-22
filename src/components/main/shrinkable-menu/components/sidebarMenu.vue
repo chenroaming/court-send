@@ -7,7 +7,8 @@
         <template v-for="item in menuList">
             <MenuItem v-if="item.children.length<=1" :name="item.children[0].name" :key="'menuitem' + item.name">
                 <Icon :type="item.children[0].icon || item.icon" :size="iconSize" :key="'menuicon' + item.name"></Icon>
-                <span class="layout-text" :key="'title' + item.name">{{ itemTitle(item.children[0]) }}</span>
+                <span class="layout-text" :key="'title' + item.name">{{ itemTitle(item.children[0]) }} 
+                    <span v-if="itemTitle(item.children[0]) == '我的文书' && bages > 0" class="dip-badge">{{bages > 99 ? '99+' : bages}}</span> </span>
             </MenuItem>
 
             <Submenu v-if="item.children.length > 1" :name="item.name" :key="item.name">
@@ -38,6 +39,14 @@ export default {
         },
         openNames: {
             type: Array
+        }
+    },
+    computed:{
+        bages(){
+            return this.$store.state.app.litigantBages;
+        },
+        role(){
+            return this.$store.state.app.roleName;
         }
     },
     methods: {

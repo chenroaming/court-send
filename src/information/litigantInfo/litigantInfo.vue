@@ -226,7 +226,7 @@
                             <Input style="width: 200px" v-model="formItem.litigantName"/>
                         </FormItem>
                         <FormItem label="身份类型：">
-                            <Select v-model="formItem.litigationStatus" style="width:200px">
+                            <Select v-model="formItem.litigationStatus" clearable style="width:200px">
                                 <Option value="原告">原告</Option>
                                 <Option value="被告">被告</Option>
                                 <Option value="第三人">第三人</Option>

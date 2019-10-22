@@ -20,12 +20,12 @@
         @drop.stop.prevent="handleItemDrop($event, _self, _self.model)">
         <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleItemToggle"></i>
-        <div :class="anchorClasses" @contextmenu.prevent="show1(model)"  v-on="events">
+        <div :class="anchorClasses" @contextmenu.prevent="show1(model)" y='1' :title="model[textFieldName]" v-on="events">
           <!-- @contextmenu.prevent="show1(model[textFieldName],dex)" -->
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
             <slot :vm="this" :model="model">
                 <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
-                <span v-html="model[textFieldName]"></span>
+                <span  v-html="model[textFieldName]"></span>
             </slot>
         </div>
         <!-- <div class="rightEv">
@@ -58,7 +58,7 @@
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
-                        <span v-html="_.model[textFieldName]"></span>
+                        <span :title="_.model[textFieldName]" v-html="_.model[textFieldName]"></span>
                     </slot>
                 </template>
             </tree-item>

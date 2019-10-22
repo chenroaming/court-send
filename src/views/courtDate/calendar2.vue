@@ -241,7 +241,13 @@ export default {
             item.date = `${now.getFullYear()}-${now.getMonth() + 1}-${d}`;
             return item;
         });
-        this.updateView(now.getFullYear(), now.getMonth(), []);
+        console.log(this.$route.params)
+        if (this.$route.params.year){
+            this.updateView(this.$route.params.year, this.$route.params.month,  [],null,this.$route.params.caseNo);
+        }else{
+            this.updateView(now.getFullYear(), now.getMonth(), []);
+        }
+        
         getJudgeList().then(res => {
             res.data.result.map((item, i) => {
                 var obj = {};

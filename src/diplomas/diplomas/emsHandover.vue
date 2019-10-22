@@ -544,7 +544,7 @@ export default {
       createMailExcel(d).then(res=>{
           var data = res.data;
           if (data.state == 100) {
-            window.open("/" + data.outPath)
+            window.open(data.outPath)
             
           } else {
             that.$Message.info(data.message);

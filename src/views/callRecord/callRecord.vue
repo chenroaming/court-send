@@ -74,7 +74,7 @@
 <script>
 import myStep from "@/components/step";
 import mySteps from "@/components/steps";
-import { queryCallLog } from "../../api/emsRecord.js";
+import { queryCallLog,getLocalPath } from "../../api/emsRecord.js";
 import { formatDate } from "../../libs/date.js";
 export default {
   components: {
@@ -249,7 +249,7 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "Button",
+                "a",
                 {
                   props: {
                     type: "text",
@@ -270,14 +270,50 @@ export default {
                                 title: '提示',
                                 content: '<p>确定要下载么</p>',
                                 onOk: () => {
-                                    // this.$Message.info('Clicked ok');
+                                  if(params.row.recordAddress.indexOf("http") != -1){
+                                    var msg = this.$Message.loading({
+                                      content: "准备下载中。。",
+                                      duration: 0
+                                    });
+                                    getLocalPath(params.row.recordAddress).then(res => {
+                                      msg();
+                                      if(res.data.state == 100){
+                                        const downloadLink = document.createElement('a');
+                                        const body = document.documentElement || document.body;
+                                        body.appendChild( downloadLink);
+                                        let str = res.data.path.substr(0,1);
+                                        if(str == '/'){
+                                        downloadLink.href =res.data.path;
+                                        }else{
+                                        downloadLink.href ='/' + res.data.path;
+                                        }
+                                        downloadLink.download = '';
+
+                                        downloadLink.click();
+                                        body.removeChild(downloadLink);
+                                      }
+                                    }).catch(error => {
+                                      this.$Message.info('网络错误');
+                                      msg();
+                                    })
+                                  }else{
+                                    const downloadLink = document.createElement('a');
+                                    const body = document.documentElement || document.body;
+                                    body.appendChild( downloadLink);
                                     let str = params.row.recordAddress.substr(0,1);
-                                    console.log(str)
                                     if(str == '/'){
-                                    window.open(params.row.recordAddress)
+                                    downloadLink.href =params.row.recordAddress;
                                     }else{
-                                    window.open('/'+params.row.recordAddress)
+                                    downloadLink.href ='/' + params.row.recordAddress;
                                     }
+                                    downloadLink.download = '';
+
+                                    downloadLink.click();
+                                    body.removeChild(downloadLink);
+                                    
+                                  }
+                                    // this.$Message.info('Clicked ok');
+                                    
                                 },
                                 onCancel: () => {
                                     // this.$Message.info('Clicked cancel');
@@ -305,6 +341,20 @@ export default {
     
   },
   methods: {
+    downloadUrlFile(url) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+      xhr.setRequestHeader('Authorization', 'Basic a2VybWl0Omtlcm1pdA==');
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          // 获取图片blob数据并保存
+          saveAs(xhr.response, 'abc.jpg');
+        }
+      };
+    
+      xhr.send();
+    },
     radioChange(){
        var key = this.sendTo;
        switch (key) {
@@ -377,9 +427,10 @@ export default {
     getList(page) {
       var that = this;
       this.pageNumber = page;
-      if(this.formItem.handoverDate .length != 0 && this.formItem.handoverDate[0] != null){
-        this.formItem.startTime =formatDate(new Date(this.formItem.handoverDate[0]),'yyyy-MM-dd');
-        this.formItem.endTime =formatDate(new Date(this.formItem.handoverDate[1]),'yyyy-MM-dd');
+      console.log(this.formItem.handoverDate)
+      if(this.formItem.handoverDate.length != 0 && this.formItem.handoverDate[0] != null){
+        this.formItem.startTime =formatDate(new Date(this.formItem.handoverDate[0]),'yyyy-MM-dd') == "NaN-aN-aN" ? "" : formatDate(new Date(this.formItem.handoverDate[0]),'yyyy-MM-dd');
+        this.formItem.endTime =formatDate(new Date(this.formItem.handoverDate[1]),'yyyy-MM-dd') == "NaN-aN-aN" ? "" : formatDate(new Date(this.formItem.handoverDate[1]),'yyyy-MM-dd');
       }else{
         this.formItem.startTime = ""
         this.formItem.endTime = ""
@@ -391,8 +442,8 @@ export default {
         noAnswerReason: this.formItem.noAnswerReason,
         isAnswer: this.formItem.isAnswer,
         // handoverDate:this.formItem.handoverDate ? formatDate(new Date(this.formItem.handoverDate),'yyyy-MM-dd') : "",
-        startTime:this.formItem.startTime || null,
-        endTime:this.formItem.endTime || null,
+        startTime:this.formItem.startTime,
+        endTime:this.formItem.endTime,
         systemId:1,
         pageNumber: page,
         pageSize: 10,

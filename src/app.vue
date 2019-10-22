@@ -22,8 +22,9 @@ html,
 body {
   min-width: 1440px;
   height: 100%;
-  background: #f0f0f0;
-  overflow: auto;
+  /* background: #f0f0f0; */
+background-color: #f4f8ff;
+  overflow: auto !important;
 }
 
 .app-main {

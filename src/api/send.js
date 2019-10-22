@@ -325,3 +325,42 @@ export function accountForExcel (data) {
         data
     });
 }
+
+/** 
+ * 当事人所有送达记录
+ */
+export function queryAllLitigantSend (pageNumber) {
+    const params = {
+        pageNumber
+    }
+    return service({
+        url: '/court/send/queryAllLitigantSend.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 查询送达记录具体信息
+ */
+export function querySendInfo (sendId) {
+    const params = {
+        sendId
+    }
+    return service({
+        url: '/court/send/querySendInfo.jhtml',
+        method: 'GET',
+        params
+    });
+}
+/** 
+ * 查询当事人送达文书
+ */
+export function countLitigantSend () {
+    
+    return service({
+        url: '/court/send/countLitigantSend.jhtml',
+        method: 'GET',
+       
+    });
+}

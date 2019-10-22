@@ -23,9 +23,9 @@ export function courtList (searchData, pageData) {
 /**
  * 案件数量统计
  */
-export function caseCount () {
+export function caseCount (court) {
     const params = {
-
+        court
     };
     return service({
         url: '/court/indexCount/caseCount.jhtml',
@@ -88,6 +88,25 @@ export function lawCaseSchedulding (lawCaseId) {
     };
     return service({
         url: '/court/scheduling/indexLawCaseSchedulding.jhtml',
+        method: 'get',
+        params
+    });
+}
+
+/**
+ * 首页案件列表
+ * stage：案件阶段  0全部，1未排期，2送达中，3已送达，4，已开庭，5已结案
+court：殿前法庭，湖里法院
+ */
+export function getlawCaseStageInfo (stage,court,pageNumber,pageSize) {
+    const params = {
+        stage,
+        court,
+        pageNumber,
+        pageSize
+    };
+    return service({
+        url: '/court/indexCount/getlawCaseStageInfo.jhtml',
         method: 'get',
         params
     });

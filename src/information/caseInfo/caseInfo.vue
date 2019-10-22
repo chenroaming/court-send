@@ -83,12 +83,12 @@
                             <Input style="width: 200px" v-model="searchData.caseNo"/>
                         </FormItem>
                         <FormItem label="部门：">
-                            <Select v-model="searchData.courtId" style="width:200px">
+                            <Select v-model="searchData.courtId" clearable style="width:200px">
                                 <Option v-for="item in departmentList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label="案由">
-                          <Select v-model="searchData.briefName" style="width: 200px;vertical-align:middle;">
+                        <FormItem label="案由" >
+                          <Select v-model="searchData.briefName" clearable filterable style="width: 200px;vertical-align:middle;">
                             <Option v-for="item in briefList" :value="item.brief" :key="item.brief">{{ item.brief }}</Option>
                           </Select>
                         </FormItem>
@@ -331,11 +331,20 @@ export default {
                       click: () => {
                         const par = {
                           lawCaseId:params.row.id,
-                        }
+                        } 
+                          var msg = this.$Message.loading({
+                            content: "卷宗导出中请稍后。。",
+                            duration: 0
+                          });
                           downloadZip(par).then(res => {
+                            msg();
                             if(res.data.state == 100){
                               this.$Message.success(res.data.message);
-                              window.open('/' + res.data.path);
+                              let a = document.createElement("a");
+                              a.href =  res.data.path;
+                              a.download =params.row.docNmae;
+                              a.click();
+                              // window.open('/' + res.data.path);
                               // var fileStr = res.data.path;
                               // if(fileStr == null){
                               //     this.$Message.info("暂无附件");
@@ -361,7 +370,10 @@ export default {
                             }else{
                               this.$Message.info(res.data.message);
                             }
-                          })
+                          }).catch(err => {
+                            msg();
+                            this.$Message.error("服务器错误请稍后再试");
+                          });
                       }
                   }
                   },
@@ -491,6 +503,9 @@ export default {
     };
   },
   created() {
+    if(this.$route.params.ff){
+      this.show1 = true;
+    }
     this.onRefreshList();
     this.getCourtList();
     getBrief()
@@ -508,6 +523,7 @@ export default {
                 console.log(res)
                 if(res.data.state == 100){
                 this.$Message.success(res.data.message);
+                this.onRefreshList();
                 // this.caseNoUpdate=
                 // this.onRefreshList();
                 }else{
@@ -559,7 +575,7 @@ export default {
     },
     onRefreshList() {
       this.$store.commit("SET_CASENO", this.searchData.caseNo);
-      if(this.searchData.date != "" && this.searchData.date[0] != null){
+      if(this.searchData.date != "" && this.searchData.date[0] != null && this.searchData.date[0] != ""){
         console.log(this.searchData.date[0])
         this.searchData.filingDate1 =new Date(this.searchData.date[0]).getTime();
         this.searchData.filingDate2 =new Date(this.searchData.date[1]).getTime();

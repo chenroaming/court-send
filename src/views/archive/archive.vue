@@ -1,3 +1,10 @@
+<style>
+html {
+    height: 100%;
+    /* overflow: visible; */
+}
+
+</style>
 <template>
   <div>
     <Row>
@@ -13,7 +20,7 @@
           <span class="ivu-transfer-list-header-title">案件列表</span>
           <Tooltip content="创建案件目录" placement="right">
             <!-- <Icon type="ios-add-circle" /> -->
-            <span style="cursor:pointer;color: cornflowerblue;">
+            <span  @click="addcreatNoMo" style="cursor:pointer;color: cornflowerblue;">
               <!-- + -->
               <Icon type="plus-round"></Icon>
             </span>
@@ -73,7 +80,7 @@
           </div>
           <div style="width: 100%;height:100%;overflow:auto;position: relative;">
             <Table border stripe size="small" :columns="columns2" :data="data2"></Table>
-            <Table border stripe ref="selection" size="small" :columns="columns1"  :data="data1" @on-selection-change="selectChange" @on-row-click="selectRow" style="position: absolute;top:0;left:0;width:100%"></Table>
+            <Table border stripe ref="selection" size="small" :columns="columns1"  :data="data1" @on-selection-change="selectChange"  style="position: absolute;top:0;left:0;width:100%"></Table>
           </div>
           <ul>
             <li class="ivu-transfer-list-content-not-found">列表为空</li>
@@ -101,7 +108,8 @@
         </div>
         <div class="ivu-transfer-list-body ivu-transfer-list-body-with-footer" style="overflow-y: auto;margin-top: 10px;height: 103.5%; ">
           <img v-show="isImage" ref="imageShow" src="" alt="" style="width: 100%">
-          <iframe v-show="!isImage" :src="fileShow" width="100%" height="100%" frameborder="0" style="object-fit: fill;"></iframe>
+          <iframe v-show="!isImage && !vedioShow" :src="fileShow" width="100%" height="100%" frameborder="0" style="object-fit: fill;"></iframe>
+          <video style="margin-top:100px;" width="100%" height="400" muted autoplay v-if="vedioShow && !isImage" :src="videoSrc" controls="controls" type="video/mp4"></video>
         </div>
         <!-- <div class="ivu-transfer-list-footer">
             <div style="float: right; margin: 5px;height: 25px;">
@@ -150,15 +158,43 @@
         </div>
     </Modal>
     <Modal
+        v-model="creatNoMol"
+        width="560px"
+        :mask-closable="closeM"
+        
+        title="创建案件目录">
+        <div >
+            <Form  :label-width="160" inline >
+                <FormItem label="新案件目录名称：" style="width: 505px;">
+                    <Input v-model="dirNameNo" placeholder="请输入案号" style="width: 300px" />
+                </FormItem>
+            </Form>
+        </div>
+        <div slot="footer"> 
+            <Button @click="creatNoMol = false"  type="dashed" size="large">关闭</Button>
+            <Button @click="addDirNo" :loading="filaeLoading"  type="primary" size="large">提交</Button>
+        </div>
+    </Modal>
+    <Modal
         v-model="upMol"
         width="560px"
         :mask-closable="closeM"
         
         title="上传文件">
         <div >
-            <Form  :label-width="160" inline v-show="isAddL">
-                <FormItem label="新建子目录名称：" style="width: 505px;">
+            <Form  :label-width="160" inline >
+                <FormItem label="新建子目录名称：" v-show="isAddL" style="width: 505px;">
                     <Input v-model="dirTypeName" placeholder="请输入目录名称" style="width: 300px" />
+                </FormItem>
+                <FormItem label="有无原件：" style="width: 505px;">
+                    <RadioGroup v-model="original" >
+                        <Radio label="0">
+                            <span>无原件</span>
+                        </Radio>
+                        <Radio label="1">
+                            <span>有原件</span>
+                        </Radio>
+                    </RadioGroup>
                 </FormItem>
             </Form>
             <Upload
@@ -177,10 +213,36 @@
                 <i class="ivu-icon ivu-icon-ios-close-empty ivu-upload-list-remove" @click="removeFile(item.name)" style=""></i>
               </li>
             </ul>
+
         </div>
         <div slot="footer"> 
             <Button @click="upMol = false"  type="dashed" size="large">关闭</Button>
             <Button @click="submitFile" :loading="filaeLoading"  type="primary" size="large">提交</Button>
+        </div>
+    </Modal>
+    <Modal
+        v-model="filesModal"
+        width="560px"
+        :mask-closable="closeM"
+        
+        title="有无原件审核">
+        <div >
+            <Form  :label-width="160" inline >
+                <FormItem label="有无原件：" style="width: 505px;">
+                    <RadioGroup v-model="originalSh" >
+                        <Radio label="0">
+                            <span>无原件</span>
+                        </Radio>
+                        <Radio label="1">
+                            <span>有原件</span>
+                        </Radio>
+                    </RadioGroup>
+                </FormItem>
+            </Form>
+        </div>
+        <div slot="footer"> 
+            <Button @click="filesModal = false"  type="dashed" size="large">关闭</Button>
+            <Button @click="subOri" :loading="filaeLoading"  type="primary" size="large">提交</Button>
         </div>
     </Modal>
   </div>
@@ -195,7 +257,10 @@ import {
   downloadDiplomsList,
   decDiploms,
   dirTypeAndUploadDiploms,
-  createCaseDir
+  createCaseDir,
+  checkDiploms,
+  createCaseTableDir,
+  verifyDiploms
 } from "@/api/archive.js";
 export default {
   components: {
@@ -203,20 +268,30 @@ export default {
   },
   data() {
     return {
+      // selectObj:{},//选择相应的文件后将该文件对象储存起来方便后续刷新文件页面使用
       colOne: 5,
       colTwo: 7,
       filena:"",
+      original:'0',
+      originalSh:'0',
+      selectOs:{},
       dirName:"",
+      nowfileid:"",
+      filesModal:false,
       menuOpen:false,
       colThree: 12,
       yjMol:false,
+      videoSrc:"",
       isAddL:false,
+      creatNoMol:false,
+      dirNameNo:"",
       closeM:false,
       keyWord: "",
       creatMol:false,
       direcId:'',
       dirTypeName:"",
       upMol:false,
+      paId:"",
       filaeLoading:false,
       catalogueShow: [],
       selObj:{},
@@ -245,7 +320,36 @@ export default {
                   domProps: {
                     title: params.row.name,
                   },
+                  on:{
+                    click: () => {
+                      this.selectRow(params.row);
+                      // this.selectObj = params.row;审核功能取消
+                    }
+                  }
                 },params.row.name)
+          }
+        },
+        {
+          title: "原件",
+          width: 40,
+          key: "original",
+          align: "center",
+          ellipsis: true,
+          render:(h,params)=>{
+                return h('p',{
+                  style:{
+                    cursor:'pointer',
+                    color:'cornflowerblue'
+                  },
+                  on:{
+                    click: () => {
+                      console.log(params.row)
+                      this.nowfileid = params.row.path[0].fileId;
+                      this.paId = params.row.id;
+                      this.filesModal = true;
+                    }
+                  }
+                },params.row.original)
           }
         },
         {
@@ -255,6 +359,63 @@ export default {
           align: "center",
           ellipsis: true
         },
+        //审核功能取消
+        // {
+        //   title: "审核",
+        //   width: 40,
+        //   key: "check",
+        //   align: "center",
+        //   ellipsis: true,
+        //   render: (h, params) => {
+        //     return h("div", [
+        //         h(
+        //             "Button",
+        //             {
+        //             props: {
+        //                 type: "text",
+        //                 size: "small"
+        //             },
+        //             style: {
+        //               color:params.row.check == "未审核" ? "#6495ED" : "#000",
+        //             },
+        //             on: {
+        //                 click: () => {
+        //                   console.log(params.row);
+        //                   if(params.row.check == "已审核"){
+        //                     return this.$Message.warning('已审核，无法操作！');
+        //                   }
+        //                   this.$Modal.confirm({
+        //                   title: '提示',
+        //                   content: '是否确认审核？',
+        //                   okText: '是',
+        //                   closable:true,
+        //                   cancelText: '否',
+        //                   onOk: () => {
+        //                       verifyDiploms(params.row.path[0].fileId).then(res => {
+        //                           console.log(res.data);
+        //                           if(res.data.state == 100){
+        //                             this.$Message.success(res.data.message);
+        //                             this.itemClick(this.selectOs);
+        //                             this.selectRow(this.selectObj);
+        //                           }else{
+        //                             this.$Message.warning(res.data.message);
+        //                           }
+        //                       }).catch(error => {
+        //                           this.$Message.warning('网络错误，请刷新重试！');
+        //                       })
+        //                   },
+        //                   onCancel: () => {
+                              
+        //                   }
+        //                 });
+        //                 }
+        //             }
+        //             },
+        //             params.row.check
+        //         ),
+        //     ]);
+        //   }
+        // },
         {
           title: "上传时间",
           width: 100,
@@ -291,7 +452,7 @@ export default {
                 return h('p',{
                   style:{
                     cursor:'pointer'
-                  },
+                  }, 
                   domProps: {
                     title: params.row.name,
                   },
@@ -443,6 +604,7 @@ export default {
       preview: [],
       previewNumber: 1,
       isImage: true,
+      vedioShow:false,
       fileShow: "",
     };
   },
@@ -459,7 +621,26 @@ export default {
     uploadFile(){
 
     },
+    addcreatNoMo(){
+      console.log(55555)
+      this.creatNoMol = true;
+      this.dirNameNo = '';
+    },
+    subOri(){
+      this.filaeLoading = true;
+      checkDiploms(this.nowfileid,this.originalSh).then(res => {
+        this.filaeLoading = false;
+        if(res.data.state == 100){
+          this.$Message.success(res.data.message);
+          this.itemClick(this.selectOs);
+          this.filesModal = false;
+        }else{
+          this.$Message.warning(res.data.message);
+        }
+      })
+    },
     cloaseMenu(){
+
       this.menuOpen = false;
     },  
     handleUpload(file){
@@ -491,7 +672,7 @@ export default {
       }
       
       this.filaeLoading = true;
-      dirTypeAndUploadDiploms(this.upFile,this.selObj.caseId,this.dirTypeName,this.selObj.id ? this.selObj.id : "").then(res => {
+      dirTypeAndUploadDiploms(this.upFile,this.selObj.caseId,this.dirTypeName,this.selObj.id ? this.selObj.id : "",this.original).then(res => {
         this.filaeLoading = false;
         if(res.data.state == 100){
           this.$Message.success('上传成功');
@@ -543,10 +724,12 @@ export default {
       var ed = document.getElementById('menuDiv');
       // var e = event || window.event;        
       // var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;       
-      // var scrollY = document.documentElement.scrollTop || document.body.scrollTop;        
+      var scrollY = document.documentElement.scrollTop || document.body.scrollTop;        
       // var x = e.pageX || e.clientX + scrollX;        
       // var y = e.pageY || e.clientY + scrollY;  
-      
+      console.log(document.documentElement.scrollTop)
+      console.log(document.body.scrollTop)
+      console.log(window.pageYOffset)
       this.isOverAll = this.$store.getters.idDraw;
       if(this.isOverAll == true){
         var xu = x;
@@ -695,6 +878,7 @@ export default {
       }
       getDiplomsFileList(params).then(res => {
         if (res.data.state == 100) {
+          console.log(res.data);
           let list = res.data.fileList;
           this.total = res.data.total;
           this.data1 = [];
@@ -809,6 +993,8 @@ export default {
               object.id = item.groupList[0].groupId;
               object.name = item.groupName;
               object.time = item.groupList[0].createDate;
+              object.original = item.groupList[0].original ? "有" : "无";
+              // object.check = item.groupList[0].checked == true ? '已审核' : '未审核';审核功能取消
               object.path = item.groupList;
               object.page = item.groupList.length;
               arr = R.append(object)(arr);
@@ -828,8 +1014,7 @@ export default {
       })
     },
     itemClick(node) {
-      console.log(node.model);
-      
+      this.selectOs = node;
       // if (!R.has("children")(node.model)) {
       let params = {};
       if (!R.has("id")(node.model)) {
@@ -847,8 +1032,12 @@ export default {
       }
       console.log(params)
       this.direcId = params.directory;
+      
+      console.log(6666666)
       getDiplomsFileList(params).then(res => {
+        
         if (res.data.state == 100) {
+          console.log(res.data);
           let list = res.data.fileList;
           this.total = res.data.total;
           this.data1 = [];
@@ -963,13 +1152,25 @@ export default {
               object.id = item.groupList[0].groupId;
               object.name = item.groupName;
               object.time = item.groupList[0].createDate;
+              object.original = item.groupList[0].original ? "有" : "无";
+              // object.check = item.groupList[0].checked == true ? '已审核' : '未审核';审核功能取消
               object.path = item.groupList;
               object.page = item.groupList.length;
               arr = R.append(object)(arr);
             })(list);
             this.data1 = R.concat(arr)(this.data1);
+            console.log(1111)
+            console.log(this.data1)
+            if(this.paId != ""){
+              this.data1.map(item => {
+                if(item.id == this.paId){
+                  this.selectRow(item);
+                  this.paId = ""
+                }
+              })
+            }
           }
-
+          this.paId = "";
           // let eqId = R.eqBy(R.prop("id"));
           // this.data1 = R.concat(
           //   R.differenceWith(eqId, arr, this.data1),
@@ -977,8 +1178,11 @@ export default {
           // );
         } else {
           this.data1 = [];
+          this.paId = ""
           this.$Message.error(res.data.message);
         }
+      }).catch(error => {
+        
       });
       // }
     },
@@ -990,22 +1194,39 @@ export default {
     selectRow(item) {
       this.preview = item.path;
       this.previewNumber = 1;
+      var msg = this.$Message.loading({
+        content: "打开文件中。。",
+        duration: 0
+      });
+
       decDiploms({ fileId: this.preview[0].fileId }).then(res => {
+        msg();
         if (res.data.state == 100) {
           if (this.checkImg(res.data.result)) {
             this.isImage = true;
+            this.vedioShow = false;
             this.$refs.imageShow.src = res.data.result;
           } else if (
             this.checkPDF(res.data.result) ||
             this.checkMP3(res.data.result)
           ) {
             this.isImage = false;
+            this.vedioShow = false;
             this.fileShow = res.data.result;
+          }else if(this.checkMp4(res.data.result)){
+            this.isImage = false;
+            this.vedioShow = true;
+            var protocolStr = document.location.protocol;
+
+            this.videoSrc = protocolStr +  '//'+ location.host +
+              res.data.result;
           } else {
             this.isImage = false;
+            this.vedioShow = false;
             this.fileShow =
               "https://view.officeapps.live.com/op/view.aspx?src=" +
               location.host +
+              // "https://court1.ptnetwork001.com/" +
               res.data.result;
           }
         } else {
@@ -1020,15 +1241,24 @@ export default {
         if (res.data.state == 100) {
           if (this.checkImg(res.data.result)) {
             this.isImage = true;
+            this.vedioShow = false;
             this.$refs.imageShow.src = res.data.result;
           } else if (
             this.checkPDF(res.data.result) ||
             this.checkMP3(res.data.result)
           ) {
             this.isImage = false;
+            this.vedioShow = false;
             this.fileShow = res.data.result;
-          } else {
+          }else if(this.checkMp4(res.data.result)){
             this.isImage = false;
+            this.vedioShow = true;
+            var protocolStr = document.location.protocol;
+            this.videoSrc = protocolStr +  '//'+ location.host +
+              res.data.result;
+          }else {
+            this.isImage = false;
+            this.vedioShow = false;
             this.fileShow =
               "https://view.officeapps.live.com/op/view.aspx?src=" +
               location.host +
@@ -1053,6 +1283,28 @@ export default {
         this.colTwo = 0;
         this.colThree = 24;
       }
+    },
+    addDirNo(){
+      if(this.dirNameNo == ''){
+         this.$Message.warning('请输入案号');
+        return false;
+      }
+      let data = {
+        caseNo:this.dirNameNo
+      }
+      this.filaeLoading = true;
+      createCaseTableDir(data).then(res => {
+        this.filaeLoading = false;
+        if(res.data.state == 100){
+          this.$Message.success('创建成功');
+          this.creatNoMol = false;
+          this.getCaseList();
+        }else{
+          this.$Message.warning(res.data.message);
+        }
+      }).catch(error => {
+        this.filaeLoading = false;
+      })
     },
     addDir(){
       console.log(this.dirName);
@@ -1155,14 +1407,15 @@ export default {
       });
     },
     checkImg(fileName) {
-      let index = fileName.indexOf(".");
-      fileName = fileName.substring(index);
+      // let index = fileName.indexOf(".");
+      // fileName = fileName.substring(index);
+      let fileType = fileName.split('.')[fileName.split('.').length-1]
       if (
-        fileName !== ".bmp" &&
-        fileName !== ".png" &&
-        fileName !== ".gif" &&
-        fileName !== ".jpg" &&
-        fileName !== ".jpeg"
+        fileType !== "bmp" &&
+        fileType !== "png" &&
+        fileType !== "gif" &&
+        fileType !== "jpg" &&
+        fileType !== "jpeg"
       ) {
         // 根据后缀，判断是否符合图片格式
         return false;
@@ -1172,18 +1425,30 @@ export default {
     },
 
     checkPDF(fileName) {
-      let index = fileName.indexOf(".");
-      fileName = fileName.substring(index);
-      if (fileName !== ".pdf") {
+      // let index = fileName.indexOf(".");
+      // fileName = fileName.substring(index);
+      let fileType = fileName.split('.')[fileName.split('.').length-1]
+      if (fileType !== "pdf") {
         return false;
       } else {
         return true;
       }
     },
     checkMP3(fileName) {
-      let index = fileName.indexOf(".");
-      fileName = fileName.substring(index);
-      if (fileName !== ".mp3") {
+      // let index = fileName.indexOf(".");
+      // fileName = fileName.substring(index);
+      let fileType = fileName.split('.')[fileName.split('.').length-1]
+      if (fileType !== "mp3") {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    checkMp4(fileName){
+      // let index = fileName.indexOf(".");
+      // fileName = fileName.substring(index);
+      let fileType = fileName.split('.')[fileName.split('.').length-1]
+      if (fileType !== "mp4") {
         return false;
       } else {
         return true;

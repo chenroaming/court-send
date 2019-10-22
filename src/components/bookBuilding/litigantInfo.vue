@@ -1,3 +1,6 @@
+<style>
+
+</style>
 <template>
     <div>
         <Card>
@@ -18,58 +21,64 @@
         </Card>
         <Modal :title="this.type === 'plaintiff' ? this.litigantId != '' ? '修改原告' : '添加原告' : this.type === 'defendant' ? this.litigantId != '' ? '修改被告' : '添加被告' : this.litigantId != '' ? '修改第三人' : '添加第三人'" v-model="showAdd" width="546px" :loading="loading" ok-text="提交" @on-ok="submit" :mask-closable="false">
             <div>
-                <Form :model="addFormItem" :label-width="100" inline>
+                <Form ref="refAddLitigant" :model="addFormItem" :rules="natureRule" :label-width="100" inline>
                     <FormItem label="类型" style="width: 245px;">
-                        <Select v-model="addFormItem.litigantType" transfer placeholder="请选择">
+                        <Select v-model="addFormItem.litigantType"  transfer placeholder="请选择">
                             <Option value="自然人">自然人</Option>
                             <Option value="法人">法人</Option>
                             <Option value="非法人组织">非法人组织</Option>
                         </Select>
                     </FormItem>
-                    <FormItem :label="addFormItem.litigantType == '自然人'? '姓名' : '公司名称'" style="width: 505px;">
+                    <FormItem :label="addFormItem.litigantType == '自然人'? '姓名' : '公司名称'" style="width: 505px;" prop="litigantName">
                         <!-- <Input v-model="addFormItem.litigantName" placeholder="请输入当事人"></Input> -->
                         <!-- <Select v-model="addFormItem.litigantName" placeholder="请选择案件" @on-change="selectLitiName" filterable remote :remote-method="acsearLiti" :loading="loading1">
                             <Option v-for="(item, key) in litigantData" :value="item.name" :key="key">{{ item.name + '(' + item.id + ")" }}</Option>
                             
                         </Select> -->
                         <!-- <AutoComplete v-model="addFormItem.litigantName" :data="litigantData" @on-search="acsearLiti" @on-select="selectLitiName" @on-blur="blurName" placeholder="请输入当事人" transfer></AutoComplete> -->
-                        <Input v-model="addFormItem.litigantName" @on-focus="acsearLiti" @on-change="acsearLiti" @on-blur="changelss"  placeholder="请输入代理人一姓名"></Input>
+                        <Input v-model="addFormItem.litigantName" @on-focus="acsearLiti" @on-change="acsearLiti" @on-blur="changelss"  placeholder="请输入"></Input>
                         <ul v-show="litigantData.length > 0" class="ivu-select-dropdown-list downSel"> 
                             <li class="ivu-select-item" v-for="item in litigantData" @click="selectLitiName(item)"> {{item}}</li>
                         </ul>
                     </FormItem>
                     
-                    <FormItem :label="addFormItem.litigantType == '自然人' ? '身份证号码' : '统一信用代码'" style="width: 245px;">
+                    <FormItem :label="addFormItem.litigantType == '自然人' ? '身份证号码' : '统一信用代码'" style="width: 245px;" prop="identityCard">
                         <Input v-model="addFormItem.identityCard" @on-blur="idCardtoBirth" placeholder="请输入"></Input>
                     </FormItem>
-                    <FormItem label="性别" style="width: 245px;" v-show="addFormItem.litigantType == '自然人'">
-                        <Select v-model="addFormItem.litigantSex" transfer placeholder="请选择">
-                            <Option value="男">男</Option>
-                            <Option value="女">女</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem label="出生日期" style="width: 245px !important;" v-show="addFormItem.litigantType == '自然人'">
+                    <div v-if="addFormItem.litigantType == '自然人'">
+                        <FormItem label="性别" style="width: 245px;" v-if="addFormItem.litigantType == '自然人'" prop="litigantSex">
+                            <Select v-model="addFormItem.litigantSex" transfer placeholder="请选择">
+                                <Option value="男">男</Option>
+                                <Option value="女">女</Option>
+                            </Select>
+                        </FormItem>
+                    </div>
+                     <div v-if="addFormItem.litigantType == '自然人'">
+                    <FormItem label="出生日期" style="width: 245px !important;" v-if="addFormItem.litigantType == '自然人'" prop="birthday">
                         <DatePicker type="date" transfer :value="addFormItem.birthday" @on-change="changeDate"></DatePicker>
                     </FormItem>
-                    
-                    <FormItem label="当事人关系" style="width: 245px;display:none">
+                    </div>
+                    <!-- <FormItem label="当事人关系" style="width: 245px;display:none">
                         <Select v-model="addFormItem.relationType" transfer placeholder="请选择">
                             <Option value="0">无</Option>
                             <Option value="1">夫妻</Option>
                             <Option value="2">同住成员家属</Option>
                             <Option value="3">其他</Option>
                         </Select>
-                    </FormItem>
-                    <FormItem label="当事人" style="width: 245px;display:none">
+                    </FormItem> -->
+                    <!-- <FormItem label="当事人" style="width: 245px;display:none">
                         <Select v-model="addFormItem.relationLitigantId" transfer placeholder="请选择">
                             <Option v-for="item in this.data" :value="item.id" :key="item.litigantName">{{ item.litigantName }}</Option>
                         </Select>
-                    </FormItem>
+                    </FormItem> -->
 
-                    <FormItem label="民族" style="width: 245px;" v-show="addFormItem.litigantType == '自然人'">
+                    <FormItem label="民族" style="width: 245px;" v-if="addFormItem.litigantType == '自然人'" prop="nation">
                         <Input v-model="addFormItem.nation" placeholder="请输入民族" width="100px;"></Input>
                     </FormItem>
-                    <FormItem label="手机号码" style="width: 245px;" v-show="addFormItem.litigantType == '自然人'">
+                    <FormItem label="固定电话" style="width: 245px;">
+                        <Input v-model="addFormItem.litigantTelPhone" placeholder="请输入固定电话"></Input>
+                    </FormItem>
+                    <FormItem label="手机号码" style="width: 245px;" v-if="addFormItem.litigantType == '自然人'" prop="litigantPhone">
                         <!-- <Input v-model="addFormItem.litigantPhone" placeholder="请输入手机号码" @input="clearNoNum"></Input> -->
                         <input type="text" name="je" v-model="addFormItem.litigantPhone"  @input="clearNoNum" style="{
     display: inline-block;
@@ -87,42 +96,40 @@
     cursor: text;
     transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
 }" />
-                        <div style="color: #ed3f14;position:absolute;top:28px;left:5px;">多个手机号码请用逗号分隔</div>
+                        <div style="color: #ed3f14;position:absolute;top:28px;left:160px;">多个手机号码请用逗号分隔</div>
                     </FormItem>
-                    <FormItem label="固定电话" style="width: 245px;">
-                        <Input v-model="addFormItem.litigantTelPhone" placeholder="请输入固定电话"></Input>
-                    </FormItem>
+                    
 
-                    <FormItem v-bind:label="addFormItem.litigantType == '法人' ? '法定代表人' : '负责人'" style="width: 245px;" v-show="addFormItem.litigantType != '自然人'">
-                        <Input v-model="addFormItem.legalManName" v-bind:placeholder="addFormItem.litigantType == '法人' ? '请输入法定代表人姓名' : '请输入负责人姓名'" width="100px;"></Input>
+                    <FormItem  :label="addFormItem.litigantType == '法人' ? '法定代表人' : '负责人'" class="none-red" style="width: 245px;" v-if="addFormItem.litigantType != '自然人'"  >
+                        <Input v-model="addFormItem.legalManName"  v-bind:placeholder="addFormItem.litigantType == '法人' ? '请输入法定代表人姓名' : '请输入负责人姓名'" width="100px;"></Input>
                     </FormItem>
-                    <FormItem label="身份证号码" style="width: 245px;" v-show="addFormItem.litigantType != '自然人'">
+                    <FormItem label="身份证号码" style="width: 245px;" v-if="addFormItem.litigantType != '自然人'" >
                         <Input v-model="addFormItem.legalManId" v-bind:placeholder="addFormItem.litigantType == '法人' ? '请输入法定代表人身份证号码' : '请输入负责人身份证号码'" width="100px;"></Input>
                     </FormItem>
-                    <FormItem label="手机号码" style="width: 505px;" v-show="addFormItem.litigantType != '自然人'">
+                    <FormItem label="手机号码" style="width: 505px;" v-if="addFormItem.litigantType != '自然人'"  >
                         <Input v-model="addFormItem.legalManPhone" v-bind:placeholder="addFormItem.litigantType == '法人' ? '请输入法定代表人手机号码' : '请输入负责人手机号码'"></Input>
                     </FormItem>
 
-                    <FormItem label="工作单位" style="width: 245px;" v-show="addFormItem.litigantType == '自然人'">
+                    <FormItem label="工作单位" style="width: 245px;" v-if="addFormItem.litigantType == '自然人'">
                         <Input v-model="addFormItem.employer" placeholder="请输入工作单位"></Input>
                     </FormItem>
                     <FormItem label="电子邮箱" style="width: 505px">
                         <Input v-model="addFormItem.email" placeholder="请输入电子邮箱"></Input>
                     </FormItem>
-                    <FormItem :label="addFormItem.litigantType == '自然人' ? '户籍地址' : '公司注册地址'" style="width: 505px">
-                        <Input v-model="addFormItem.nativePlace" placeholder="请输入户籍地址"></Input>
+                    <FormItem :label="addFormItem.litigantType == '自然人' ? '户籍地址' : '公司注册地址'" style="width: 505px"  prop="nativePlace">
+                        <Input v-model="addFormItem.nativePlace" placeholder="请输入地址"></Input>
                     </FormItem>
                     <FormItem label="备注" style="width: 505px">
                         <Input v-model="addFormItem.nativePlaceRemark" placeholder="请输入地址备注"></Input>
                     </FormItem>
                     <FormItem :label="addFormItem.litigantType == '自然人' ? '经常居住地址' : '公司经营地址'" style="width: 505px">
-                        <Input v-model="addFormItem.address" placeholder="请输入经常居住地址"></Input>
+                        <Input v-model="addFormItem.address" placeholder="请输入地址"></Input>
                     </FormItem>
                     <FormItem label="备注" style="width: 505px">
                         <Input v-model="addFormItem.addressRemark" placeholder="请地址备注"></Input>
                     </FormItem>
                     <FormItem :label="addFormItem.litigantType == '自然人' ? '送达地址' : '确认公司经营地址'" style="width: 505px">
-                        <Input v-model="addFormItem.sendAddress" placeholder="请输入送达地址"></Input>
+                        <Input v-model="addFormItem.sendAddress" placeholder="请输入地址"></Input>
                     </FormItem>
                     <FormItem label="备注" style="width: 505px">
                         <Input v-model="addFormItem.sendAddressRemark" placeholder="请输入地址备注"></Input>
@@ -162,15 +169,15 @@
                         <!-- <Input v-model="addFormItem.lawermobile"  placeholder="请输入代理人一电话" width="100px;"></Input> -->
                         <AutoComplete v-model="addFormItem.lawermobile" :data="phoneData1" placeholder="请输入代理人一电话" transfer></AutoComplete>
                     </FormItem>
-                    <FormItem label="公民身份证号码" v-show="addFormItem.lawerType != 1 && addFormItem.lawerType != 2" style="width: 505px;">
+                    <FormItem label="公民身份证号码" v-if="addFormItem.lawerType != 1 && addFormItem.lawerType != 2" style="width: 505px;">
                         <!-- <Input v-model="addFormItem.lawIdentiCard" placeholder="请输入代理人一公民身份证号码"  ></Input> -->
                         <AutoComplete v-model="addFormItem.lawIdentiCard" :data="numData1" @on-search="queryAgent1" placeholder="请输入代理人一公民身份证号码" transfer></AutoComplete>
                     </FormItem>
-                    <FormItem label="工作证件号码" v-show="addFormItem.lawerType == 1 || addFormItem.lawerType == 2" style="width: 505px;">
+                    <FormItem label="工作证件号码" v-if="addFormItem.lawerType == 1 || addFormItem.lawerType == 2" style="width: 505px;">
                         <Input v-model="addFormItem.lawerNum" placeholder="请输入代理人一工作证件号码"  ></Input>
                         <!-- <AutoComplete v-model="addFormItem.lawerNum" :data="lawNumData1" @on-search="queryAgent1" placeholder="请输入代理人一工作证件号码" transfer></AutoComplete> -->
                     </FormItem>
-                    <FormItem label="工作单位" v-show="addFormItem.lawerType == 1 || addFormItem.lawerType == 2" style="width: 505px;">
+                    <FormItem label="工作单位" v-if="addFormItem.lawerType == 1 || addFormItem.lawerType == 2" style="width: 505px;">
                         <Input v-model="addFormItem.lawFirm" placeholder="请输入代理人一工作证单位"  ></Input>
                     </FormItem>
                     </div>
@@ -286,6 +293,7 @@ import {
     updateLitigantRelation,
     removeAddress
 } from '@/api/case';
+import plantVialte from "./litigantRule.js";
 export default {
     components: {
         ClipLoader
@@ -313,6 +321,7 @@ export default {
             arr1: [],
             arr2: [],
             addmodel:false,
+            natureRule: plantVialte.naRule, //自然人表单规则
             addFormItem: {
                 litigantName: '',
                 litigantSex: '',
@@ -350,7 +359,7 @@ export default {
                 lawermobile1: "",
                 lawIdentiCard1: "",
                 lawerNum1: ""
-
+                
             },
             lawerType: [
                 {
@@ -390,30 +399,30 @@ export default {
                 {
                     title: '当事人',
                     key: 'litigantName',
-                    width: '180px',
+                    width: 180,
                     align: 'center'
                 },
                 {
                     title: '身份证号/统一信用码',
                     key: 'identityCard',
-                    width: '170px',
+                    width: 180,
                     align: 'center'
                 },
                 {
                     title: '手机号码',
                     key: 'litigantPhone',
-                    width: '130px',
+                    width: 130,
                     align: 'center'
                 },
                 {
                     title: '地址',
                     key: 'address',
-                    width: '280px',
+                    // width: 280,
                     align: 'center'
                 },
                 {
                     title: '操作',
-                    width: '130px',
+                    width: 130,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -467,17 +476,12 @@ export default {
                                                             this.addFormItem.birthday = res.data.result.birthday;
                                                             this.addFormItem.email = res.data.result.email;                                                           
                                                             var arys = res.data.result.litigantAddresses;
+                                                            this.addFormItem.nativePlace = res.data.result.nativePlace ? res.data.result.nativePlace : "";
+                                                            this.addFormItem.address = res.data.result.address ? res.data.result.address : "";
+                                                            this.addFormItem.sendAddress = res.data.result.sendAddress ? res.data.result.sendAddress : "";
                                                             for(var i=0;i<arys.length;i++){
-                                                                if(arys[i].type == 0){
-                                                                    this.addFormItem.nativePlace = arys[i].address;
-                                                                    this.addFormItem.nativePlaceRemark = arys[i].remark;
-                                                                }else if(arys[i].type == 1){
-                                                                    this.addFormItem.address = arys[i].address;
-                                                                    this.addFormItem.addressRemark = arys[i].remark;
-                                                                }else if(arys[i].type == 2){
-                                                                    this.addFormItem.sendAddress = arys[i].address;
-                                                                    this.addFormItem.sendAddressRemark = arys[i].remark;
-                                                                }else{
+                                                                
+                                                                if(arys[i].type == 3){
                                                                     var data = {
                                                                         id:arys[i].id,
                                                                         name:arys[i].address,
@@ -935,6 +939,10 @@ export default {
                 this.lawyerT2 = true;
             }
         },
+        changeLiti(){
+            console.log(this.addFormItem.litigantType)
+            this.$refs['refAddLitigant'].resetFields();
+        },
         selectNamey (value) {
             console.log(value)
             this.addFormItem.lawerName =this.trimK(value.agentName);
@@ -1158,7 +1166,7 @@ export default {
         changeDate (date) {
             console.log(date)
             if(date != ''){
-                this.addFormItem.birthday = new Date(date).getTime();
+                this.addFormItem.birthday = date;
             }else{
                 this.addFormItem.birthday = '';
             }
@@ -1189,11 +1197,23 @@ export default {
                 this.loading = true;
             });
         },
+        changeLitigantType(){
+            console.log(this.addFormItem.litigantType)
+            // if(this.addFormItem.litigantType == '自然人'){
+            //     this.rules = plantVialte.naRule;
+            // }else if(this.addFormItem.litigantType == '法人'){
+            //     this.rules = plantVialte.legalRule;
+            // }else{
+            //     this.rules = plantVialte.nolegalRule;
+            // }
+        },
         add () {
             console.log(this.litigantId)
             if (this.CaseInfoSaved()) {
+                this.$refs['refAddLitigant'].resetFields();
                 console.log(this.addFormItem.nativePlaceRemark)
                 this.showAdd = true;
+                this.addFormItem.litigantType = "自然人";
                 this.addFormItem.iscreat = '';
                 this.litigantId = '';
                 this.addFormItem.litigantName = '';
@@ -1332,6 +1352,20 @@ export default {
             return s ? s.replace(/(^\s*)|(\s*$)/g, "") : '' ;
         },
         submit () {
+            let isTures = true;
+            this.$refs['refAddLitigant'].validate(valid => {
+                if (valid) {
+                    isTures = true;
+                    // 如果验证通过，执行的一些操作，比如调接口等
+                } else {
+                    isTures = false;
+                    // 如果验证不通过执行的一些操作
+                }
+            })
+            if(!isTures){
+                this.changeLoading();
+                return false;
+            }
             var litigaStatus;
             var adrStr = '';
             console.log(this.adressList)
@@ -1402,9 +1436,9 @@ export default {
                 var litigantPhone = this.addFormItem.litigantPhone.replace(/，/gi, ',');
                 // var litigantPhone = this.addFormItem.litigantPhone;
             }
-            var birthday =
-                this.addFormItem.birthday &&
-                formatDate(new Date(this.addFormItem.birthday), 'yyyy-MM-dd');
+            var birthday =this.addFormItem.birthday;
+                // this.addFormItem.birthday &&
+                // formatDate(new Date(this.addFormItem.birthday), 'yyyy-MM-dd');
             if (birthday == 'NaN-aN-aN') {
                 birthday = '';
             }
@@ -2058,7 +2092,7 @@ export default {
                     this.deleteModal = false;
                     this.$emit('refreshList');
                 } else {
-                    this.$Message.err(res.data.message);
+                    this.$Message.error(res.data.message);
                     this.deleteModal = false;
                 }
             });
@@ -2070,7 +2104,7 @@ export default {
                     this.deleteRelationModal = false;
                     this.$emit('refreshList');
                 } else {
-                    this.$Message.err(res.data.message);
+                    this.$Message.error(res.data.message);
                     this.deleteRelationModal = false;
                 }
             });
@@ -2089,6 +2123,8 @@ export default {
     }
 };
 </script>
+
+
 <style lang="less" scoped>
 .ivu-card {
   margin-bottom: 20px;
@@ -2105,6 +2141,7 @@ export default {
     }
   }
 }
+
 [v-cloak] {
   display: none;
 }

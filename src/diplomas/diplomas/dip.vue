@@ -21,6 +21,14 @@
     *display: inline;
     *zoom: 1
 }
+.ivu-table-cell b{
+    background-image:url('../../images/download.png');
+    background-size: 100% 100%; 
+    display:inline-block;
+    cursor: pointer;
+    height: 30px;
+    width:30px;
+}
 .a-upload  input {
     position: absolute;
     font-size: 100px;
@@ -1147,8 +1155,9 @@ export default {
                 "H5确认阅读",
                 '微信送达',
                 "委托送达",
-                "平台送达",
+                "调解送达",
                 "公告送达",
+                "平台送达",
             ],
             sendTypesLit: [
                 "现场领取",
@@ -1224,6 +1233,7 @@ export default {
     mounted () {
         this.getBrief();
         if (this.$route.params) {
+            this.cased = this.$route.params.lawCaseId;
             var caseId = this.$route.params.lawCaseId;
             this.uploadUrl="/api/dp/createPayOrder.jhtml?lawCaseId="+caseId
             if (caseId) {
@@ -1346,7 +1356,7 @@ export default {
                 this.fileInfo = true;
             }
             this.caInfo = false;
-            otherGetFiles(this.$route.params.lawCaseId).then(res => {
+            otherGetFiles(this.cased).then(res => {
             if(res.data.state == 100){
                 this.EviList = [];
                 this.qFileName = {
@@ -3063,7 +3073,7 @@ export default {
             //     }
             // }
             console.log(el.disabledGroup)
-            if(el.sendType == 0 || el.sendType == 3 || el.sendType == 4){
+            if(el.sendType == 0 || el.sendType == 3 || el.sendType == 4 || el.sendType == 9){
                 isReturn = 0;
             }
             let ret = "已传";

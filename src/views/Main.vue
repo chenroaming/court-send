@@ -111,6 +111,9 @@ import store from "@/store";
 import { formatDate } from "@/libs/date";
 import md5 from 'md5';
 import {
+    countLitigantSend
+} from '@/api/send.js';
+import {
     changePassword,
 } from '@/api/user';
 export default {
@@ -370,6 +373,18 @@ export default {
   },
   mounted() {
     this.init();
+    // store.dispatch('ShowNotice').then(res => {
+      
+    // })
+    console.log(this.$store.state.app.roleName)
+    if(this.$store.state.app.roleName == "当事人" || this.$store.state.app.roleName == "代理人"){
+      countLitigantSend().then(res => {
+        if(res.data.state == 100){
+           this.$store.commit('setlitigantBages',res.data.total);
+        }
+      })
+    }
+    
   },
   created() {
     // 显示打开的页面的列表

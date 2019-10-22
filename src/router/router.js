@@ -79,6 +79,12 @@ export const otherRouter = {
             component: () => import('@/views/message/message.vue')
         },
         {
+            path: '/send/homeCaseList',
+            title: '案件列表',
+            name: 'homeCaseList_index',
+            component: () => import('@/views/home/homeCaseList.vue')
+        },
+        {
             path: '/send/send',
             name: 'send',
             title: '送达详情',
@@ -469,6 +475,21 @@ export const appRouter = [
                 title: '案件进展查询',
                 name: 'litigantCaseInfo_index',
                 component: () => import('@/views/litigant/litigantCaseInfo.vue')
+            }
+        ]
+    },
+    {
+        path: '/send/sendRecord',
+        name: 'sendRecord',
+        title: '送达记录',
+        access: ['litigant','lawyer'],
+        component: Main,
+        children: [
+            {
+                path: 'index',
+                title: '送达记录',
+                name: 'sendRecord_index',
+                component: () => import('@/views/litigant/sendRecord.vue')
             }
         ]
     },

@@ -27,7 +27,7 @@
                                 <Option value="-1">取消</Option>
                                 <Option value="0">送达中</Option>
                                 <Option value="1">已送达成功</Option>
-                                <Option value="2">未外送达成功</Option>
+                                <Option value="2">未送达成功</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="立案时间：">
@@ -169,14 +169,15 @@ export default {
       "EMS送达",
       "工作人员上门送达",
       "电子邮件送达",
-      "公告",
+      "公告送达",
       "H5确认阅读",
       "委托送达",
-      '电话送达',
-      '微信送达',
-      "平台送达",
+      "电话送达",
+      "微信送达",
+      "调解送达",
+      "平台送达"
     ];
-    const sendStates = ["取消", "送达中", "已送达成功", "未外送达成功"];
+    const sendStates = ["取消", "送达中", "已送达成功", "未送达成功"];
     return {
       sms_loading: "",
       selCaseId: "",

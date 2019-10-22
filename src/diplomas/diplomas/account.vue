@@ -524,7 +524,7 @@ export default {
         // this.$Message.info("请先选择案件！");
         accountForExcel(dt).then(res => {
             if(res.data.state == 100){
-                window.open('/' + res.data.data)
+                window.open(res.data.data)
             }else{
                 that.$Message.info(res.data.message);
             }

@@ -14,7 +14,7 @@
         <Icon type="navicon"></Icon>
         功能菜单
         <span class="close-icon">
-          <Icon type="close-round"></Icon>
+          <!-- <Icon type="close-round"></Icon> -->
         </span>
       </p>
       <div class="card-content">
@@ -97,7 +97,7 @@
             </td>
             <td>审限届满日期</td>
             <td>
-              <span>{{ caseInfo.expireDate | formatDate }}</span>
+              <span>{{ caseInfo.expireDate  }}</span>
             </td>
           </tr>
           <tr>
@@ -749,7 +749,7 @@ export default {
             this.caseInfo.judge = lawCase.judge.name;
             this.caseInfo.clerk = lawCase.clerk.name;
             this.caseInfo.filingDate = lawCase.filingDate;
-            this.caseInfo.expireDate = lawCase.expireDate;
+            this.caseInfo.expireDate = lawCase.expireDate && lawCase.expireDate != "" ? formatDate(new Date(lawCase.expireDate), "yyyy-MM-dd") : "";
             this.caseInfo.brief = lawCase.brief.name;
             this.caseInfo.applyStandard = lawCase.applyStandard;
             this.caseInfo.allMembers = lawCase.allMembers;
@@ -954,7 +954,7 @@ export default {
             this.caseInfo.judge = lawCase.judge.name;
             this.caseInfo.clerk = lawCase.clerk.name;
             this.caseInfo.filingDate = lawCase.filingDate;
-            this.caseInfo.expireDate = lawCase.expireDate;
+            this.caseInfo.expireDate = lawCase.expireDate && lawCase.expireDate != "" ? formatDate(new Date(lawCase.expireDate), "yyyy-MM-dd") : "" ;
             this.caseInfo.brief = lawCase.brief.name;
             this.caseInfo.applyStandard = lawCase.applyStandard;
             this.caseInfo.allMembers = lawCase.allMembers;

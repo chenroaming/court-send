@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
                 if(res.data.court){
                     store.commit('setCourtName',res.data.court.name)
                 }
-                
+                store.commit('setroleName',res.data.roleName)
             }
             
             if (to.name == 'register') {

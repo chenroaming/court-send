@@ -5,24 +5,25 @@
           <FormItem label="案号">
             <Input style="width: 200px" v-model="searchData.caseNo"/>
         </FormItem>
-        <FormItem label="部门：">
-            <Select v-model="searchData.courtId" style="width:200px">
+        <!-- <FormItem label="部门：">
+            <Select v-model="searchData.courtId" clearable style="width:200px">
                 <Option v-for="item in departmentList" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="当事人">
           <Input v-model="searchData.litigantName" placeholder="请输入当事人" style="width: 200px" />
         </FormItem>
         <FormItem label="身份类型">
-          <Select v-model="searchData.litigantType" placeholder="请选择身份类型" style="width: 200px;vertical-align:middle;">
+          <Select v-model="searchData.litigantType" clearable placeholder="请选择身份类型" style="width: 200px;vertical-align:middle;">
             <Option value="0">原告</Option>
             <Option value="1">被告</Option>
+            <Option value="2">第三人</Option>
           </Select>
         </FormItem>
         <FormItem label="处理状态">
-          <Select v-model="searchData.state" placeholder="请选择处理状态" style="width: 200px;vertical-align:middle;">
-            <Option value="0">待处理</Option>
-            <Option value="1">已处理</Option>
+          <Select v-model="searchData.state" clearable placeholder="请选择处理状态" style="width: 200px;vertical-align:middle;">
+            <Option value="0">未审核</Option>
+            <Option value="1">已审核</Option>
           </Select>
         </FormItem>
         <div style="text-align:right;" class="btn-group">
@@ -34,9 +35,9 @@
       </Form>
     </Card>
     <Card>
-      <div class="table-btn-group">
+      <!-- <div class="table-btn-group">
         <Button icon="plus" type="primary" @click="showAddModal">添加</Button>
-      </div>
+      </div> -->
       <Table
         ref="selection"
         border
@@ -696,6 +697,7 @@ export default {
             }
         },
         onRefreshList () {
+            console.log(this.searchData)
             queryEvidence(this.searchData, this.pageData).then(res => {
                 console.log(this.searchData);
                 this.tableData = [];

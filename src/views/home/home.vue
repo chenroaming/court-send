@@ -55,6 +55,11 @@
                 <Row class-name="home-page-row1" style="height:100%" :gutter="10">
                     <Col :md="17" :lg="17" :style="{marginBottom: '10px'}" style="height:100%">
                         <Card style="height:100%">
+                            <Select v-model="courtName" @on-change="changeCourt" clearable placeholder="请选择法院" style="width: 120px;vertical-align:middle;position: absolute;top: 55px;z-index: 999999;">
+                                <Option value="全部">全院</Option>
+                                <!-- <Option value="湖里法院">湖里法院</Option> -->
+                                <Option value="殿前法庭">殿前法庭</Option>
+                            </Select>
                             <div id="charts-m" :style="{width: '100%',height: '100%',backgroundColor: '#F7F7F7'}">
                             </div>
                         </Card>
@@ -321,6 +326,7 @@ export default {
     data () {
         return {
             toDoList: [],
+            courtName:"全部",
             count: {
                 createUser: 496,
                 visit: 3264,
@@ -400,20 +406,7 @@ export default {
         };
     },
     created () {
-        this.$store.dispatch('GetUserInfo').then(res => {
-            this.name = res.data.result.name;
-
-            var dataStr = formatDate(
-                new Date(res.data.nowLoginDay),
-                'yyyy-MM-dd hh:mm:ss'
-            );
-            this.nowLoginDay = dataStr.slice(0, 4) + '年' + dataStr.slice(5, 7) + '月' + dataStr.slice(8, 10) + '日';
-            if (res.data.result.roles[0].name == '当事人' || res.data.result.roles[0].name == '代理人') {
-                this.litigantLogin = true;
-            } else {
-                this.litigantLogin = false;
-            }
-        });
+        
     },
     computed: {
         avatorPath () {
@@ -422,41 +415,29 @@ export default {
     },
     mounted () {
     // 案件数统计及环形图
-        caseCount().then(res => {
-            if (res.data.result.state == 100) {
-                this.newCase = res.data.result.newCaseCount;
-                this.acceptCase = res.data.result.allCaseCount;
-                var ary1 = {
-                    value: res.data.result.waitSendCount,
-                    name: '待送达案件数'
-                };
-                var ary2 = {
-                    value: res.data.result.overSendCount,
-                    name: '已送达案件数'
-                };
-                var ary3 = {
-                    value: res.data.result.overOpenCount,
-                    name: '已开庭案件数'
-                };
-                var ary4 = {
-                    value: res.data.result.waitScheduldingCount,
-                    name: '待排期案件数'
-                };
-                var ary5 = {
-                    value: res.data.result.allCaseCount,
-                    name: '受理案件'
-                };
-                var ary6 = {
-                    value: res.data.result.endOpenCount,
-                    name: '已结案件数'
-                };
-                var caseAry = [ary4, ary1, ary2, ary3, ary6];
-                var waitshCase = [ary5];
-                this.drawChart1(waitshCase, caseAry);
-            } else if (res.data.result.state == 101) {
-                this.$Message.error(res.data.result.message);
+        this.$store.dispatch('GetUserInfo').then(res => {
+            this.name = res.data.result.name;
+
+            var dataStr = formatDate(
+                new Date(res.data.nowLoginDay),
+                'yyyy-MM-dd hh:mm:ss'
+            );
+            this.nowLoginDay = dataStr.slice(0, 4) + '年' + dataStr.slice(5, 7) + '月' + dataStr.slice(8, 10) + '日';
+            if (res.data.roleName == '当事人' || res.data.roleName == '代理人') {
+                this.litigantLogin = true;
+            } else {
+                this.litigantLogin = false;
             }
+            if(res.data.state == 100){
+                if(res.data.court){
+                    if(res.data.court.name == "殿前法庭"){
+                        this.courtName = "殿前法庭"
+                    }
+                }
+            }
+            this.getCount();
         });
+        
         // 近三天庭审排期
         schedulingCase().then(res => {
             if (res.data.state == 100) {
@@ -727,6 +708,47 @@ export default {
                 return value1 - value2;
             }
         },
+        getCount(){
+            caseCount(this.courtName).then(res => {
+                if (res.data.result.state == 100) {
+                    this.newCase = res.data.result.newCaseCount;
+                    this.acceptCase = res.data.result.allCaseCount;
+                    var ary1 = {
+                        value: res.data.result.waitSendCount,
+                        name: '送达中案件数'
+                    };
+                    var ary2 = {
+                        value: res.data.result.overSendCount,
+                        name: '已送达案件数'
+                    };
+                    var ary3 = {
+                        value: res.data.result.overOpenCount,
+                        name: '已开庭案件数'
+                    };
+                    var ary4 = {
+                        value: res.data.result.waitScheduldingCount,
+                        name: '排期中案件数'
+                    };
+                    var ary5 = {
+                        value: res.data.result.allCaseCount,
+                        name: '受理案件'
+                    };
+                    var ary6 = {
+                        value: res.data.result.endOpenCount,
+                        name: '已结案件数'
+                    };
+                    var caseAry = [ary4, ary1, ary2, ary3, ary6];
+                    var waitshCase = [ary5];
+                    this.drawChart1(waitshCase, caseAry);
+                } else if (res.data.result.state == 101) {
+                    this.$Message.error(res.data.result.message);
+                }
+            });
+        },
+        changeCourt(){
+            console.log(this.courtName)
+            this.getCount();
+        },
         addNewToDoItem () {
             this.showAddNewTodo = true;
         },
@@ -747,6 +769,7 @@ export default {
             });
         },
         drawChart1 (waitshCase, aryData) {
+            let that = this;
             let myChart = echarts.init(document.getElementById('charts-m'));
             var option1 = {
                 title: {
@@ -760,8 +783,8 @@ export default {
                     right: 20,
                     data: [
                         '受理案件',
-                        '待排期案件数',
-                        '待送达案件数',
+                        '排期中案件数',
+                        '送达中案件数',
                         '已送达案件数',
                         '已开庭案件数',
                         '已结案件数'
@@ -782,7 +805,23 @@ export default {
                             }
                         },
                         center: ['50%', '60%'],
-                        data: waitshCase
+                        data: waitshCase,
+                        itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                 },
+                                normal:{
+                                    color:function(params) {
+                                    //自定义颜色
+                                    var colorList = [          
+                                            '#002060',
+                                        ];
+                                        return colorList[params.dataIndex]
+                                     }
+                                }
+                          }
                     },
                     {
                         name: '案件数量',
@@ -819,7 +858,23 @@ export default {
                             }
                         },
                         center: ['50%', '60%'],
-                        data: aryData
+                        data: aryData,
+                        itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                 },
+                                normal:{
+                                    color:function(params) {
+                                    //自定义颜色
+                                    var colorList = [          
+                                            '#FF0000', '#FFFF00', '#00B050', '#00B0F0', '#7030A0',
+                                        ];
+                                        return colorList[params.dataIndex]
+                                     }
+                                }
+                          }
                     }
                 ]
             };
@@ -830,6 +885,10 @@ export default {
             // ':' +
             // option1.series[param.seriesIndex].data[param.dataIndex].name
             //     );
+              that.$router.push({
+                name: "homeCaseList_index",
+                params: { court: that.courtName,stage:option1.series[param.seriesIndex].data[param.dataIndex].name }
+              });
             });
         },
         drawChart2 (xaxisdata, serieszs, seriesyx, avergeCount) {

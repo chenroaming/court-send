@@ -126,12 +126,12 @@
                             <Input style="width: 200px" v-model="formItem.name"/>
                         </FormItem>
                         <FormItem label="法院类型：">
-                            <Select v-model="formItem.type" style="width:200px">
+                            <Select v-model="formItem.type"  clearable filterable style="width:200px">
                                 <Option v-for="item in typeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="上级法院：">
-                            <Select v-model="formItem.parentId" style="width:200px">
+                            <Select v-model="formItem.parentId"  clearable filterable style="width:200px">
                                 <Option v-for="item in parentList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>

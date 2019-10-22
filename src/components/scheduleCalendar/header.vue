@@ -184,6 +184,8 @@ export default {
             this.litigantName=this.value13
             this.caseNo=''
         }
+        console.log(month)
+        console.log(year)
       this.updateValue(year, month);
     },
     nextMonth() {

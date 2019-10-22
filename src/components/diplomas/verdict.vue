@@ -12,7 +12,7 @@
             </Col>
          </Row>
          <div class="main">
-            <div class="">时间：{{backFill.executeTime}}</div>
+            <div class="">时间：<div class="smallInput"><input type="text" v-model="backFill.executeTime"></div></div>
             <div class="">地点：殿前法庭办公室</div>
             <div class="">审判长：<div class="smallInput"><input type="text" v-model="backFill.judgeName"></div></div>
             <div class="">代书记员：<div class="smallInput" style=""><input type="text" v-model="backFill.otherClerkName"></div></div>
@@ -96,6 +96,7 @@ export default {
                     plaintiffNameOrLawyerNameAndPhone:this.backFill.plaintiffNameOrLawyerNameAndPhone,
                     otherClerkName:this.backFill.otherClerkName,
                     plaintiffNameOrLawyerName:this.backFill.plaintiffNameOrLawyerName,
+                    executeTime:this.backFill.executeTime
                 }  
               dbList(
                   data

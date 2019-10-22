@@ -48,14 +48,22 @@ export default {
         };
     },
     mounted() {
-        countTime().then(res=>{
-            console.log(res)
-        })
+        // countTime().then(res=>{
+        //     console.log(res)
+        // })
     },
     watch: {
         handoverDate(cur,old){
-            var timestamp1 = Date.parse(new Date(cur[0]));
-            var timestamp2 = Date.parse(new Date(cur[1]));
+            console.log(1111111111111)
+            console.log(cur[0])
+            if(cur[0] != "" && cur[0] != null){
+                var timestamp1 = Date.parse(new Date(cur[0]));
+                var timestamp2 = Date.parse(new Date(cur[1]));
+            }else{
+                var timestamp1 = '';
+                var timestamp2 = '';
+            }
+            
             console.log(timestamp1)
             console.log(old)
             this.getData(timestamp1,timestamp2)

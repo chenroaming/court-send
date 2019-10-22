@@ -677,6 +677,8 @@ export default {
           this.formItem.creator=''
           this.formItem.isRelease=''
           this.formItem.newspaper=''
+          this.formItem.startDate=''
+          this.formItem.endDate=''
           this.daterange=''
       },
       searchCase(value){

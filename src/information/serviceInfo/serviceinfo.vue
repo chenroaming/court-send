@@ -115,7 +115,7 @@
                             <Input style="width: 200px" v-model="formItem.name"/>
                         </FormItem>
                         <FormItem label="性别：">
-                            <Select v-model="formItem.sex" style="width:200px">
+                            <Select v-model="formItem.sex" clearable style="width:200px">
                                 <Option value="0">男</Option>
                                  <Option value="1">女</Option>
                             </Select>

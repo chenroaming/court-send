@@ -243,7 +243,31 @@ export default {
           title: "文件名",
           key: "name",
           align: "center",
-          ellipsis: true
+          ellipsis: true,
+          render:(h,params)=>{
+                return h('p',{
+                  style:{
+                    cursor:'pointer'
+                  },
+                  domProps: {
+                    title: params.row.name,
+                  },
+                },params.row.name)
+          }
+        },
+        {
+          title: "原件",
+          width: 40,
+          key: "original",
+          align: "center",
+          ellipsis: true,
+          render:(h,params)=>{
+                return h('p',{
+                  style:{
+                    cursor:'pointer',
+                  },
+                },params.row.original)
+          }
         },
         {
           title: "页数",
@@ -955,6 +979,7 @@ export default {
               let object = {};
               object.id = item.groupList[0].groupId;
               object.name = item.groupName;
+              object.original = item.groupList[0].original ? "有" : "无";
               object.time = item.groupList[0].createDate;
               object.path = item.groupList;
               object.page = item.groupList.length;

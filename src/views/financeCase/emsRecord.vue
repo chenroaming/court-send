@@ -525,6 +525,7 @@ export default {
     console.log(myDate)
     let upWeek =formatDate(new Date(myDate -  7*24*3600*1000),'yyyy-MM-dd');
     // console.log(formatDate(new Date(myDate -  7*24*3600*1000),'yyyy-MM-dd'))
+    this.formItem.handoverDate = [];
     this.formItem.handoverDate.push(upWeek,myDate1)
     this.getList(1);
     
@@ -550,6 +551,7 @@ export default {
         if(res.data.state == 100){
           this.$Message.success(res.data.message);
           this.cardState = false;
+          this.getList(this.pageNumber)
         }else{
           this.$Message.info(res.data.message);
         }
@@ -698,7 +700,7 @@ export default {
       var that = this;
       this.pageNumber = page;
       console.log(this.formItem.handoverDate)
-      if(this.formItem.handoverDate.length != 0 && this.formItem.handoverDate[0] != null){
+      if(this.formItem.handoverDate.length != 0 && this.formItem.handoverDate[0] != null && this.formItem.handoverDate[0] != ''){
         this.formItem.startDate =formatDate(new Date(this.formItem.handoverDate[0]),'yyyy-MM-dd');
         this.formItem.endDate =formatDate(new Date(this.formItem.handoverDate[1]),'yyyy-MM-dd');
       }else{

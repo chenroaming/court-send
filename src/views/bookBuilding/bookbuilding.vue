@@ -5,7 +5,7 @@
                 <Icon type="navicon"></Icon>
                 功能菜单
                 <span class="close-icon" @click="toggleCloseSideBar">
-                  <Icon type="close-round"></Icon>
+                  <!-- <Icon type="close-round"></Icon> -->
                 </span>
             </p>
             <div class="card-content" style="height: 455px;">
@@ -76,7 +76,7 @@
                         </td>
                         <td>审限届满日期</td>
                         <td>
-                          <span v-show="!changeCaseInfo">{{ caseInfo.expireDate | formatDate }}</span>
+                          <span v-show="!changeCaseInfo">{{ caseInfo.expireDate  }}</span>
                           <DatePicker type="date" :value="caseInfo.expireDate" @on-change="changeDate2" style="width: 98%;vertical-align:baseline;" v-show="changeCaseInfo"></DatePicker>
                         </td>
                     </tr>
@@ -264,12 +264,12 @@
                         <Input v-model="addFormItem.nativePlaceRemark" placeholder="请输入地址备注"></Input>
                     </FormItem>
                 <FormItem :label="addFormItem.litigantType == '自然人' ? '经常居住地址' : '公司经营地址'" style="width: 505px">
-                    <Input v-model="addFormItem.address" placeholder="请输入经常居住地址"></Input>
+                    <Input v-model="addFormItem.address" placeholder="请输入地址"></Input>
                 </FormItem>
                 <FormItem label="备注" style="width: 505px">
                     <Input v-model="addFormItem.addressRemark" placeholder="请地址备注"></Input>
                 </FormItem>
-                <FormItem :label="addFormItem.litigantType == '自然人' ? '送达地址' : '确认公司经营地址'" style="width: 505px">
+                <FormItem :label="addFormItem.litigantType == '自然人' ? '送达地址' : '确认送达地址'" style="width: 505px">
                     <Input v-model="addFormItem.sendAddress" placeholder="请输入送达地址"></Input>
                 </FormItem>
                 <FormItem label="备注" style="width: 505px">
@@ -666,11 +666,18 @@ export default {
                         this.caseInfo.clerkId = item.clerkListId;
                     }
                 });
+                let expireDate = "";
+                if(this.caseInfo.expireDate == "" || this.caseInfo.expireDate == null){
+                    expireDate = "";
+                }else{
+                    expireDate = new Date(this.caseInfo.expireDate).getTime();
+                }
+                
                 modifyCaseInfo(
                     this.caseInfo.id,
                     this.caseInfo.allMembers,
                     this.caseInfo.filingDate,
-                    this.caseInfo.expireDate,
+                    expireDate,
                     this.caseInfo.applyStandard,
                     this.caseInfo.brief,
                     this.caseInfo.judgeId,
@@ -697,7 +704,6 @@ export default {
                     this.judgeList = [];
                     const constList1 = res.data.clerkList;
                     constList1.map((item, index) => {
-                        console.log(item.name);
                         const data = {};
                         data.clerkListName = item.name;
                         data.clerkListId = item.id;
@@ -705,7 +711,6 @@ export default {
                     });
                     const constList2 = res.data.judgeList;
                     constList2.map((item, index) => {
-                        console.log(item.name);
                         const data = {};
                         data.judgeListName = item.name;
                         data.judgeListId = item.id;
@@ -719,7 +724,8 @@ export default {
             this.caseInfo.filingDate = new Date(date).getTime();
         },
         changeDate2 (date) {
-            this.caseInfo.expireDate = new Date(date).getTime();
+            console.log(date)
+            this.caseInfo.expireDate = date;
         },
         changeDate3 (date) {
             this.addFormItem.birthday = new Date(date).getTime();
@@ -833,7 +839,13 @@ export default {
                         this.caseInfo.judge = caseInfo.judge.name;
                         this.caseInfo.clerk = caseInfo.clerk.name;
                         this.caseInfo.filingDate = caseInfo.filingDate;
-                        this.caseInfo.expireDate = caseInfo.expireDate;
+                        // this.caseInfo.expireDate = caseInfo.expireDate;
+                        if(caseInfo.expireDate && caseInfo.expireDate != ''){
+                            this.caseInfo.expireDate = formatDate(new Date(caseInfo.expireDate), "yyyy-MM-dd")
+                        }else{
+                            this.caseInfo.expireDate = "";
+                        }
+                        // this.caseInfo.expireDate = formatDate(new Date(caseInfo.expireDate), "yyyy-MM-dd")
                         this.caseInfo.brief = caseInfo.brief.name;
                         // if(this.caseInfo.brief == '申请支付令'){//判断为申请支付令时改变标题栏内容，不好的写法，直接用三目表达式即可
                         //     this.plaintiff = '申请人信息';
@@ -897,7 +909,9 @@ export default {
                                 this.plaintiffRelation.push(data); 
                                 console.log(111)
                                 console.log(this.plaintiffRelation)
-                                })
+                                
+                            })
+                            this.$refs.revertsList1.getRelation(this.plaintiffRelation);
                                 // console.log('原告'+this.plaintiffRelation);
                         }
                      }).catch(() => {});
@@ -925,6 +939,7 @@ export default {
                                 this.defendantRelation.push(data);
                                 
                             });
+                            this.$refs.revertsList2.getRelation(this.defendantRelation);
                             // console.log('dsd'+this.litigantRelations);
                         }
                      }).catch(() => {});
@@ -947,7 +962,9 @@ export default {
                                 }
                                               
                                 this.thirdRelation.push(data);
+                                  
                             });
+                            this.$refs.revertsList3.getRelation(this.thirdRelation);
                             // console.log('第三人'+this.thirdRelation);
                         }
                      }).catch(() => {});
@@ -981,7 +998,14 @@ export default {
                             this.caseInfo.judge = caseInfo.judge.name;
                             this.caseInfo.clerk = caseInfo.clerk.name;
                             this.caseInfo.filingDate = caseInfo.filingDate;
-                            this.caseInfo.expireDate = caseInfo.expireDate;
+                            // this.caseInfo.expireDate = caseInfo.expireDate;
+                            if(caseInfo.expireDate && caseInfo.expireDate != ''){
+                               
+                                this.caseInfo.expireDate = formatDate(new Date(caseInfo.expireDate), "yyyy-MM-dd")
+                            }else{
+                                this.caseInfo.expireDate = "";
+                            }
+                            
                             this.caseInfo.brief = caseInfo.brief.name;
                             // if(this.caseInfo.brief == '申请支付令'){//判断为申请支付令时改变标题栏内容，其实直接用三目即可
                             //     this.plaintiff = '申请人信息';

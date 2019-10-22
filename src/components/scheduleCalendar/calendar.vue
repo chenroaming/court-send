@@ -51,8 +51,8 @@ export default {
   },
   data() {
     return {
-      year: new Date().getFullYear(),
-      month: new Date().getMonth(),
+      year: this.$store.state.app.calendarYear,
+      month: this.$store.state.app.calendarMonth,
       judgeId: [],
       checkJudge: [],
       openState:[],

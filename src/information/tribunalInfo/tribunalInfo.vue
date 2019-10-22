@@ -156,18 +156,18 @@
                             <Input style="width: 200px" v-model="formItem.name"/>
                         </FormItem>
                         <FormItem label="归属：">
-                            <Select style="width: 200px" v-model="formItem.courtName">
+                            <Select style="width: 200px" clearable v-model="formItem.courtName">
                                 <Option v-for="item in courtNameList" :value="item" :key="item">{{ item }}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="使用状态：">
-                            <Select v-model="formItem.state" style="width: 200px">
+                            <Select v-model="formItem.state" clearable style="width: 200px">
                                 <Option value="true">不可用</Option>
                                 <Option value="false">正常使用</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="法庭类型：">
-                            <Select v-model="formItem.type" style="width: 200px">
+                            <Select v-model="formItem.type" clearable style="width: 200px">
                                 <Option value="0">普通法庭</Option>
                                 <Option value="1">科技法庭</Option>
                             </Select>

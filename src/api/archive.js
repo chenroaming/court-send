@@ -78,9 +78,21 @@ export function createCaseDir (params) {
 }
 
 /**
+ * 创建案件根目录
+ * @param {*} params 
+ */
+export function createCaseTableDir (data) {
+  return service({
+    url: '/dp/createCaseTableDir.jhtml',
+    method: 'post',
+    data
+  })
+}
+
+/**
  * 上传文件到电子卷宗
  */
-export function dirTypeAndUploadDiploms (fileList, caseId,dirTypeName,dirTypeParentId) {
+export function dirTypeAndUploadDiploms (fileList, caseId,dirTypeName,dirTypeParentId,original) {
   let params = new FormData()
   for(var i=0;i<fileList.length;i++){
       params.append('fileList', fileList[i])
@@ -88,7 +100,37 @@ export function dirTypeAndUploadDiploms (fileList, caseId,dirTypeName,dirTypePar
   let config = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }
-  var str = '/dp/dirTypeAndUploadDiploms.jhtml?caseId='+caseId+'&dirTypeName='+dirTypeName + '&dirTypeParentId='+dirTypeParentId;
+  var str = '/dp/dirTypeAndUploadDiploms.jhtml?caseId='+caseId+'&dirTypeName='+dirTypeName + '&dirTypeParentId='+dirTypeParentId+ '&original='+original;
   var strs = encodeURI(str)
   return service.post(strs, params, config)
+}
+
+/**
+ * 是否有无原件
+ */
+export function checkDiploms (fileId,original) {
+  const params = {
+    fileId,
+    original
+  }
+  return service({
+    url: '/dp/checkDiploms.jhtml',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 审核接口
+ * @param {*} params 
+ */
+export function verifyDiploms (fileId) {
+  const params = {
+    fileId
+  }
+  return service({
+    url: '/dp/verifyDiploms.jhtml',
+    method: 'get',
+    params
+  })
 }

@@ -15,7 +15,7 @@
         <Icon type="navicon"></Icon>
         功能菜单
         <span class="close-icon">
-          <Icon type="close-round"></Icon>
+          <!-- <Icon type="close-round"></Icon> -->
         </span>
       </p>
       <div class="card-content">
@@ -283,25 +283,25 @@ export default {
         {
             title: '当事人',
             key: 'litigantName',
-            width: '180px',
+            width: 180,
             align: 'center'
         },
         {
             title: '当事人类型',
             key: 'litigantType',
-            width: '100px',
+            width: 120,
             align: 'center'
         },
         {
             title: '身份证号/统一信用码',
             key: 'identityCard',
-            width: '170px',
+            width: 170,
             align: 'center'
         },
         {
             title: '手机号码',
             key: 'litigantPhones',
-            width: '150px',
+            width: 150,
             align: 'center',
              render: (h, params) => {
                 let hArr = [];
@@ -516,7 +516,8 @@ export default {
           if(res.data.state == 100){
               this.$Message.success(res.data.message);
               this.subLoad = false;
-              this.phoneModal = false;                
+              this.phoneModal = false;
+              localStorage.setItem("codes",'');              
           }else{
               this.$Message.info(res.data.message);
               this.subLoad = false;
@@ -731,7 +732,11 @@ export default {
                         if(data.defendantList[y].litigantPhone != ""&& data.defendantList[y].litigantPhone != null){
                           let sary = data.defendantList[y].litigantPhone.split(',');
                           for(let u=0;u<sary.length;u++){
-                            aryy.push(sary[u])
+                            // aryy.push(sary[u])
+                            let arrs = sary[u].split('，');
+                            arrs.map(item => {
+                              aryy.push(item)
+                            })
                           }
                             // aryy.push(data.defendantList[y].litigantPhone)
                         }
