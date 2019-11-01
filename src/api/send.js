@@ -364,3 +364,28 @@ export function countLitigantSend () {
        
     });
 }
+
+/** 
+ * 送达流程登记表
+ */
+export function getSendInfo2 (lawId) {
+    const params = {
+        lawId
+    }
+    return service({
+        url: '/court/send/getSendInfo.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 修改送达流程登记表
+ */
+export function updateSendInfo (params) {
+    return service({
+        url: '/court/send/updateSendInfo.jhtml',
+        method: 'post',
+        params
+    });
+}

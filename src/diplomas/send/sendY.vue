@@ -41,6 +41,7 @@
     <Card v-show="caseInfoShow">
         <p slot="title">
             案件信息
+            <span class="case-finish" style="right: 135px;" @click="sendTable">送达流程登记表</span>
             <span class="case-finish" @click="caseFinish">案件送达完成</span>
         </p>
         <div class="maininfo-warp">
@@ -492,6 +493,16 @@
             <Button @click="viewDipmos = false"   type="dashed" size="large">关闭</Button>
         </div>
     </Modal>
+    <!-- 送达流程登记表 -->
+    <Modal
+    v-model="showTable"
+    title="送达流程登记表"
+    footer-hide
+    width="800">
+    <div>
+        <sendTable ref="sendTable"></sendTable>
+    </div>
+    </Modal>
   </div>
 </template>
 
@@ -509,18 +520,22 @@ import {
 } from "../../api/send.js";
 import { formatDate } from "../../libs/date.js";
 import ZhViewer from "@/components/moreFileViewer/moreFileViewer.vue";
+import sendTable from "@/components/sendTable/sendTable.vue";
 export default {
     components: {
-        ZhViewer
+        ZhViewer,
+        sendTable
     },
   data() {
     var width = window.innerWidth - 350;
     return {
+      showTable:false,//显示送达详情表格
       sendStates: [
         { s: "取消", c: "#495060" },
         { s: "送达中", c: "#2d8cf0" },
         { s: "已送达成功", c: "#19be6b" },
-        { s: "送达失败！", c: "#ed3f14" }
+        { s: "送达失败！", c: "#ed3f14" },
+        { s: "已阅读", c: "#ed3f14" },
       ],
       sendTo: "0",
       searchData: {
@@ -567,6 +582,10 @@ export default {
     this.getBrief();
   },
   methods: {
+    sendTable(){
+        this.showTable = true;
+        this.$refs.sendTable.search(this.caseInfo.id);
+    },
     cancelExps(num) {
       cancelExp(this.lawCaseId, num).then(res => {
         if (res.data.state == 100) {

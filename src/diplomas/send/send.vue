@@ -42,6 +42,7 @@
         <Card v-show="caseInfoShow">
             <p slot="title">
                 案件信息
+                <span class="case-finish" @click="caseFinish">送达流程登记表</span>
                 <span class="case-finish" @click="caseFinish">案件送达完成</span>
             </p>
             <div class="maininfo-warp">
