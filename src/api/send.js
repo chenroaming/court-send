@@ -382,10 +382,10 @@ export function getSendInfo2 (lawId) {
 /** 
  * 修改送达流程登记表
  */
-export function updateSendInfo (params) {
+export function updateSendInfo (data) {
     return service({
         url: '/court/send/updateSendInfo.jhtml',
         method: 'post',
-        params
+        data
     });
 }

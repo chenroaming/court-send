@@ -41,7 +41,10 @@
     <Card v-show="caseInfoShow">
         <p slot="title">
             案件信息
-            <span class="case-finish" style="right: 135px;" @click="sendTable">送达流程登记表</span>
+            <span class="case-finish" style="right: 135px;" @click="sendTable">
+                <Spin fix v-if="spinShow"></Spin>
+                送达流程登记表
+            </span>
             <span class="case-finish" @click="caseFinish">案件送达完成</span>
         </p>
         <div class="maininfo-warp">
@@ -498,9 +501,9 @@
     v-model="showTable"
     title="送达流程登记表"
     footer-hide
-    width="800">
+    width="1000">
     <div>
-        <sendTable ref="sendTable"></sendTable>
+        <sendTable ref="sendTable" v-on:listenToChildEvent="receive"></sendTable>
     </div>
     </Modal>
   </div>
@@ -529,6 +532,7 @@ export default {
   data() {
     var width = window.innerWidth - 350;
     return {
+      spinShow:false,
       showTable:false,//显示送达详情表格
       sendStates: [
         { s: "取消", c: "#495060" },
@@ -582,9 +586,17 @@ export default {
     this.getBrief();
   },
   methods: {
-    sendTable(){
-        this.showTable = true;
+    sendTable(){//送达情况表格
+        this.spinShow = true;
         this.$refs.sendTable.search(this.caseInfo.id);
+    },
+    receive(data){
+        this.spinShow = false;
+        if(data){
+            this.showTable = false;
+        }else{
+            this.showTable = true;
+        }
     },
     cancelExps(num) {
       cancelExp(this.lawCaseId, num).then(res => {

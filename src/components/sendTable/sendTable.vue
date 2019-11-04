@@ -9,7 +9,7 @@
             <span>确认开庭法庭：</span>
             <span>{{openCourt}}</span>
         </P>
-        <table border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+        <table border="1" width="950" align="center" cellspacing="0" cellpadding="6">
             <tbody>
                 <tr align="left">
                     <td>
@@ -33,7 +33,7 @@
         </table>
         <br><br>
         <div v-for="(item,index) in plaintiffList">
-            <table border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <tbody class="people">
                     <tr align="left">
                         <td>
@@ -48,7 +48,7 @@
                 </tbody>
             </table>
             <br>
-            <table v-if="item.layerList.length > 0" v-for="(item3,index) in item.layerList" border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table v-if="item.layerList.length > 0" v-for="(item3,index) in item.layerList" border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <tbody class="people">
                     <tr align="left">
                         <td>
@@ -63,7 +63,7 @@
                 </tbody>
             </table>
             <br>
-            <table v-if="item.plaintiffSendForSite.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForSite.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -103,14 +103,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForSite.length > 0">
-            <table v-if="item.plaintiffSendForEMS.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForEMS.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -146,18 +146,18 @@
                             <span>{{item2.sendMan}}</span>
                         </td>
                         <td>
-                            <Input v-model="item2.sendMan" placeholder="输入备注" />
+                            <Input v-model="item2.reviewer" placeholder="输入审核人" />
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForEMS.length > 0">
-            <table v-if="item.plaintiffSendForHome.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForHome.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -197,23 +197,22 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForHome.length > 0">
-            <table v-if="item.plaintiffSendForMail.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table v-if="item.plaintiffSendForMail.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <thead>
                     <tr align="left">
-                        <th colspan="8" class="methods-title">
+                        <th colspan="7" class="methods-title">
                             <span>邮件送达：</span>
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >邮单编号</th>
-                        <th >地址</th>
+                        <th >邮箱地址</th>
                         <th >邮寄时间</th>
                         <th >送达情况</th>
                         <th >备注</th>
@@ -225,10 +224,7 @@
                 <tbody>
                     <tr v-for="(item2,index) in item.plaintiffSendForMail" align="center">
                         <td>
-                            <span>{{item2.num}}</span>
-                        </td>
-                        <td>
-                            <span>{{item2.address}}</span>
+                            <span>{{item2.sendEmail}}</span>
                         </td>
                         <td>
                             <span>{{item2.time}}</span>
@@ -248,14 +244,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForMail.length > 0">
-            <table v-if="item.plaintiffSendForNotice.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForNotice.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -295,14 +291,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForNotice.length > 0">
-            <table v-if="item.plaintiffSendForCommission.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForCommission.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -342,14 +338,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForCommission.length > 0">
-            <table v-if="item.plaintiffSendForPhone.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForPhone.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -389,14 +385,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForPhone.length > 0">
-            <table v-if="item.plaintiffSendForWechat.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForWechat.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="6" class="methods-title">
@@ -432,14 +428,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.plaintiffSendForWechat.length > 0">
-            <table v-if="item.plaintiffSendForPlatform.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.plaintiffSendForPlatform.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -479,7 +475,7 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
@@ -490,7 +486,7 @@
         
         <br><br>
         <div v-for="(item,index) in defendantList">
-            <table border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <tbody class="people">
                     <tr align="left">
                         <td>
@@ -505,7 +501,7 @@
                 </tbody>
             </table>
             <br>
-            <table v-if="item.layerList.length > 0" v-for="(item3,index) in item.layerList" border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table v-if="item.layerList.length > 0" v-for="(item3,index) in item.layerList" border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <tbody class="people">
                     <tr align="left">
                         <td>
@@ -520,7 +516,7 @@
                 </tbody>
             </table>
             <br v-if="item.layerList.length > 0">
-            <table v-if="item.defendantSendForSite.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForSite.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -560,14 +556,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForSite.length > 0">
-            <table v-if="item.defendantSendForEMS.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForEMS.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -607,14 +603,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForEMS.length > 0">
-            <table v-if="item.defendantSendForHome.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForHome.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -654,24 +650,23 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForHome.length > 0">
-            <table v-if="item.defendantSendForMail.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="6">
+            <table v-if="item.defendantSendForMail.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="6">
                 <thead>
                     <tr align="left">
-                        <th colspan="8" class="methods-title">
+                        <th colspan="7" class="methods-title">
                             <span>邮件送达：</span>
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >邮单编号</th>
-                        <th >地址</th>
-                        <th >邮寄时间</th>
+                        <th >邮箱地址</th>
+                        <th >发送时间</th>
                         <th >送达情况</th>
                         <th >备注</th>
                         <th >送达人员</th>
@@ -682,10 +677,7 @@
                 <tbody>
                     <tr v-for="(item2,index) in item.defendantSendForMail" align="center">
                         <td>
-                            <span>{{item2.num}}</span>
-                        </td>
-                        <td>
-                            <span>{{item2.address}}</span>
+                            <span>{{item2.sendEmail}}</span>
                         </td>
                         <td>
                             <span>{{item2.time}}</span>
@@ -705,14 +697,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForMail.length > 0">
-            <table v-if="item.defendantSendForNotice.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForNotice.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -752,14 +744,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForNotice.length > 0">
-            <table v-if="item.defendantSendForCommission.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForCommission.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -799,14 +791,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForCommission.length > 0">
-            <table v-if="item.defendantSendForPhone.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForPhone.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -842,14 +834,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForPhone.length > 0">
-            <table v-if="item.defendantSendForWechat.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForWechat.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -885,14 +877,14 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
             <br v-if="item.defendantSendForWechat.length > 0">
-            <table v-if="item.defendantSendForPlatform.length > 0" border="1" width="700" align="center" cellspacing="0" cellpadding="0">
+            <table v-if="item.defendantSendForPlatform.length > 0" border="1" width="950" align="center" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr align="left">
                         <th colspan="7" class="methods-title">
@@ -932,7 +924,7 @@
                             <!-- <span>{{item2.reviewer}}</span> -->
                         </td>
                         <td>
-                            <DatePicker v-model="item2.reviewTime" type="date" placeholder="选择审核日期" ></DatePicker>
+                            <DatePicker v-model="item2.reviewTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择审核日期" ></DatePicker>
                             <!-- <span>{{item2.reviewTime}}</span> -->
                         </td>
                     </tr>
@@ -940,7 +932,7 @@
             </table>
             <br v-if="item.defendantSendForPlatform.length > 0">
         </div>
-        <div style="text-align: center;"><Button type="primary" @click="submitTable">确认修改</Button></div>
+        <div style="text-align: center;"><Button type="primary" :loading="standby" @click="submitTable">确认修改</Button></div>
     </div>  
 </template>
       
@@ -951,6 +943,8 @@ export default {
     props:[],
     data () {
         return {
+            standby:false,
+            caseId:'',
             openingTime:'',
             openCourt:'',
             caseNo:'',
@@ -963,48 +957,61 @@ export default {
     },
     methods: {
         time(time = +new Date()) {//时间戳转换函数
-            const date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+            const date = new Date(time + 8 * 3600 * 1000); // 中国东八区，增加8小时
             return date.toJSON().substr(0, 19).replace('T', ' ').substring(0,16);
         },
-        time2(time = +new Date()) {//时间戳转换函数
-            var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
-            return date.toJSON().substr(0, 19).replace('T', ' ').substring(0,10);
+        time2(time) {//Date对象转时间戳
+            const date = new Date(time).getTime()+ 8 * 3600 * 1000;
+            return new Date(date).toJSON().substr(0, 19).replace('T', ' ').substring(0,16);
         },
         submitTable(){
+            this.standby = true;
             this.paramList = [];
+            console.log(this.plaintiffList);
             for(const item of this.plaintiffList){
                 const newArr = Object.values(item);
                 for (const item2 of newArr){
                     if(typeof(item2[0]) == 'object' && item2[0].hasOwnProperty('id')){
-                        const params = {
-                            sendId:item2[0].id,
-                            remarks:item2[0].remark,
-                            auditor:item2[0].reviewer,
-                            auditDate:item2[0].reviewTime ? this.time2(item2[0].reviewTime) : '',
-                        }
-                        this.paramList.push(params);
-                    }
-                }
-            }
-            for(const item3 of this.defendantList){
-                const newArr = Object.values(item3);
-                for (const item2 of newArr){
-                    if(item2){
-                        if(typeof(item2[0]) == 'object' && item2[0].hasOwnProperty('id')){
+                        for(const item3 of item2){
                             const params = {
-                                sendId:item2[0].id,
-                                remarks:item2[0].remark,
-                                auditor:item2[0].reviewer,
-                                auditDate:item2[0].reviewTime ? this.time2(item2[0].reviewTime) : '',
+                                sendId:item3.id,
+                                remarks:item3.remark,
+                                auditor:item3.reviewer,
+                                auditDate:item3.reviewTime ? this.time2(item3.reviewTime) : '',
                             }
                             this.paramList.push(params);
                         }
                     }
                 }
             }
-            console.log(JSON.stringify(this.paramList));
-            updateSendInfo(JSON.stringify(this.paramList)).then(res => {
-                console.log(res.data);
+            for(const item of this.defendantList){
+                const newArr = Object.values(item);
+                for (const item2 of newArr){
+                    if(typeof(item2[0]) == 'object' && item2[0].hasOwnProperty('id')){
+                        for(const item3 of item2){
+                            const params = {
+                                sendId:item3.id,
+                                remarks:item3.remark,
+                                auditor:item3.reviewer,
+                                auditDate:item3.reviewTime ? this.time2(item3.reviewTime) : '',
+                            }
+                            this.paramList.push(params);
+                        }
+                    }
+                }
+            }
+            updateSendInfo(this.paramList).then(res => {
+                this.standby = false;
+                if(res.data.state == 100){
+                    this.$emit('listenToChildEvent',true);
+                    return this.$Message.success(res.data.message);
+                }
+                this.$emit('listenToChildEvent',false);
+                this.$Message.warning(res.data.message);
+            })
+            .catch(error => {
+                console.log(error);
+                this.$Message.warning('网络错误，请刷新重试！');
             })
         },
         reset(){
@@ -1017,13 +1024,15 @@ export default {
             this.defendantList = [];
         },
         search(caseId){
+            this.caseId = caseId;
             this.reset();
-            const status = {'-1':'取消',0:'送达中',1:'已送达成功',2:'未送达成功',3:'已阅读'};
+            const status = {'':'暂无信息','-1':'取消','0':'送达中',1:'已送达成功',2:'未送达成功',3:'已阅读'};
             getSendInfo2(caseId).then(res => {
                 //原告人信息
                 if(res.data.state != 100){
                     return this.$Message.warning(res.data.message);
                 }
+                this.$emit('listenToChildEvent',false);
                 this.litigant = res.data.data.lawInfo.reason;
                 this.caseRoom = res.data.data.lawInfo.tribunal2;
                 this.openCourt = res.data.data.lawInfo.tribunal1;
@@ -1062,11 +1071,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForSite.push(plaintiffSendForSite);
                                 break;
@@ -1075,11 +1084,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForEMS.push(plaintiffSendForEMS);
                                 break;
@@ -1088,25 +1097,24 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForHome.push(plaintiffSendForHome);
                                 break;
                             case 3:
                                 const plaintiffSendForMail = {//邮件送达类型
                                     id:item2.id,
-                                    num:!item2.oddNumbers ? '' : item2.oddNumbers,
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
+                                    sendEmail:!item2.sendEmail ? '' : item2.sendEmail,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForMail.push(plaintiffSendForMail);
                                 break; 
@@ -1115,11 +1123,11 @@ export default {
                                     id:item2.id,
                                     releaseDate:!item2.notice.releaseDate ? '' : item2.notice.releaseDate,
                                     newspaper:!item2.notice.newspaper ? '' : item2.notice.newspaper,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForNotice.push(plaintiffSendForNotice);
                                 break;
@@ -1128,11 +1136,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForCommission.push(plaintiffSendForCommission);
                                 break;
@@ -1141,11 +1149,11 @@ export default {
                                     id:item2.id,
                                     num:!item2.oddNumbers ? '' : item2.oddNumbers,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForPhone.push(plaintiffSendForPhone);
                                 break;
@@ -1153,11 +1161,11 @@ export default {
                                 const plaintiffSendForWechat = {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForWechat.push(plaintiffSendForWechat);
                                 break;
@@ -1166,11 +1174,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 plaintiff.plaintiffSendForPlatform.push(plaintiffSendForPlatform);
                                 break;    
@@ -1198,7 +1206,7 @@ export default {
                     }
                     //被告代理人信息
                     if(item.lawyers.length > 0){
-                        for(const item2 of item.lawyers2){
+                        for(const item2 of item.lawyers){
                             const layerinfo = {
                                 layer:item2,
                                 layerOpenTiem:this.openingTime,
@@ -1214,11 +1222,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForSite.push(defendantSendForSite);
                                 break;
@@ -1227,11 +1235,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForEMS.push(defendantSendForEMS);
                                 break;
@@ -1240,39 +1248,37 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForHome.push(defendantSendForHome);
                                 break;
                             case 3:
                                 const defendantSendForMail = {//邮件送达类型，暂时为空
                                     id:item2.id,
-                                    num:!item2.oddNumbers ? '' : item2.oddNumbers,
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
+                                    sendEmail:!item2.sendEmail ? '' : item2.sendEmail,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForMail.push(defendantSendForMail);
                                 break; 
                             case 4:
-                                console.log(item2.notice.releaseDate);
                                 const defendantSendForNotice = {
                                     id:item2.id,
                                     releaseDate:!item2.notice.releaseDate ? '' : item2.notice.releaseDate,
                                     newspaper:!item2.notice.newspaper ? '' : item2.notice.newspaper,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForNotice.push(defendantSendForNotice);
                                 break;
@@ -1281,11 +1287,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForCommission.push(defendantSendForCommission);
                                 break;
@@ -1294,11 +1300,11 @@ export default {
                                     id:item2.id,
                                     num:!item2.oddNumbers ? '' : item2.oddNumbers,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForPhone.push(defendantSendForPhone);
                                 break;
@@ -1306,11 +1312,11 @@ export default {
                                 const defendantSendForWechat = {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:''
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForWechat.push(defendantSendForWechat);
                                 break;
@@ -1319,11 +1325,11 @@ export default {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
                                     address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:!item2.state ? '' : status[item2.state],
-                                    remark:'',
+                                    status:status[item2.state],
+                                    remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:'',
-                                    reviewTime:'',
+                                    reviewer:!item2.auditor ? '' : item2.auditor,
+                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
                                 }
                                 defendant.defendantSendForPlatform.push(defendantSendForPlatform);
                                 break;    
@@ -1331,32 +1337,6 @@ export default {
                     }
                     this.defendantList.push(defendant);
                 }
-                
-                    // if(item.type == 7){
-                    //     const defendantSendForMail = {//邮件送达类型，暂时为空
-                    //         num:'',
-                    //         address:'',
-                    //         time:'',
-                    //         status:'',
-                    //         remark:'',
-                    //         sendMan:'',
-                    //         reviewer:'',
-                    //         reviewTime:''
-                    //     }
-                    //     defendant.defendantSendForMail.push(defendantSendForMail);
-                    // }else if(item.type == 2){
-                    //     const defendantSendForHome = {//上门送达类型
-                    //         num:!item.oddNumbers ? '' : item.oddNumbers,
-                    //         address:!item.sendAddress ? '' : item.sendAddress,
-                    //         time:!item.createDate ? '' : this.time(item.createDate),
-                    //         status:!item.content ? '' : item.content,
-                    //         remark:'',
-                    //         sendMan:!item.sender ? '' :item.sender.name,
-                    //         reviewer:!item.sender ? '' : item.sender.name,
-                    //         reviewTime:''
-                    //     }
-                    //     defendant.defendantSendForHome.push(defendantSendForHome);
-                    // }
             })
             .catch(error => {
                 console.log(error);
