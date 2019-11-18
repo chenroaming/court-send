@@ -6,7 +6,7 @@
       <Table
         ref="selection"
         border
-        style="min-height:200px;"
+        style="min-height:250px;"
         :columns="columns"
         :data="tableData"></Table>
         <div style="margin: 10px;overflow: hidden">

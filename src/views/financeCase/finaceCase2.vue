@@ -309,6 +309,12 @@
                 <FormItem label="当事人|事由:" style="width: 505px;" >
                     <Input v-model="newLitigantContent" placeholder="请输入当事人|事由"></Input>
                 </FormItem>
+                <FormItem label="适用程序:" style="width: 245px;">
+                    <Select v-model="procedure" filterable transfer placeholder="请选择">
+                        <Option  value="简易程序">简易程序</Option>
+                        <Option  value="普通程序">普通程序</Option>
+                    </Select>
+                </FormItem>
                 <FormItem label="诉讼费:" style="width: 305px;" >
                     <!-- <Input v-model="payMoney" placeholder="诉讼费（单位元）"  ></Input> -->
                     <input type="text" name="je" v-model="payMoney"  @input="clearNoNum" style="{
@@ -358,6 +364,7 @@
                         <span>{{applyReason}}</span>
                     </FormItem>
                     <FormItem label="附件：" style="width: 505px;">
+                        <!-- showDipmos(path) -->
                         <span> <a href="javascript:;" @click="modal1 = true;"  style="line-height:33px">撤诉申请书</a> </span>
                         <!-- download="文件名.txt" -->
                     </FormItem>
@@ -779,6 +786,7 @@ export default {
         isAnswer:[],
         teleRemarkType:'3',
         teleType:[],
+        procedure:"",
         n:-1,
         dailList:[
             {
@@ -946,40 +954,47 @@ export default {
         render: (h, params) => {
             return h("div", [
                 h(
-                    "b",
+                    "span",
                     {
                     props: {
                         type: "img",
                         size: "small"
                     },
+                    style:{
+                        cursor:"pointer"
+                    },
                     on: {
                         click: () => {
                             var fileStr = params.row.filePa;
-                            if(fileStr == null){
-                                this.$Message.info("暂无附件");
-                                return false;
-                            }
-                            // 创建隐藏的可下载链接
-                            var eleLink = document.createElement("a");
-                            var strs = fileStr.split("/");
-                            for (var i = 0; i < strs.length; i++) {
-                                if (i == strs.length - 1) {
-                                var filename = strs[i];
-                                }
-                            }
-                            eleLink.download = filename;
-                            eleLink.style.display = "none";
-                            // 字符内容转变成blob地址
-                            eleLink.href = fileStr;
-                            // 触发点击
-                            document.body.appendChild(eleLink);
-                            eleLink.click();
-                            // 然后移除
-                            document.body.removeChild(eleLink);
+                            this.filePathAry = [];
+                            this.filePathAry.push(fileStr);
+                            console.log(this.filePathAry)
+                            this.viewDipmos = true;
+                            // if(fileStr == null){
+                            //     this.$Message.info("暂无附件");
+                            //     return false;
+                            // }
+                            // // 创建隐藏的可下载链接
+                            // var eleLink = document.createElement("a");
+                            // var strs = fileStr.split("/");
+                            // for (var i = 0; i < strs.length; i++) {
+                            //     if (i == strs.length - 1) {
+                            //     var filename = strs[i];
+                            //     }
+                            // }
+                            // eleLink.download = filename;
+                            // eleLink.style.display = "none";
+                            // // 字符内容转变成blob地址
+                            // eleLink.href = fileStr;
+                            // // 触发点击
+                            // document.body.appendChild(eleLink);
+                            // eleLink.click();
+                            // // 然后移除
+                            // document.body.removeChild(eleLink);
                         }
                     }
                     },
-                    ""
+                    "查看"
                 ),
             ]);
         }
@@ -1294,7 +1309,7 @@ export default {
                                 let Envpro = location.protocol;
                                 let EnvdoName = location.host;
                                 let requestUrl = Envpro+'//'+EnvdoName
-                                this.ft_elect_pdfViewer =requestUrl +  res.data.withdrawal;
+                                this.ft_elect_pdfViewer = res.data.withdrawal;
                                 this.applyMol = true;
                                 // this.modal1 = true;
                             }else{
@@ -1703,11 +1718,12 @@ export default {
                             type:item.litigantType==0 ? "原告" : (item.litigantType==1 ? "被告" : "第三人"),
                             typeStatus:item.litigationStatus.name,
                             card:item.identityCard,
-                            phone:item.litigantPhone,
+                            phone:item.litigantType==0 ? item.litigantPhone : item.legalManPhone,
                             adress:item.nativePlace,
                             id:item.id,
                         }
                         this.liniList.push(data);
+                        console.log(this.liniList)
                     }); 
                 }
             })
@@ -1913,7 +1929,8 @@ export default {
             expireTime:this.expireTime,
             litigantContent:this.litigantContent,
             payMoney:parseInt(this.payMoney*100),
-            files:this.fileNlistFormData
+            files:this.fileNlistFormData,
+            procedure:this.procedure
         }
         console.log(this.filingDateStr)
         auditOnlineLawCase(params).then(res => {

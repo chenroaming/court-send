@@ -349,13 +349,22 @@
                                     <p v-for="op in item.ZhengJfileNlist">{{op.name}}<span @click="delZhengJFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
                                 </div>
                             </Col>
-                            
                             </CheckboxGroup>
+                            
                         </Row>
 
-                    <!-- <Row> -->
-
-                    <!-- </Row> -->`
+                    <Row>
+                        <CheckboxGroup v-model="item.disabledGroup"  @on-change="otherdipCheckedChange(item)">
+                            <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                <Checkbox label="公告"></Checkbox>
+                                <span class="edit" style="float: right;" @click="editor('公告xin',item)">编辑</span>
+                                <div style="display:block;text-align:right;padding-right:5px;">
+                                    <p v-if="item.noticeNew.name != '' ">{{item.noticeNew.name}}<span @click="delNoticeFile(item,item.noticeNew.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
+                                </div>
+                            </Col>
+                            
+                        </CheckboxGroup>
+                    </Row>`
                 </div>
                 <div style="line-height: 38px;border-right:1px solid #e9eaec;border-top:1px solid #e9eaec;" >
                      &nbsp;&nbsp; 裁判文书(上传文件格式支持：doc、docx、pdf)
@@ -450,7 +459,9 @@
                                 <Upload multiple :show-upload-list="false" :on-success="uploadMinShi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
                                     <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
                                 </Upload>
+                               
                                 <span class="selDipcs" @click="selectArc(item,'民事判决书')">选择</span>
+                                 <span class="selDipcs" style="margin-right:5px;" @click="creatJudgement(item,'民事判决书')">生成</span>
                                 <div style="display:block;text-align:right;padding-right:5px;">
                                     <p v-for="op in item.minShifileNlist">{{op.name}}<span @click="delMinShiFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
                                 </div>
@@ -760,6 +771,7 @@
                             <bulletinJudgment :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告判决书'"></bulletinJudgment>
                             <draft :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告稿'"></draft>
                             <draftss :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告稿(保全)'"></draftss>
+                            <notice :backFill="backFill" ref="cita" @model="proNotice" v-else-if="panelList=='公告xin'"></notice>
                             <!-- <UE v-if="modal1" :defaultMsg="dip.content || ''" :config="config" :ref="dip.name"></UE> -->
                         </div>
                         <div :style="{marginTop: '10px', textAlign: 'right', width: ueWidth}">
@@ -996,7 +1008,8 @@ import {
   otherGetFiles,
   wechatMessageTemplate,
   getWeiXinInfo,
-  sendEditLitigant
+  sendEditLitigant,
+  createElementJudgement
 } from "../../api/send.js";
 const R = require("ramda");
 import { getBrief, queryCase, queryCaseInfo } from '../../api/global.js';
@@ -1029,12 +1042,14 @@ import citationStubOut from '../../components/diplomas/citationStubOut.vue';
 import bulletinJudgment from '../../components/diplomas/bulletinJudgment.vue';
 import draft from '../../components/diplomas/draft.vue';
 import draftss from '../../components/diplomas/draftss.vue';
+import notice from '../../components/diplomas/notice.vue';
+import {tools_downLoad} from '@/libs/tools.js';
 import Vue from 'vue';
 import archive from "@/components/archive/archive.vue";
 
 export default {
     components: { archive,UE,citation,citationHl,receipt,receiptHl,sendAddressConfirm,joinLitigationAdviceNote,citationStub,citationOut,citationStubOut,phoneNotification,
-    ComponentMembers,draft,draftss,proofNotice,proofNoticeHl,superviseCard,caseAccept,apperanceNotice,apperanceNoticeHl,envelope,envelopeHl,entrustSend,bulletin,verdict,sendAddressConfirmHuLi,bulletinJudgment},
+    ComponentMembers,draft,draftss,proofNotice,proofNoticeHl,superviseCard,caseAccept,apperanceNotice,apperanceNoticeHl,envelope,envelopeHl,entrustSend,bulletin,verdict,sendAddressConfirmHuLi,bulletinJudgment,notice},
     data () {
         var width = window.innerWidth - 200;
         var width2 = window.innerWidth - 100;
@@ -1255,6 +1270,7 @@ export default {
       onChangeDips(ary,st) {
         console.log(ary);
         console.log(this.info);
+        console.log(this.arcCaseObj);
         for(let i=0;i<this.info.length;i++){
             let d = this.info[i];
             if(d.litigantId == this.arcCaseObj.litigantId){
@@ -1349,6 +1365,27 @@ export default {
           this.arcCaseObj = dt;
           this.$refs.arc.getCaseList(dt.caseNo);
           this.viewDipmos = true;
+      },
+      creatJudgement(dt,str){
+          console.log(dt)
+          createElementJudgement(this.lawCaseId).then(res => {
+              if(res.data.state == 100){
+                  this.$Message.success(res.data.message);
+                  tools_downLoad(res.data.filePath)
+                  let aryss = res.data.filePath.split(".");
+                  let xar = aryss[aryss.length-2].split("/");
+                  let type = aryss[aryss.length-1];
+                  let name = xar[xar.length-1];
+                  const dat = {
+                    name:name + "." + type,
+                    urlName:res.data.filePath
+                }
+                  dt.minShifileNlist.push(dat)
+                  this.info = JSON.parse(JSON.stringify(this.info));
+              }else{
+                  this.$Message.error(res.data.message);
+              }
+          })
       },
       showFinace(){
           this.infoMol = true
@@ -1538,6 +1575,10 @@ export default {
             }else{
                 this.$Message.error(res.message);
             }
+        },
+        delNoticeFile(data,str){
+            data.noticeNew = {name:"",path:""}
+            this.info = JSON.parse(JSON.stringify(this.info));
         },
         delZhengJFile(data,str){
             for(let i=0;i<data.ZhengJfileNlist.length;i++){
@@ -2406,6 +2447,7 @@ export default {
 
                         el.otherGroup = [];
                         el.adId = 1;
+                        el.noticeNew = {name:"",path:""},  //其他文书：公告 生成的文件列表
                         el.defoultChecked=[];   //缓存默认选择的
                         
                         var exam = {
@@ -3370,7 +3412,10 @@ export default {
                             el.print = 1;
                             el.sendId = mm[m].sendId;
                         }
-                        window.open(mm[m].diplomsPathList);
+                        if(mm[m].diplomsPathList != ""){
+                            window.open(mm[m].diplomsPathList);
+                        }
+                        
                     }
                     // if(mm[0].diplomsPathList != ""){
                     //     window.open("/" + mm[0].diplomsPathList);
@@ -3478,6 +3523,8 @@ export default {
                             }
                         }
                    }
+               }else if(ary[i] == "公告"){
+                   strTest = data.noticeNew.name == "" ? "" :data.noticeNew.path
                }
                if(i == ary.length -1){
                    allStr = allStr + ary[i] + ";" + strTest;
@@ -3737,6 +3784,7 @@ export default {
                             this.backFill.sendDiploms = item.dipChecked.join(',');
                         }
                         this.backFill.entrustedCourt = item.courtName;
+                        this.backFill.lawCaseId = this.cased;
                         console.log(this.panelList)
                         this.modal1 = true;
                     }else{
@@ -3750,12 +3798,28 @@ export default {
             this.$refs.cita.dipPro(value,panelList);
 
         },
+        proNotice(value,result,title){
+            tools_downLoad(result)
+            this.modal1 = value;
+            let xar = result.split("/");
+            console.log(xar)
+            let name = xar[xar.length-1]
+            for(let i=0;i<this.info.length;i++){
+                if(this.info[i].litigantId == this.dipName){
+                    this.info[i].noticeNew.name = name;
+                    this.info[i].noticeNew.path = result;
+                }
+            }
+            console.log(value)
+            console.log(result)
+            console.log(title)
+        },
         modelIshid(value,result,title){
           this.$Message.loading({
                 content: '文书生成中，请稍候',
                 duration: 0.6, // 按照文书数量给后台一点生成pdf文件的时间
                 onClose: () => {
-                    window.open(result);
+                    window.open( result);
                 }
             });
             console.log(value+111111111)

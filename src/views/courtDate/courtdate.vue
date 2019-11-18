@@ -29,7 +29,7 @@
             <Input v-model="searchData.tribunalName" placeholder="请输入法庭" />
           </FormItem>
           <FormItem label="日期">
-            <DatePicker style="width:175px;" type="daterange" placeholder="选择日期" v-model="formItem.date" />
+            <DatePicker style="width:175px;" type="daterange" placeholder="选择开庭日期" v-model="formItem.date" />
           </FormItem>
           <FormItem style="text-align: right;margin-top:30px">
             <Button type="ghost" @click="resetSearch">重置</Button>

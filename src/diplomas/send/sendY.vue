@@ -30,7 +30,7 @@
                     </Tooltip>
                 </p>
                 <p>
-                    <Tooltip :content="'案由：' + item.briefName + '|' + item.litigationStatusName + ':' + item.litigantName">
+                    <Tooltip :content="'案由：' + item.briefName + '|' + item.litigationStatusName + ':' + item.litigantName"  placement="bottom-start">
                         案由：{{ item.briefName }} | {{ item.litigantName }}
                     </Tooltip>
                 </p>

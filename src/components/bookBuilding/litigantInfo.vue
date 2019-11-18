@@ -412,7 +412,7 @@ export default {
                     title: '手机号码',
                     key: 'litigantPhone',
                     width: 130,
-                    align: 'center'
+                    align: 'center',
                 },
                 {
                     title: '地址',

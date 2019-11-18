@@ -215,7 +215,7 @@
                   </Col>
               </Row>
           </Modal>
-            <Col :md="12" :lg="12" style="height:60%">
+            <Col :md="12" :lg="12" style="height:60%;padding-right: 5px;">
                 <Row class-name="home-page-row1" :gutter="10" style="height:100%">
                     
                     <Col :md="24" :lg="24" :style="{marginBottom: '10px'}"  style="height:100%">
@@ -260,7 +260,7 @@
                     </Col>               
                 </row>
             </Col>
-            <Col :md="12" :lg="12" style="height:60%">
+            <Col :md="12" :lg="12" style="height:60%;padding-left: 5px;">
                 <Row class-name="home-page-row1" :gutter="10"  style="height:100%">                    
                     <Col :md="24" :lg="24" :style="{marginBottom: '10px'}"  style="height:100%">
                         <Card  style="height:100%">
@@ -436,6 +436,10 @@ export default {
                 }
             }
             this.getCount();
+            // 平均送达时间表
+            this.getCountDate();
+            // 案件案由分布统计表
+            this.getcaseCount();
         });
         
         // 近三天庭审排期
@@ -680,25 +684,7 @@ export default {
                 this.$Message.error(res.data.result.message);
             }
         });
-        // 平均送达时间表
-        sendCountDate().then(res => {
-            this.drawChart2(
-                res.data.monthList,
-                res.data.belowAvergeList,
-                res.data.overAvergeList,
-                res.data.avergeCountList
-            );
-        });
-        // 案件案由分布统计表
-        caseCountDate(this.courtStartDate, this.courtEndDate).then(res => {
-            if (res.data.result.state == 100) {
-                this.courtxdata = res.data.result.briefList;
-                this.courtydata = res.data.result.talNums;
-                this.drawChart3(this.courtxdata, this.courtydata);
-            } else if (res.data.result.state == 101) {
-                this.$Message.error(res.data.result.message);
-            }
-        });
+        
     },
     methods: {
         compare (property) {
@@ -708,6 +694,7 @@ export default {
                 return value1 - value2;
             }
         },
+         // 案件数统计及环形图
         getCount(){
             caseCount(this.courtName).then(res => {
                 if (res.data.result.state == 100) {
@@ -745,9 +732,39 @@ export default {
                 }
             });
         },
+        // 平均送达时间表
+        getCountDate(){
+            let data = {
+                court:this.courtName
+            }
+            sendCountDate(data).then(res => {
+                this.drawChart2(
+                    res.data.monthList,
+                    res.data.belowAvergeList,
+                    res.data.overAvergeList,
+                    res.data.avergeCountList
+                );
+            });
+        },
+        // 案件案由分布统计表
+        getcaseCount(){
+            caseCountDate(this.courtStartDate, this.courtEndDate,this.courtName).then(res => {
+                if (res.data.result.state == 100) {
+                    this.courtxdata = res.data.result.briefList;
+                    this.courtydata = res.data.result.talNums;
+                    this.drawChart3(this.courtxdata, this.courtydata);
+                } else if (res.data.result.state == 101) {
+                    this.$Message.error(res.data.result.message);
+                }
+            });
+        },
         changeCourt(){
             console.log(this.courtName)
             this.getCount();
+            // 平均送达时间表
+            this.getCountDate();
+            // 案件案由分布统计表
+            this.getcaseCount();
         },
         addNewToDoItem () {
             this.showAddNewTodo = true;
@@ -829,7 +846,7 @@ export default {
                         radius: ['40%', '60%'],
                         label: {
                             normal: {
-                                formatter: '{b|{b}：}{c}  {per|{d}%}',
+                                formatter: '{b|{b}：}{c}  {per|{d}%}\n',
                                 borderWidth: 1,
                                 borderRadius: 4,
                                 rich: {
@@ -1102,7 +1119,16 @@ export default {
             });
         },
         sendCourtAj (yearDate, startDate, endDate, type) {
-            sendCountDate(yearDate, startDate, endDate, type).then(res => {
+                console.log(startDate)
+                console.log(endDate)
+                let data = {
+                    countyear: yearDate,
+                    startTime: startDate,
+                    endTime: endDate,
+                    countType: type,
+                    court:this.courtName
+                }
+            sendCountDate(data).then(res => {
                 this.drawChart2(
                     res.data.monthList,
                     res.data.belowAvergeList,
@@ -1152,7 +1178,7 @@ export default {
         caseDate () {
             var startDate = formatDate(new Date(this.courtStartDate), 'yyyy-MM-dd');
             var endDate = formatDate(new Date(this.courtEndDate), 'yyyy-MM-dd');
-            caseCountDate(startDate, endDate).then(res => {
+            caseCountDate(startDate, endDate,this.courtName).then(res => {
                 if (res.data.result.state == 100) {
                     this.courtxdata = res.data.result.briefList;
                     this.courtydata = res.data.result.talNums;

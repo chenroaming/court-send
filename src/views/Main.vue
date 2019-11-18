@@ -152,7 +152,7 @@ export default {
       isFullScreen: false,
       openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
       ruleValidate:{
-                     newpwd1:[{validator:validatepsw,trigger:'blur' },{min:8,message:'请输入最少8位'}],  
+                     newpwd1:[{validator:validatepsw,trigger:'blur' },{min:8,max:16,message:'请输入8-16位密码'}],  
                     }
     };
   },
@@ -195,7 +195,7 @@ export default {
         this.$refs[name].validate((valid) => {
                 if (!valid) {
                     this.isPass = false;
-                    this.$Message.error('密码长度必须大于8且同时包含字母和数字!');     
+                    this.$Message.error('密码长度必须大等于8且小于16，同时包含字母和数字!');     
                 }else{
                   this.isPass =true;
                 } 

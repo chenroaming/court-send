@@ -52,12 +52,13 @@ export function schedulingCase () {
  * endDate 结束时间
  * typeDate 年月分类
  */
-export function sendCountDate (yearDate, startData, endDate, typeDate) {
+export function sendCountDate (data) {
     const params = {
-        countyear: yearDate,
-        startTime: startData,
-        endTime: endDate,
-        countType: typeDate
+        countyear: data.countyear,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        countType: data.countType,
+        court:data.court
     };
     return service({
         url: '/court/indexCount/getSendTime.jhtml',
@@ -68,10 +69,11 @@ export function sendCountDate (yearDate, startData, endDate, typeDate) {
 /**
  * 案件案由分布情况统计
  */
-export function caseCountDate (startData, endDate) {
+export function caseCountDate (startData, endDate,court) {
     const params = {
         startTime: startData,
-        endTime: endDate
+        endTime: endDate,
+        court
     };
     return service({
         url: '/court/indexCount/getBriefCountTen.jhtml',
@@ -109,5 +111,27 @@ export function getlawCaseStageInfo (stage,court,pageNumber,pageSize) {
         url: '/court/indexCount/getlawCaseStageInfo.jhtml',
         method: 'get',
         params
+    });
+}
+
+/**
+ * 我的案件--图标
+ */
+export function personCase () {
+    return service({
+        url: '/court/case/personCase.jhtml',
+        method: 'get',
+        
+    });
+}
+
+/**
+ * 我的案件--列表
+ */
+export function warnCase () {
+    return service({
+        url: '/court/case/warnCase.jhtml',
+        method: 'get',
+        
     });
 }

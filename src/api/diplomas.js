@@ -219,4 +219,23 @@ export function sendDeliverer (data) {
     });
 }
 
+/** 
+ * 查询送达记录具体信息
+ */
+export function createNotice (lawCaseId,litigantName,plaintiffName,defendantName,briefName,caseNo) {
+    const data = {
+        lawCaseId,
+        litigantName,
+        plaintiffName,
+        defendantName,
+        briefName,
+        caseNo
+    }
+    return service({
+        url: '/dp/createNotice.jhtml',
+        method: 'post',
+        data
+    });
+}
+
 

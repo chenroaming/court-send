@@ -1023,7 +1023,8 @@ export default {
                                 data.id = item.id;
                                 data.litigantName = item.litigantName;
                                 data.identityCard = item.identityCard;
-                                data.litigantPhone = item.litigantPhone;
+                                data.litigantPhone = item.litigantType == 1 ? item.legalManPhone :(item.litigantType == 2 ?  item.legalManPhone : item.litigantPhone);
+                                data.address = item.address;
                                 data.address = item.address;
                                 this.plaintiffList.push(data);
                             });
@@ -1035,7 +1036,7 @@ export default {
                                 data.id = item.id;
                                 data.litigantName = item.litigantName;
                                 data.identityCard = item.identityCard;
-                                data.litigantPhone = item.litigantPhone;
+                                data.litigantPhone = item.litigantType == 1 ? item.legalManPhone :(item.litigantType == 2 ?  item.legalManPhone : item.litigantPhone);
                                 data.address = item.address;
                                 this.defendantList.push(data);
                             });
@@ -1045,7 +1046,7 @@ export default {
                                 data.id = item.id;
                                 data.litigantName = item.litigantName;
                                 data.identityCard = item.identityCard;
-                                data.litigantPhone = item.litigantPhone;
+                                data.litigantPhone = item.litigantType == 1 ? item.legalManPhone :(item.litigantType == 2 ?  item.legalManPhone : item.litigantPhone);
                                 data.address = item.address;
                                 this.thirdList.push(data);
                             });

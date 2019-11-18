@@ -85,6 +85,12 @@ export const otherRouter = {
             component: () => import('@/views/home/homeCaseList.vue')
         },
         {
+            path: '/send/mycaseList',
+            title: '逾期预警列表',
+            name: 'mycaseList_index',
+            component: () => import('@/views/mycase/mycaseList.vue')
+        },
+        {
             path: '/send/send',
             name: 'send',
             title: '送达详情',
@@ -131,6 +137,21 @@ export const appRouter = [
                 title: '立案登记',
                 name: 'bookbuilding_index',
                 component: () => import('@/views/bookBuilding/bookbuilding.vue')
+            }
+        ]
+    },
+    {
+        path: '/send/mycase',
+        title: '我的案件',
+        name: 'notice',
+        access: ['admin', 'judge', 'clerk'],
+        component: Main,
+        children: [
+            {
+                path: 'index',
+                title: '我的案件',
+                name: 'mycase_index',
+                component: () => import('@/views/mycase/mycase.vue')
             }
         ]
     },
@@ -481,13 +502,13 @@ export const appRouter = [
     {
         path: '/send/sendRecord',
         name: 'sendRecord',
-        title: '送达记录',
+        title: '我的文书',
         access: ['litigant','lawyer'],
         component: Main,
         children: [
             {
                 path: 'index',
-                title: '送达记录',
+                title: '我的文书',
                 name: 'sendRecord_index',
                 component: () => import('@/views/litigant/sendRecord.vue')
             }

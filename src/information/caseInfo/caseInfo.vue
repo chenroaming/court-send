@@ -567,6 +567,7 @@ export default {
       this.searchData.caseNo = "";
       this.searchData.briefName = "";
       this.searchData.litigantName = "";
+      this.searchData.courtId = "";
       this.searchData.date = "";
       this.searchData.filingDate1 = "";
       this.searchData.filingDate2 = "";

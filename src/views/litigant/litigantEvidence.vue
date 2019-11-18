@@ -416,7 +416,7 @@ export default {
                                                     this.caseInfo.brief =
                                                         res.data.result.evidence.lawCase.brief.name;
                                                     this.caseInfo.expireDate =
-                                                         res.data.result.evidence.lawCase.expireDate;
+                                                         res.data.result.evidence.lawCase.filingDate;
                                                     this.caseInfo.judge =
                                                         res.data.result.evidence.lawCase.judge.name;
                                                     this.caseInfo.clerk =

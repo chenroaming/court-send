@@ -389,3 +389,17 @@ export function updateSendInfo (data) {
         data
     });
 }
+
+/** 
+ * 判决书生成接口
+ */
+export function createElementJudgement (lawCaseId) {
+    const params = {
+        lawCaseId
+    }
+    return service({
+        url: '/dp/createElementJudgement.jhtml',
+        method: 'GET',
+        params
+    });
+}

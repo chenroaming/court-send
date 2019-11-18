@@ -38,10 +38,10 @@
           <Col span="5">
             <ButtonGroup vertical>
                 <Button v-if="item.current.length != 0" v-for="(item,index) in litigantSendList" type="ghost" @click="selectLitigant(index)" :key="index">
-                  {{ item.current.litigationStatusName }}: {{ item.current.litigantName }} <br>
+                  <p style="max-width:120px;overflow:visible;white-space:normal;text-overflow:inherit;">{{ item.current.litigationStatusName }}: {{ item.current.litigantName }}</p> 
                   送达方式：{{ sendTypes[item.current.sendType] ? sendTypes[item.current.sendType] : "" }}
                 </Button>
-                <Row v-if="item.current.length == 0" v-for="(item,index) in litigantSendList"> {{ item.other[0].litigantName }} 无当前送达详情</Row>
+                <Row v-if="item.current.length == 0" style="padding:5px;" v-for="(item,index) in litigantSendList"> {{ item.other[0].litigantName }} 无当前送达详情</Row>
             </ButtonGroup>
           </Col>
           <Col span="19" v-show="showSendDetail">

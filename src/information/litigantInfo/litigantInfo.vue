@@ -57,13 +57,13 @@
                         人员类型
                     </Col>
                     <Col v-show="cardState > 1" span="9" class="maininfo-col">
-                      <RadioGroup v-model="info.litigantType">
+                      <RadioGroup v-model="info.litiganType">
                           <Radio label="自然人"></Radio>
                           <Radio label="法人"></Radio>
                       </RadioGroup>
                     </Col>
                     <Col v-show="cardState <= 1" span="9" class="maininfo-col">
-                        {{ info.litigantType }}
+                        {{ info.litiganType }}
                     </Col>
                     <Col span="3" class="maininfo-col maininfo-col-label">
                         身份证号/统一信用码
@@ -336,14 +336,14 @@ export default {
         },
         {
           title: "人员类型",
-          key: "litigantType",
+          key: "litiganType",
           align: "center",
           width: 100,
           render: (h, params) => {
             return h(
               "span",
               {},
-              params.row.litigantType == "1" ? "法人" : "自然人"
+              params.row.litiganType == 1 ? "法人" :(params.row.litiganType == 2 ?  "第三人" : "自然人") 
             );
           }
         },
@@ -497,11 +497,11 @@ export default {
                       var c = JSON.parse(JSON.stringify(params.row));
                       this.info = c;
                       this.info.litigationStatus =
-                        params.row.litigationStatus;
+                        params.row.litigantStatus;
                       this.info.litigantSex =
                         params.row.litigantSex == "1" ? "女" : "男";
-                      this.info.litigantType =
-                        params.row.litigantType == "1" ? "法人" : "自然人";
+                      this.info.litiganType =
+                        params.row.litiganType == "1" ? "法人" : "自然人";
                       this.info.departmentName =
                         this.info.department && this.info.department.name;
                       this.info.createDateD =
@@ -534,11 +534,11 @@ export default {
                       var c = JSON.parse(JSON.stringify(params.row));
                       this.info = c;
                       this.info.litigationStatus =
-                        params.row.litigationStatus;
+                        params.row.litigantStatus;
                       this.info.litigantSex =
                         params.row.litigantSex == "1" ? "女" : "男";
-                      this.info.litigantType =
-                        params.row.litigantType == "1" ? "法人" : "自然人";
+                      this.info.litiganType =
+                        params.row.litiganType == "1" ? "法人" : "自然人";
                       this.info.departmentName =
                         this.info.department && this.info.department.name;
                       this.info.createDateD = this.formatDate(
@@ -565,7 +565,7 @@ export default {
         litigationStatus: "",
         birthdayD: "",
         litigantSex: "",
-        litigantType: "",
+        litiganType: "",
         identityCard: "",
         litigantPhone: "",
         litigantTelPhone: "",
@@ -615,7 +615,7 @@ export default {
       var that = this;
       that.saved = true;
       const litigantSex = this.info.litigantSex == "男" ? 0 : 1;
-      const litigantType = this.info.litigantType == "自然人" ? 0 : 1;
+      const litiganType = this.info.litiganType == "自然人" ? 0 : 1;
       var params = {
         litigantId: this.info.id,
         litigantName: this.info.litigantName,
@@ -623,7 +623,7 @@ export default {
         birthday:
           this.info.birthdayD && new Date(this.info.birthdayD).getTime(),
         litigantSex,
-        litigantType,
+        litiganType,
         identityCard: this.info.identityCard,
         litigantPhone: this.info.litigantPhone,
         litigantTelPhone: this.info.litigantTelPhone,

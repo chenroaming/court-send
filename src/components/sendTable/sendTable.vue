@@ -2,12 +2,16 @@
     <div>
         <p class="title">送达流程登记表</p>
         <p class="openTime">
-            <span>确认开庭时间：</span>
-            <span>{{openingTime}}</span>
+            <span>确认开庭时间：
+                <DatePicker v-model="openingTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="请选择开庭日期" ></DatePicker>
+            </span>
+            <!-- <span>{{openingTime}}</span> -->
         </p>
         <P class="openCourt">
-            <span>确认开庭法庭：</span>
-            <span>{{openCourt}}</span>
+            <span>确认开庭法庭：
+                <Input v-model="openCourt" style="width: 187px" placeholder="输入开庭法庭" />
+            </span>
+            <!-- <span>{{openCourt}}</span> -->
         </P>
         <table border="1" width="950" align="center" cellspacing="0" cellpadding="6">
             <tbody>
@@ -118,9 +122,9 @@
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >领取时间</th>
-                        <th >领取地点</th>
-                        <th >领取情况</th>
+                        <th >送达时间</th>
+                        <th >送达地点</th>
+                        <th >送达情况</th>
                         <th >备注</th>
                         <th >送达人员</th>
                         <th >审核人</th>
@@ -165,9 +169,9 @@
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >领取时间</th>
-                        <th >领取地点</th>
-                        <th >领取情况</th>
+                        <th >送达时间</th>
+                        <th >送达地点</th>
+                        <th >送达情况</th>
                         <th >备注</th>
                         <th >送达人员</th>
                         <th >审核人</th>
@@ -571,9 +575,9 @@
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >领取时间</th>
-                        <th >领取地点</th>
-                        <th >领取情况</th>
+                        <th >送达时间</th>
+                        <th >送达地点</th>
+                        <th >送达情况</th>
                         <th >备注</th>
                         <th >送达人员</th>
                         <th >审核人</th>
@@ -618,9 +622,9 @@
                         </th>
                     </tr>
                     <tr align="center">
-                        <th >领取时间</th>
-                        <th >领取地点</th>
-                        <th >领取情况</th>
+                        <th >送达时间</th>
+                        <th >送达地点</th>
+                        <th >送达情况</th>
                         <th >备注</th>
                         <th >送达人员</th>
                         <th >审核人</th>
@@ -952,7 +956,11 @@ export default {
             litigant:'',
             plaintiffList:[],
             defendantList:[],
-            paramList:[],
+            paramList:{
+                tribunal:'',
+                courtTime:'',
+                list:[]
+            }
         };
     },
     methods: {
@@ -966,7 +974,9 @@ export default {
         },
         submitTable(){
             this.standby = true;
-            this.paramList = [];
+            this.paramList.list = [];
+            this.paramList.tribunal = this.openCourt;
+            this.paramList.courtTime = this.time2(this.openingTime);
             console.log(this.plaintiffList);
             for(const item of this.plaintiffList){
                 const newArr = Object.values(item);
@@ -979,7 +989,7 @@ export default {
                                 auditor:item3.reviewer,
                                 auditDate:item3.reviewTime ? this.time2(item3.reviewTime) : '',
                             }
-                            this.paramList.push(params);
+                            this.paramList.list.push(params);
                         }
                     }
                 }
@@ -995,11 +1005,12 @@ export default {
                                 auditor:item3.reviewer,
                                 auditDate:item3.reviewTime ? this.time2(item3.reviewTime) : '',
                             }
-                            this.paramList.push(params);
+                            this.paramList.list.push(params);
                         }
                     }
                 }
             }
+            
             updateSendInfo(this.paramList).then(res => {
                 this.standby = false;
                 if(res.data.state == 100){
@@ -1070,7 +1081,7 @@ export default {
                                 const plaintiffSendForSite = {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
+                                    address:!item2.sendAddress ? '湖里法院' : item2.sendAddress,
                                     status:status[item2.state],
                                     remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,
@@ -1221,7 +1232,7 @@ export default {
                                 const defendantSendForSite = {
                                     id:item2.id,
                                     time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
+                                    address:!item2.sendAddress ? '湖里法院' : item2.sendAddress,
                                     status:status[item2.state],
                                     remark:!item2.remarks ? '' : item2.remarks,
                                     sendMan:!item2.sender ? '' : item2.sender.name,

@@ -60,7 +60,8 @@
                       案号
                   </Col>
                   <Col span="9" class="maininfo-col">
-                      {{detailLawcase.caseNo}}
+                      <!-- {{detailLawcase.caseNo}} -->
+                      <Input v-model="detailLawcase.caseNo" placeholder="请输入"></Input>
                   </Col>
                   <Col span="3" class="maininfo-col maininfo-col-label">
                       案由
@@ -74,13 +75,19 @@
                       法官
                   </Col>
                   <Col span="9" class="maininfo-col">
-                      {{detailLawcase.judgeName}}
+                      <!-- {{detailLawcase.judgeName}} -->
+                      <Select v-model="detailLawcase.judgeId" filterable transfer placeholder="请选择">
+                        <Option v-for="item in judgeList" v-bind:value="item.id">{{item.name}}</Option>
+                    </Select>
                   </Col>
                   <Col span="3" class="maininfo-col maininfo-col-label">
                       书记员
                   </Col>
                   <Col span="9" class="maininfo-col">
-                      {{detailLawcase.clerkName}}
+                      <!-- {{detailLawcase.clerkName}} -->
+                      <Select v-model="detailLawcase.clerkId" filterable transfer placeholder="请选择">
+                        <Option v-for="item in clerkList" v-bind:value="item.id">{{item.name}}</Option>
+                    </Select>
                   </Col>
               </Row>
               <Row>
@@ -185,7 +192,7 @@
 </template>
 
 <script>
-import { orderByTimes,updateScheduldingIsConfirmOpen } from "@/api/courtDate.js";
+import { orderByTimes,updateScheduldingIsConfirmOpen,findWorkerNames } from "@/api/courtDate.js";
 import { formatDate } from "@/libs/date.js";
 import scheduleCalendar from "../../components/scheduleCalendar";
 import { calendarList } from "@/api/courtDate.js";
@@ -213,11 +220,14 @@ export default {
             countInfos:{},
             modalWidth:width,
             judgeColorData: [],
+            clerkList:[],
+            judgeList:[],
             detailModal: false,
             loading: true,
             buttunType:"primary",
             rtcState:"",
             isEdit:false,
+            lawCaseId:"",
             isRefuce:false,
             dateChecks:false,
             otheI:true,
@@ -272,8 +282,10 @@ export default {
         });
     },
     submi(){
+        console.log(this.detailLawcase.judgeId)
+        console.log(this.detailLawcase.clerkId)
       if(this.isEdit == false){
-        this.detailModal = false;
+        this.isConfrimOpen = "";
       }else{
         if(this.isConfrimOpen == 2){
           if(this.remark == ''){
@@ -290,18 +302,48 @@ export default {
             }
           }
         }
-        updateScheduldingIsConfirmOpen(this.isConfrimOpen,this.scheduldingId,this.remark).then(res => {
-          if(res.data.state == 100){
-            this.$Message.success(res.data.message);
-            this.detailModal = false;
-            this.updateView(this.year, this.month, this.judgeIdStr,this.openStateid);
-          }else{
-            this.changeLoading();
-            this.$Message.error(res.data.message);
-          }
+        
+      }
+      updateScheduldingIsConfirmOpen(this.isConfrimOpen,
+            this.scheduldingId,
+            this.remark,
+            this.lawCaseId,
+            this.detailLawcase.judgeId,
+            this.detailLawcase.clerkId,
+            this.detailLawcase.caseNo).then(res => {
+                if(res.data.state == 100){
+                    this.$Message.success(res.data.message);
+                    this.detailModal = false;
+                    this.updateView(this.year, this.month, this.judgeIdStr,this.openStateid);
+                }else{
+                    this.changeLoading();
+                    this.$Message.error(res.data.message);
+                }
           
         })
-      }
+    },
+    getjuds(){
+        findWorkerNames('',1).then(res => {
+            res.data.resul.map(item => {
+                const data1 = {
+                    id:item.id,
+                    name:item.name,
+                }
+                this.clerkList.push(data1);
+            })
+        })
+        findWorkerNames('',0).then(res => {
+
+            res.data.resul.map(item => {
+                const data3 = {
+                    id:item.id,
+                    name:item.name,
+                }
+                this.judgeList.push(data3);
+            })
+        })
+        console.log(this.clerkList)
+        console.log(this.judgeList)
     },
     goDateC(){
       this.$store.commit("SET_CASENO", this.detailLawcase.caseNo);
@@ -434,13 +476,19 @@ export default {
       this.isEdit = false;
       this.buttunType = 'primary';
       this.scheduldingId = item.scheduldingId;
+      this.lawCaseId = item.caseId;
       lawCaseSchedulding(item.caseId).then(res => {
         if (res.data.state == 100) {
           this.detailLawcase = res.data.result;
           if (this.detailLawcase.tribunalName.replace('湖里区人民法院',"")) {
               this.detailLawcase.tribunalName= this.detailLawcase.tribunalName.replace('湖里区人民法院',"");
           }
-          
+          console.log(this.judgeList)
+          if(this.judgeList.length == 0 || this.clerkList.length == 0 ){
+              
+              this.getjuds();
+          } 
+          console.log(5777777777777777777777)
           this.detailModal = true;
         } else {
           this.$Message.error(res.data.message);

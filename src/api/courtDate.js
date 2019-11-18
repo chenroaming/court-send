@@ -264,11 +264,15 @@ export function getAssociateCase (caseNo) {
     });
 }
 
-export function updateScheduldingIsConfirmOpen (isConfirmOpen,scheduldingId,remark) {
+export function updateScheduldingIsConfirmOpen (isConfirmOpen,scheduldingId,remark,lawCaseId,judgeId,clerkId,caseNo) {
     const params = {
         isConfirmOpen,
         scheduldingId,
-        remark
+        remark,
+        lawCaseId,
+        judgeId,
+        clerkId,
+        caseNo
     };
     return service({
         url: '/court/scheduling/updateScheduldingIsConfirmOpen.jhtml',
@@ -516,6 +520,21 @@ export function getTribunalWinterRuleList (tribunalId,season) {
     };
     return service({
         url: '/court/scheduldingRule/ordinaryScheduldingRuleList.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/**
+ * 查询书记员或法官
+ */
+export function findWorkerNames (name,judgeType) {
+    const params = {
+        name: name,
+        judgeType:judgeType
+    };
+    return service({
+        url: '/court/case/findWorkerNames.jhtml',
         method: 'GET',
         params
     });
