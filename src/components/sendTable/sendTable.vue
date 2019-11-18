@@ -976,8 +976,7 @@ export default {
             this.standby = true;
             this.paramList.list = [];
             this.paramList.tribunal = this.openCourt;
-            this.paramList.courtTime = this.time2(this.openingTime);
-            console.log(this.plaintiffList);
+            this.paramList.courtTime = this.openingTime ? this.time2(this.openingTime) : '';
             for(const item of this.plaintiffList){
                 const newArr = Object.values(item);
                 for (const item2 of newArr){
@@ -1010,7 +1009,6 @@ export default {
                     }
                 }
             }
-            
             updateSendInfo(this.paramList).then(res => {
                 this.standby = false;
                 if(res.data.state == 100){
@@ -1074,126 +1072,130 @@ export default {
                             plaintiff.layerList.push(layerinfo);
                         }
                     }
-                    //原告送达情况信息
-                    for(const item2 of item.sendInfo){
-                        switch(item2.type){
-                            case 0:
+                    const getSendState = (state,sendInfo) => {
+                        const actions = {
+                            0: (sendInfo) => { 
                                 const plaintiffSendForSite = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '湖里法院' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '湖里法院' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForSite.push(plaintiffSendForSite);
-                                break;
-                            case 1:
+                            },
+                            1: (sendInfo) => {
                                 const plaintiffSendForEMS = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForEMS.push(plaintiffSendForEMS);
-                                break;
-                            case 2:
+                            },
+                            2: (sendInfo) => { 
                                 const plaintiffSendForHome = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForHome.push(plaintiffSendForHome);
-                                break;
-                            case 3:
+                            },
+                            3: (sendInfo) => { 
                                 const plaintiffSendForMail = {//邮件送达类型
-                                    id:item2.id,
-                                    sendEmail:!item2.sendEmail ? '' : item2.sendEmail,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    sendEmail:!sendInfo.sendEmail ? '' : sendInfo.sendEmail,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForMail.push(plaintiffSendForMail);
-                                break; 
-                            case 4:
+                            },
+                            4: (sendInfo) => { 
                                 const plaintiffSendForNotice = {
-                                    id:item2.id,
-                                    releaseDate:!item2.notice.releaseDate ? '' : item2.notice.releaseDate,
-                                    newspaper:!item2.notice.newspaper ? '' : item2.notice.newspaper,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    releaseDate:!sendInfo.notice.releaseDate ? '' : sendInfo.notice.releaseDate,
+                                    newspaper:!sendInfo.notice.newspaper ? '' : sendInfo.notice.newspaper,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForNotice.push(plaintiffSendForNotice);
-                                break;
-                            case 6:
+                            },
+                            6: (sendInfo) => { 
                                 const plaintiffSendForCommission = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForCommission.push(plaintiffSendForCommission);
-                                break;
-                            case 7:
+                            },
+                            7: (sendInfo) => { 
                                 const plaintiffSendForPhone = {//电话送达类型，暂时为空
-                                    id:item2.id,
-                                    num:!item2.oddNumbers ? '' : item2.oddNumbers,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    num:!sendInfo.oddNumbers ? '' : sendInfo.oddNumbers,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForPhone.push(plaintiffSendForPhone);
-                                break;
-                            case 8:
+                            },
+                            8: (sendInfo) => { 
                                 const plaintiffSendForWechat = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForWechat.push(plaintiffSendForWechat);
-                                break;
-                            case 10:
+                            },
+                            10: (sendInfo) => { 
                                 const plaintiffSendForPlatform = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 plaintiff.plaintiffSendForPlatform.push(plaintiffSendForPlatform);
-                                break;    
+                            }
                         }
+                        return actions[state](sendInfo);
+                    }
+                    //原告送达情况信息
+                    for(const item2 of item.sendInfo){
+                        getSendState(item2.type,item2);
                     }
                     this.plaintiffList.push(plaintiff);
                 }
@@ -1226,125 +1228,129 @@ export default {
                         }
                     }
                     //被告送达情况信息
-                    for(const item2 of item.sendInfo){
-                        switch(item2.type){
-                            case 0:
+                    const getSendState = (state,sendInfo) => {
+                        const actions = {
+                            0:(sendInfo) => {
                                 const defendantSendForSite = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '湖里法院' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '湖里法院' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForSite.push(defendantSendForSite);
-                                break;
-                            case 1:
+                            },
+                            1:(sendInfo) => {
                                 const defendantSendForEMS = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForEMS.push(defendantSendForEMS);
-                                break;
-                            case 2:
+                            },
+                            2:(sendInfo) => {
                                 const defendantSendForHome = {//上门送达类型
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForHome.push(defendantSendForHome);
-                                break;
-                            case 3:
-                                const defendantSendForMail = {//邮件送达类型，暂时为空
-                                    id:item2.id,
-                                    sendEmail:!item2.sendEmail ? '' : item2.sendEmail,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                            },
+                            3:(sendInfo) => {
+                                const defendantSendForMail = {//邮件送达类型
+                                    id:sendInfo.id,
+                                    sendEmail:!sendInfo.sendEmail ? '' : sendInfo.sendEmail,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForMail.push(defendantSendForMail);
-                                break; 
-                            case 4:
+                            },
+                            4:(sendInfo) => {
                                 const defendantSendForNotice = {
-                                    id:item2.id,
-                                    releaseDate:!item2.notice.releaseDate ? '' : item2.notice.releaseDate,
-                                    newspaper:!item2.notice.newspaper ? '' : item2.notice.newspaper,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    releaseDate:!sendInfo.notice.releaseDate ? '' : sendInfo.notice.releaseDate,
+                                    newspaper:!sendInfo.notice.newspaper ? '' : sendInfo.notice.newspaper,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForNotice.push(defendantSendForNotice);
-                                break;
-                            case 6:
+                            },
+                            6:(sendInfo) => {
                                 const defendantSendForCommission = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForCommission.push(defendantSendForCommission);
-                                break;
-                            case 7:
+                            },
+                            7:(sendInfo) => {
                                 const defendantSendForPhone = {//邮件送达类型，暂时为空
-                                    id:item2.id,
-                                    num:!item2.oddNumbers ? '' : item2.oddNumbers,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    num:!sendInfo.oddNumbers ? '' : sendInfo.oddNumbers,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForPhone.push(defendantSendForPhone);
-                                break;
-                            case 8:
+                            },
+                            8:(sendInfo) => {
                                 const defendantSendForWechat = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForWechat.push(defendantSendForWechat);
-                                break;
-                            case 10:
+                            },
+                            10:(sendInfo) => {
                                 const defendantSendForPlatform = {
-                                    id:item2.id,
-                                    time:!item2.createDate ? '' : this.time(item2.createDate),
-                                    address:!item2.sendAddress ? '' : item2.sendAddress,
-                                    status:status[item2.state],
-                                    remark:!item2.remarks ? '' : item2.remarks,
-                                    sendMan:!item2.sender ? '' : item2.sender.name,
-                                    reviewer:!item2.auditor ? '' : item2.auditor,
-                                    reviewTime:!item2.auditTime ? '' : this.time(item2.auditTime),
+                                    id:sendInfo.id,
+                                    time:!sendInfo.createDate ? '' : this.time(sendInfo.createDate),
+                                    address:!sendInfo.sendAddress ? '' : sendInfo.sendAddress,
+                                    status:status[sendInfo.state],
+                                    remark:!sendInfo.remarks ? '' : sendInfo.remarks,
+                                    sendMan:!sendInfo.sender ? '' : sendInfo.sender.name,
+                                    reviewer:!sendInfo.auditor ? '' : sendInfo.auditor,
+                                    reviewTime:!sendInfo.auditTime ? '' : this.time(sendInfo.auditTime),
                                 }
                                 defendant.defendantSendForPlatform.push(defendantSendForPlatform);
-                                break;    
+                            }
                         }
+                        return actions[state](sendInfo);
+                    }
+                    for(const item2 of item.sendInfo){
+                        getSendState(item2.type,item2);
                     }
                     this.defendantList.push(defendant);
                 }
