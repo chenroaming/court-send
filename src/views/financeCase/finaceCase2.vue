@@ -732,7 +732,7 @@
                                 </tr>
                                 <tr>
                                     <td>核对状态</td>
-                                    <td> <Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '已核对' : '未核对'}}</Button></td>
+                                    <td> <Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '未核对' : '已核对'}}</Button></td>
                                 </tr>
                             </table>
                         </div>
@@ -822,7 +822,7 @@
                                 </tr>
                                 <tr>
                                     <td>核对状态</td>
-                                    <td><Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '已核对' : '未核对'}}</Button></td>
+                                    <td><Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '未核对' : '已核对'}}</Button></td>
                                 </tr>
                             </table>
                         </div>
@@ -2709,7 +2709,7 @@ export default {
             this.elementSw = true;
             getEdit(this.lawcaseId).then(res => {
                 if(res.data.state == 100){
-                    this.lawCaseChecked = !res.data.flag;
+                    this.lawCaseChecked = res.data.flag;
                 }
             })
             if(this.element == 1){
