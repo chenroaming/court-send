@@ -10,7 +10,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">文书生成管理</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -37,9 +37,9 @@
                             <DatePicker style="width: 128px" type="date" v-model="formItem.endDate"></DatePicker>
                         </FormItem>
                         <div style="display: inline-block; padding-left: 20px">
-                            <Button type="ghost">查询</Button>
-                            <Button style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button >查询</Button>
+                            <Button style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
                         </div>
                     </Form>
                 </Col>

@@ -15,7 +15,7 @@
                     </div>
                 </TabPane>
                 <Input v-model="temName" placeholder="请输入要添加的模板名称" style="width: 200px" slot="extra"></Input>
-                <Button type="ghost" @click.native="handleTabsAdd" slot="extra">增加</Button>
+                <Button  @click.native="handleTabsAdd" slot="extra">增加</Button>
             </Tabs>
         </Card>
     </div>

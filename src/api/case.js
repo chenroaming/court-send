@@ -19,6 +19,25 @@ export function queryCaseNo (caseNo, pageData) {
         params
     });
 }
+
+/**
+ * [通过历史案号模糊搜索案件]
+ * @param caseNo [历史案号]
+ * @return {[Array]} [案件列表]
+ */
+export function queryHistoryNo (caseNo, pageData) {
+    const params = {
+        caseNo,
+        pageNumber: pageData.pageNumber || '',
+        pageSize: pageData.pageSize || ''
+    };
+    return service({
+        url: '/court/createCase/queryHistoryNo.jhtml',
+        method: 'get',
+        params
+    });
+}
+
 /** 三网认证 */
 export function NetworkKyc (litigantName, identityCard, litigantPhone,legalManName, legalManId, legalManPhone,  litigantType) {
     const params = {
@@ -210,7 +229,9 @@ export function addLitigant (
     agentMobile1,
     agentIdentiCard1,
     lawerNum1,
-    lawFirm1
+    lawFirm1,
+    agentEmail,
+    agentEmail1
 ) {
     const params = {
         isCreate,
@@ -251,7 +272,9 @@ export function addLitigant (
         agentMobile1,
         agentIdentiCard1,
         lawerNum1,
-        lawFirm1
+        lawFirm1,
+        agentEmail,
+        agentEmail1
     };
     return service({
         url: '/court/estFile/addLitigant.jhtml',
@@ -299,7 +322,9 @@ export function modiLitigant (
     agentMobile1,
     agentIdentiCard1,
     lawerNum1,
-    lawFirm1
+    lawFirm1,
+    agentEmail,
+    agentEmail1
 ) {
     const params = {
         isCreate,
@@ -340,7 +365,9 @@ export function modiLitigant (
         agentMobile1,
         agentIdentiCard1,
         lawerNum1,
-        lawFirm1
+        lawFirm1,
+        agentEmail,
+        agentEmail1
     };
     return service({
         url: '/court/estFile/modiLitigant.jhtml',

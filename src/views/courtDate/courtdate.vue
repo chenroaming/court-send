@@ -32,7 +32,7 @@
             <DatePicker style="width:175px;" type="daterange" placeholder="选择开庭日期" v-model="formItem.date" />
           </FormItem>
           <FormItem style="text-align: right;margin-top:30px">
-            <Button type="ghost" @click="resetSearch">重置</Button>
+            <Button  @click="resetSearch">重置</Button>
             <Button type="primary" style="margin-left: 8px" @click="searchList">查询</Button>
           </FormItem>
         </Form>
@@ -118,7 +118,7 @@
           </tr>
         </table>
       </Card>
-      <Card v-show="showCaseInfo" style='height:50vh'>
+      <Card v-show="showCaseInfo" style='height:50%'>
         <p slot="title">
           <Icon type="ios-calendar"></Icon>
           排期信息
@@ -206,7 +206,7 @@
           <td>开庭时间</td>
           <td style="position: relative;">
 
-            <DatePicker placement="bottom-start" type="date" confirm  :options="dateOptions" :open="addDateModal ? addDatePickerOpen:addDatePickerOpen=addDateModal" transfer @on-change="selectAddDate" @on-ok="submitDate" @on-clear="clearAddDate" style="width: 98%;vertical-align:baseline;">
+            <DatePicker placement="bottom-start" type="date" confirm  :options="dateOptions" :open="addDateModal ? addDatePickerOpen:addDatePickerOpen=addDateModal"  @on-change="selectAddDate" @on-ok="submitDate" @on-clear="clearAddDate" style="width: 98%;vertical-align:baseline;">
               <a href="javascript:void(0)" @click="addHandleClick">
                 <Icon type="ios-calendar-outline"></Icon>
                 <template v-if="addDateTime.time === ''">选择时间</template>
@@ -527,6 +527,7 @@ export default {
               this.onRefreshList();
               this.schedulingId = res.data.result.id;
             } else {
+              this.changeCaseDateTime = false;
               this.$Message.error(res.data.message);
             }
           })
@@ -2010,7 +2011,7 @@ export default {
 }
 .search-list {
   padding: 10px;
-  max-height: 270px;
+  max-height: 300px;
   overflow-y: auto;
   li {
     margin-bottom: 8px;

@@ -7,7 +7,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">短信通知记录</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px;margin-bottom: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px;margin-bottom: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -37,9 +37,9 @@
                             <Input style="width: 128px" v-model="formItem.phone"/>
                         </FormItem>
                         <FormItem>
-                            <Button @click="getList(1)" type="ghost">查询</Button>
-                            <Button @click="formItem = {}" style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button @click="getList(1)" >查询</Button>
+                            <Button @click="formItem = {}" style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
                         </FormItem>
                     </Form>
                 </Col>
@@ -191,7 +191,7 @@ export default {
           title: "姓名",
           key: "dstName",
           align: "center",
-          width: 100
+          // width: 100
         },
         {
           title: "身份类型",
@@ -215,7 +215,7 @@ export default {
               "Tooltip",
               {
                 props: {
-                  placement: "left-start",
+                  placement: "top-start",
                   transfer: true,
                   content: params.row.msgStr
                 }
@@ -238,7 +238,7 @@ export default {
           title: "送达状态",
           key: "status",
           align: "center",
-          // width: 100,
+          width: 100,
           render: (h, params) => {
             return h(
               "span",
@@ -251,7 +251,7 @@ export default {
           title: "发送时间",
           key: "status",
           align: "center",
-          width: 100,
+          width: 170,
           render: (h, params) => {
             return h(
               "span",

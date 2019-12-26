@@ -16,7 +16,7 @@
                     <div class="height-120px">
                         <Row type="flex" justify="center" align="middle" class="height-100">
                             <Upload action="//jsonplaceholder.typicode.com/posts/">
-                                <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                                <Button  icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
                         </Row>
                     </div>
@@ -32,7 +32,7 @@
                         <Row type="flex" justify="center" align="middle" class="height-100">
                             <Upload multiple action="//jsonplaceholder.typicode.com/posts/">
                                 <span>多选文件上传&nbsp;&nbsp;</span>
-                                <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                                <Button  icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
                         </Row>
                     </div>
@@ -52,7 +52,7 @@
                                 :on-format-error="handleFormatError"
                             >
                                 <span>选择图片上传&nbsp;&nbsp;</span>
-                                <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                                <Button  icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
                         </Row>
                     </div>
@@ -79,7 +79,7 @@
                                         :on-error="handleError"
                                     >
                                         <span>请选择文件&nbsp;&nbsp;</span>
-                                        <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
                                     </Upload>
                                 </div>
                             </Row>

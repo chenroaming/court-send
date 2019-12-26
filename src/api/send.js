@@ -235,6 +235,50 @@ export function otherGetFiles (lawCaseId) {
 }
 
 /** 
+ * 法官获取文件列表
+ */
+export function otherGetFiles2 (lawCaseId) {
+    const params = {
+        lawCaseId
+    };
+    return service({
+        url: '/online/evidenceAttachment/getAllFiles.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+
+/** 
+ * 查询该案件是否允许修改
+ */
+export function getEdit (onlineLawCaseId) {
+    const params = {
+        onlineLawCaseId
+    };
+    return service({
+        url: '/online/part/getEdit.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 获取全部合同信息
+ */
+export function getPart (lawId) {
+    const params = {
+        lawId
+    };
+    return service({
+        url: '/online/part/getPart.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+
+/** 
  * 微信模板接口
  */
 export function wechatMessageTemplate (lawCaseId,litigantId) {
@@ -399,6 +443,69 @@ export function createElementJudgement (lawCaseId) {
     }
     return service({
         url: '/dp/createElementJudgement.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 获取单个信用卡详情
+ */
+export function getCtInfo (infoType,infoId) {
+    const params = {
+        infoType,
+        infoId
+    };
+    return service({
+        url: '/online/part/getCtInfo.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 要素信息核对
+ */
+export function checkFactor (lawCaseId,check) {
+    const params = {
+        lawCaseId,
+        check
+    };
+    return service({
+        url: '/online/evidenceAttachment/checkFactor.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 查询保证合同纠纷要素信息
+ */
+export function getContractInfo (lawId,partId,infoType,cdInfoId,gcIds) {
+    const params = {
+        lawId,
+        partId,
+        infoType,
+        cdInfoId,
+        gcIds
+    };
+    return service({
+        url: '/online/part/getContractInfo.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+/** 
+ * 更改案件是否可在已申请界面编辑（法院端）
+ */
+export function confirmOnLawCase (onlineLawCaseId,flag) {
+    const params = {
+        onlineLawCaseId,
+        flag
+    };
+    return service({
+        url: '/online/part/confirmOnLawCase.jhtml',
         method: 'GET',
         params
     });

@@ -98,7 +98,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:1}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传材料文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传材料文件</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value2" >
@@ -109,7 +109,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:2}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传答辩状文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传答辩状文件</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value3">
@@ -120,7 +120,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:3}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传起诉状文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传起诉状文件</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value4">
@@ -131,7 +131,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:4}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传反诉状文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传反诉状文件</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value5">
@@ -142,7 +142,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:5}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传调查取证申请书</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传调查取证申请书</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value6">
@@ -153,7 +153,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:6}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传证人出庭申请书</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传证人出庭申请书</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value7">
@@ -164,7 +164,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:7}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传证据目录文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传证据目录文件</Button>
                     </myUpload>
                 </div>
                 <div class="pic_upload_list"  v-show="value8">
@@ -175,7 +175,7 @@
                       action="/api/court/evidenceManage/upEvidence.jhtml"
                       :data="{lawCaseId: this.caseInfo.id,litigantId:this.litigantId ? this.litigantId : '',lawyerId:this.lawyerId ? this.lawyerId : '', evidenceId: this.evidenceInfo.evidenceId,uploadType:8}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">上传其他文件</Button>
+                      <Button icon="ios-cloud-upload-outline" style="width: 170px;">上传其他文件</Button>
                     </myUpload>
                 </div>
               </td>

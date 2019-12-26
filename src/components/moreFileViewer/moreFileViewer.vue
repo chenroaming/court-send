@@ -156,6 +156,11 @@ export default {
 
                 let fileType=item.split('.')[item.split('.').length-1];//获取文件类型
                 let url=item.indexOf('http://')>=0 || item.indexOf('https://')>=0 ? item : this.allHost+item;//过滤文件路径
+                //-----临时代码--开始
+                if(url.indexOf('dqfile.hlcourt.gov.cn') != -1){
+                    url = url.replace("http://dqfile.hlcourt.gov.cn", "https://hlcourt.obs.cn-south-1.myhuaweicloud.com:443")
+                }
+                 //-----临时代码---结束
                 switch (fileType) {
                     case 'pdf':
                         this.PTFurls.push({url:url,loading:true,id:Math.random().toString(36).substr(2)});

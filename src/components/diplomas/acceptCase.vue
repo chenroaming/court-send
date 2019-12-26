@@ -2,7 +2,7 @@
    <div class="box">
        <div class="header">
              <h2>福建省厦门市湖里区人民法院</h2>
-             <h2>参加诉讼告知书</h2>
+             <h2>受理案件通知书</h2>
        </div>
     <div>
        <Row>
@@ -16,25 +16,33 @@
             
                   <div style="width: 22%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.litigantName"></div>：
              <div>
-                &emsp;&emsp; <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.plaintiffName"></div>
-                与
+                &emsp;&emsp; 你方与
                 <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.defendantNameBriefName"></div>
-                一案，本院已立案，因<div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.notifiedPerson"></div>与本案处理结果存在法律上的利害关系，通知<div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.notifiedPerson"></div>作为
-                <div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.litigantStatusName"></div>
-                 参加诉讼。现将参加诉讼的有关事项通知如下：
+                一案，本院已立案，并移送<div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.courtName"></div>审理。现将受理案件有关事项通知如下：
              </div>
              <div class="textIndent">
                  一、在诉讼过程中，当事人必须依法行使诉讼权利，有权行使《中华人民共和国民事诉讼法》第四十九条、第五十条、第五十一条等规定的诉讼权利，同时也必须遵守诉讼秩序，履行诉讼义务。
              </div>
              <div class="textIndent">
-                 二、自然人应当提交身份证或者通行证、护照复印件；法人或者其他组织应当提交营业执照或者事业单位法人代码证复印件、法定代表人或者主要负责人身份证明书。
+                二、自然人应当提交身份证或者通行证、护照复印件；法人或者其他组织应当提交营业执照或者事业单位法人代码证复印件、法定代表人或者主要负责人身份证明书。
              </div>
-             <div class="textIndent">三、当事人、法定代理人可以委托一至二人作为诉讼代理人。</div>
-             <div class="textIndent">委托他人代为诉讼，必须向人民法院提交由委托人签名或者盖章的授权委托书。授权委托书必须记明委托事项和权限。诉讼代理人代为承认、放弃、变更诉讼请求，进行和解，提起反诉或者上诉，必须有委托人的特别授权。</div>
-             <div class="textIndent">侨居在国外的中华人民共和国公民从国外寄交或者托交的授权委托书，必须经中华人民共和国驻该国的使领馆证明；没有使领馆的，由与中华人民共和国有外交关系的第三国驻该国的使领馆证明，再转由中华人民共和国驻该第三国使领馆证明，或者由当地的爱国华侨团体证明。</div>  
+             <div class="textIndent">三、当事人、法定代理人可以委托一至二人作为诉讼代理人。委托他人代为诉讼，必须向人民法院提交由委托人签名或者盖章的授权委托书。授权委托书必须记明委托事项和权限。
+                 诉讼代理人代为承认、放弃、变更诉讼请求，进行和解，提起反诉或者上诉，必须有委托人的特别授权。
+                 侨居在国外的中华人民共和国公民从国外寄交或者托交的授权委托书，必须经中华人民共和国驻该国的使领馆证明；
+                 没有使领馆的，由与中华人民共和国有外交关系的第三国驻该国的使领馆证明，再转由中华人民共和国驻该第三国使领馆证明，或者由当地的爱国华侨团体证明。</div>
+             <div class="textIndent">四、你方应在接到本通知书后七日内，向本院预交案件受理费 （小写）元。</div>
+             <div class="textIndent">提示：请在完成缴费后及时持缴费凭据至本院诉讼服务大厅（厦门市湖里区金尚路1789号湖里区法院审判综合大楼一楼）开具诉讼费收费票据，以便日后办理退费手续。</div>  
              <div class="textIndent">
-                 四、根据《最高人民法院关于人民法院在互联网公布裁判文书的规定》，本院作出的生效裁判文书将在中国裁判文书网上公布。如果你认为案件涉及个人隐私或商业秘密，申请对裁判文书中的有关内容进行技术处理或者申请不予公布的，至迟应在裁判文书送达之日起三日内以书面形式提出并说明具体理由。经本院审查认为理由正当的，可以在公布裁判文书时隐去相关内容或不予公布。
-                 特此通知。联系人：沈春福，0592-2621015。
+                本院开户行：兴业银行厦门东区支行
+            </div> 
+            <div class="textIndent">
+                户名：厦门市湖里区人民法院
+            </div> 
+            <div class="textIndent">
+                账号：129500100100182530。
+            </div> <br/>
+            <div class="textIndent">
+                联系人：沈春福，0592-2621015。
             </div> 
              <Row>
                     <Col span="8" push="18" class="maininfo-col headerCase" style="margin-top:36px;">
@@ -64,7 +72,7 @@ export default {
 
         //     }
         modelHid:true,
-        title:'参加诉讼告知书'
+        title:'受理案件通知书'
         }
     },
      props: {

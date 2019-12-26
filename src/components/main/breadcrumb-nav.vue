@@ -25,4 +25,10 @@ export default {
     }
 };
 </script>
+<style>
+    .ivu-breadcrumb{
+        line-height: 28px;
+    }
+</style>
+
 

@@ -28,7 +28,8 @@
       
                 </Col>
                 <Col span="5" class="maininfo-col grid60">
-                    <Input v-model="backFill.litigantName"></Input>
+                <textarea style="  line-height: 1;  width: 205px;height: 70px;margin: 0px;resize: none;padding: 3px;" type="text" v-model="backFill.litigantName"></textarea>
+                    <!-- <Input v-model="backFill.litigantName"></Input> -->
                 </Col>
                 <Col span="5" class="maininfo-col grid60">
                     <!-- <FormItem  style="width: 100%;"> -->
@@ -68,7 +69,8 @@
                     送达文书名称和件数
                 </Col>
                 <Col span="5" class="maininfo-col grid100">
-                     <Input v-model="backFill.sendDiploms"></Input>
+                <textarea style="  line-height: 1;  width: 205px;height: 100px;margin: 0px;resize: none;padding: 3px;" type="text" v-model="backFill.sendDiploms"></textarea>
+                     <!-- <Input v-model="backFill.sendDiploms"></Input> -->
                 </Col>
                  <Col span="5" class="maininfo-col grid100">
                    
@@ -138,7 +140,7 @@
                    送达人
                 </Col>
                 <Col span="5" class="maininfo-col">
-                    
+                    <Input v-model="backFill.sendPeople"></Input>
                 </Col>
                   <Col span="5" class="maininfo-col">
                    
@@ -156,7 +158,8 @@
                    备注
                 </Col>
                 <Col span="5" class="maininfo-col grid60">
-                    
+                <textarea style="  line-height: 1;  width: 205px;height: 70px;margin: 0px;resize: none;padding: 3px;" type="text" v-model="backFill.sendRemark"></textarea>
+                     <!-- <Input v-model="backFill.sendRemark"></Input> -->
                 </Col>
                   <Col span="5" class="maininfo-col grid60">
                    
@@ -245,6 +248,8 @@ export default {
                     proofPeriod:this.backFill.proofPeriod,
                     filingDate:this.backFill.filingDate,
                     type:'add',
+                    sendPeople:this.backFill.sendPeople,
+                    sendRemark:this.backFill.sendRemark,
                 }  
               dbList(
                   data

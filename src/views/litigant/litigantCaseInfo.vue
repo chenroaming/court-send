@@ -21,7 +21,7 @@
         ok-text="关闭"
         title="案件进展详情">
         <mySteps :current="2" direction="vertical" v-show="stepList.length > 0">
-            <myStep v-for="(item, index) in stepList" :icon="index == 0 ? 'compose' : '' " :status="index == 0 ? 'process' : 'finish'" :title="item.createDate | formatStartDate" :content="item.operatorContent" :people="item.operatorName"></myStep>
+            <myStep v-for="(item, index) in stepList" :icon="index == 0 ? 'ios-create-outline' : '' " :status="index == 0 ? 'process' : 'finish'" :title="item.createDate | formatStartDate" :content="item.operatorContent" :people="item.operatorName"></myStep>
         </mySteps>
         <div v-show="stepList.length == 0" style="text-align: center;color:#999;">
           暂无数据
@@ -37,7 +37,7 @@
         <Row>
           <Col span="5">
             <ButtonGroup vertical>
-                <Button v-if="item.current.length != 0" v-for="(item,index) in litigantSendList" type="ghost" @click="selectLitigant(index)" :key="index">
+                <Button v-if="item.current.length != 0" v-for="(item,index) in litigantSendList" style="padding:6px 15px;height:auto" @click="selectLitigant(index)" :key="index">
                   <p style="max-width:120px;overflow:visible;white-space:normal;text-overflow:inherit;">{{ item.current.litigationStatusName }}: {{ item.current.litigantName }}</p> 
                   送达方式：{{ sendTypes[item.current.sendType] ? sendTypes[item.current.sendType] : "" }}
                 </Button>

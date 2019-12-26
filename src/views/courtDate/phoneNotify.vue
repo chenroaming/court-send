@@ -9,8 +9,8 @@
 </style>
 
 <template>
-  <div style="position:relative;">
-    <Card class="side-bar">
+  <div style="position:relative;height:100%">
+    <Card class="side-bar"  style="height:95%;min-height:600px;position: relative;">
       <p slot="title">
         <Icon type="navicon"></Icon>
         功能菜单
@@ -33,7 +33,7 @@
             <DatePicker style="width:175px;" type="daterange" placeholder="选择日期" v-model="formItem.date" />
           </FormItem>
           <FormItem style="text-align: right;">
-            <Button type="ghost" @click="resetSearch">重置</Button>
+            <Button  @click="resetSearch">重置</Button>
             <Button type="primary" style="margin-left: 8px" @click="searchList">查询</Button>
           </FormItem>
         </Form>
@@ -1135,7 +1135,7 @@ export default {
 }
 .search-list {
   padding: 10px;
-  max-height: 270px;
+  max-height: 300px;
   overflow-y: auto;
   li {
     margin-bottom: 8px;

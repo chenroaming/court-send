@@ -23,7 +23,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">公告送达管理</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -52,9 +52,9 @@
                             <Input style="width: 128px" v-model="formItem.newspaper"/>
                         </FormItem>
                         <div style="display: inline-block; padding-left: 20px">
-                            <Button @click="getNoticeList(formItem, 1)" type="ghost">查询</Button>
-                            <Button style="margin-left: 10px" type="ghost" @click='cleanForm()'>清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button @click="getNoticeList(formItem, 1)" >查询</Button>
+                            <Button style="margin-left: 10px"  @click='cleanForm()'>清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
                         </div>
                     </Form>
                 </Col>
@@ -63,7 +63,7 @@
                 <!-- <Button @click="$router.push('../dip')" size="large" type="info">查看</Button> -->
                 <Button @click=" openAdd" size="large" type="primary">添加</Button>
                 <!-- <Button size="large" type="success">修改</Button> -->
-                <Button @click="toDel" size="large" type="ghost">删除</Button>
+                <Button @click="toDel" size="large" >删除</Button>
             </ButtonGroup>
             <Table stripe ref="noticeTable" :columns="noticecol" :data="noticedata" @on-selection-change="tableCheck"></Table>
             <div style="margin: 10px;overflow: hidden">
@@ -268,7 +268,7 @@
                       action="/api/court/notice/uploadImg.jhtml"
                       :data="{}"
                       :on-success="uploadSuccess">
-                      <Button type="ghost" icon="ios-cloud-upload-outline" style="width: 170px;">照片上传</Button>
+                      <Button  icon="ios-cloud-upload-outline" style="width: 170px;">照片上传</Button>
                     </myUpload>
                     </Col>
                 </Row>

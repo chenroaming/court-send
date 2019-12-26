@@ -2,7 +2,7 @@
    <div class="box">
        <div class="header">
              <h2>福建省厦门市湖里区人民法院</h2>
-             <h2>合议庭成员告知书</h2>
+             <h2>领取诉讼文书通知书</h2>
        </div>
     <div>
      <Form>
@@ -20,20 +20,19 @@
            </Row>
             
                 <div class="lineHeight">
-                     &emsp;&emsp;本院受理原告
+                     &emsp;&emsp;本院受理
                     <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.plaintiffName"></div>
-                    与被告<div style="width:35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.defendantNameBriefName"></div>
-                    一案，决定由法官
-                    <div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.judgeName"></div>
-                    担任审判长，与人民陪审员
-                    <div style="width: 22%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.allMembers"></div>
-                    组成合议庭进行审理。同时，本院再给予你方 <div class="underline100">
-                        <input type="text" v-model="backFill.proofPeriod">
-                        </div>天举证期限。
+                    诉你<div style="width:35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.briefName"></div>
+                    一案，现将领取诉讼文书事宜告知如下：
+                    
+                    <div class="textIndent">一、你方应于收到本通知书之日起三日内至本院殿前人民法庭领取起诉状副本、证据、传票、应诉通知书等诉讼文书；</div>
+                    <div class="textIndent">二、如因交通不便或其他原因要求邮寄或通过电子邮件、微信等方式送达的，你方应于收到本通知书之日告知本院。本院将按照你方提供并确认的送达方式和送达地址进行送达；</div>
+                    <div class="textIndent">三、如你方在指定期间内未领取诉讼文书，也未告知送达地址的，本院将按照推定地址进行送达。</div>
                 </div>
                
            
-                <div class="textIndent">特此通知。</div>
+                <div style="margin-top:10px;" class="textIndent">殿前人民法庭地址：福建省厦门市湖里区华荣路54号。</div>
+                <div class="textIndent">联系电话：0592-2621015，联系人：沈春福。</div>
                 <Row>
                     <Col span="8" push="18" class="maininfo-col headerCase">
                         <p>{{backFill.noticeTime}}</p>
@@ -63,7 +62,7 @@ export default {
 
         //     }
         modelHid:true,
-        title:'合议庭成员告知书'
+        title:'领取诉讼文书通知书'
         }
     },
      props: {

@@ -134,3 +134,66 @@ export function verifyDiploms (fileId) {
     params
   })
 }
+
+/**
+ * 生成归档卷宗接口
+ * @param {*} params 
+ */
+export function createProcessExc (lawCaseId) {
+  const params = {
+    lawCaseId
+  }
+  return service({
+    url: '/court/process/createProcessExc.jhtml',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 删除文件接口
+ * @param {*} params 
+ */
+export function delDiploms (fileIdList) {
+  const data = {
+    fileIdList
+  }
+  return service({
+    url: '/dp/delDiploms.jhtml',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 移动文件接口
+ *fileIdList 文件id数组
+ *dirTypeId  要移到该目录的目录id
+ */
+export function updateFileDirType (fileIdList,dirTypeId) {
+  const data = {
+    fileIdList,
+    dirTypeId
+  }
+  return service({
+    url: '/dp/updateFileDirType.jhtml',
+    method: 'post',
+    data
+  })
+}
+
+
+/**
+ * 导入诉前证据
+ * @param {*} params 
+ */
+export function saveEviToArchive (lawCaseId) {
+  const params = {
+    lawCaseId
+  }
+  return service({
+    url: '/dp/saveEviToArchive.jhtml',
+    method: 'get',
+    params
+  })
+}

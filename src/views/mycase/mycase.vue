@@ -392,7 +392,7 @@ export default {
                     console.log(caseAry)
                     this.drawChart1(waitshCase, caseAry);
                     //条形图
-                    this.courtxdata = ['案件总数','未启动送达','未启动送达','已送达'];
+                    this.courtxdata = ['案件总数','未启动送达','正在送达','已送达'];
                     this.courtydata = [res.data.allLawCase,res.data.noSendCase,res.data.sendCase,res.data.overSendCase];
                     this.drawChart3(this.courtxdata, this.courtydata);
                 } else if (res.data.state == 101) {

@@ -108,6 +108,10 @@ export default {
                     ellipsis: true,
                     render: (h, params) => {
                         return h('a', {
+                            style:{
+                                padding:"1px 15px",
+                                textAlign:'left'
+                            },
                             on: {
                                 click: () => {
                                     this.showMesTitleList = false;
@@ -123,7 +127,7 @@ export default {
                 {
                     title: ' ',
                     key: 'createDate',
-                    align: 'center',
+                    align: 'left',
                     width: 180,
                     render: (h, params) => {
                         return h('span', [
@@ -148,7 +152,7 @@ export default {
                 {
                     title: ' ',
                     key: 'asread',
-                    align: 'center',
+                    align: 'left',
                     width: 100,
                     render: (h, params) => {
                         if (this.currentMessageType === 'unread') {
@@ -175,10 +179,17 @@ export default {
             }
             this.currentMessageType = type;
             if (type === 'unread') {
+                this.$store.dispatch('ShowNotice').then(res => {
+                    this.currentMesList = this.unreadMesList = this.$store.getters.new;
+                    this.hasreadMesList = this.$store.getters.read;
+                    this.unreadCount = this.unreadMesList.length;
+                    this.hasreadCount = this.hasreadMesList.length;
+                })
                 this.noDataText = '暂无未读消息';
                 this.currentMesList = this.$store.getters.new;
                 console.log(this.currentMesList)
             } else if (type === 'hasread') {
+                
                 this.noDataText = '暂无已读消息';
                 this.currentMesList = this.$store.getters.read;
             }

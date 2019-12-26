@@ -23,8 +23,8 @@
                 </Select>
             </FormItem>
             <div style="display: inline-block;padding-right: 30px;margin-left:30px;">
-                <Button @click="onRefreshList()" type="ghost">查询</Button>
-                <!-- <Button @click="clean" style="margin-left: 10px" type="ghost">清空</Button> -->
+                <Button @click="onRefreshList()" >查询</Button>
+                <!-- <Button @click="clean" style="margin-left: 10px" >清空</Button> -->
 
             </div>
         </Form>

@@ -22,11 +22,14 @@
                 <div class="lineHeight">
                      &emsp;&emsp;本院已经受理原告
                     <div style="width: 30%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.plaintiffName"></div>
-                    与被告<div style="width: 30%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.defendantName"></div>
-                    <div style="width: 30%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.briefName"></div>
+                    与被告<div style="width: 30%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.defendantNameBriefName"></div>
+ 
                     纠纷一案，现依法向你公告送达 <div style="width: 30%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.caseNo"></div>
                     案件的起诉状、证据材料、应诉通知书、举证通知书、诉讼权利义务告知书、廉政监督卡、民事裁定书、合议庭组成人员告知书及开庭传票。自本公告发出之日起经过60日，即视为送达；提出答辩状和举证的期限分别为公告送达期满后15日和30日内，并定于举证期限届满后次日（遇节假日顺延）
-                    上午8时30分在本院殿前人民法庭第四法庭（厦门市湖里区华荣路54号）开庭审理此案，逾期不到庭，本院将依法缺席裁判。 
+                    上午8时30分在本院
+                    <div style="width: 40%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.tribunalAddress"></div>
+                    <!-- 殿前人民法庭第四法庭（厦门市湖里区华荣路54号） -->
+                    开庭审理此案，逾期不到庭，本院将依法缺席裁判。 
                 </div>
         
                 <div class="textIndent">
@@ -67,7 +70,7 @@ export default {
 
         //     }
         modelHid:true,
-        title:'公告'
+        title:'公告(开庭传票)'
         }
     },
      props: {
@@ -79,18 +82,21 @@ export default {
             // var _this = this;
             // console.log(panelList);
             // console.log('组件调用') 
-
-              createNotice(
-                this.backFill.lawCaseId,
-                this.backFill.litigantName,
-                this.backFill.plaintiffName,
-                this.backFill.defendantName,
-                this.backFill.briefName,
-                this.backFill.caseNo
+                let data = {
+                    litigantId:litigantId.toString(),
+                    name:panelList,
+                    caseNo:this.backFill.caseNo,
+                    litigantName:this.backFill.litigantName,
+                    defendantNameBriefName:this.backFill.defendantNameBriefName,
+                    tribunalAddress:this.backFill.tribunalAddress,
+                    plaintiffName:this.backFill.plaintiffName,
+                }
+              dbList(
+                data
               ).then(res=>{
                if(res.data.state == 100){
                     this.modelHid = false;
-                     this.$emit('model',this.modelHid,res.data.file,this.title);
+                     this.$emit('model',this.modelHid,res.data.result,this.title);
                }else{
                    this.$Message.info(res.data.message);  
                }

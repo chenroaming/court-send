@@ -235,6 +235,7 @@ export default {
             remark:"",
             otherRemark:"",
             month:"",
+            nowSorts:"time",
             judgeIdStr:[],
             openStateid:[],
             scheduldingId:"",
@@ -358,15 +359,12 @@ export default {
       let openStateStr=''
       if(openStateid){
           openStateStr = openStateid.join(',')
-        console.log(openStateStr)
       }else{
         openStateStr = '1';
-        console.log(7777+openStateid)
       }
       let judgeIdStrForm=''
       if(judgeIdStr){
           judgeIdStrForm = judgeIdStr.join(',')
-        console.log(judgeIdStrForm)
       }
       this.year = year;
       this.month = month;
@@ -376,21 +374,21 @@ export default {
           this.caseNo=caseNo
           
       }
-      let sorts = 'time';
+      let sorts = this.nowSorts;
       if(sort){
+          this.nowSorts = sort;
           sorts = sort;
       }
-      console.log(caseNo+'11111111111111111111111')
             if (litigantName) {
           this.litigantName=litigantName
       }
         //openStateid=JSON.stringify(openStateid)
         // console.log(year, month, judgeIdStr,openStateid);
+        
       calendarList(year, month + 1, judgeIdStrForm, "dq",openStateStr,caseNo,litigantName,sorts).then(res => {
         this.$refs.calen.cloaseReload();
         if ((res.data.state = 100)) {
             this.countInfos = res.data.count;
-            console.log(res.data.count)
           this.events = [];
           res.data.result.map(item => {
               let litigantsArr = item.litigationStatus.split(',')
@@ -431,6 +429,13 @@ export default {
             }
             this.events.push(obj);
           });
+          
+          if(this.$store.state.app.isTrueChangeYear && this.events.length > 0){
+              
+                let aryd =  this.events[0].date.split('-');
+                console.log(aryd)
+                this.$refs.calen.changeYearMonth(Number(aryd[0]),Number(aryd[1] - 1))
+          }
           // console.log(this.events);
         }
       });

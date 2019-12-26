@@ -34,8 +34,11 @@ const app = {
         menuList: [],
         caseStage:"0",//首页案件列表案件状态
         casePage:1,
+        isTrueChangeYear:false, //庭审日历案号搜索是否更新日历年月
         caseCourt:"全院",//首页部门
         litigantBages:0,
+        archiveMoveObj:{},  //案件卷宗拖动对象
+        moveObjEd:false,    //案件卷宗移动文件判断
         calendarYear:new Date().getFullYear(),
         calendarMonth:new Date().getMonth(),
         routers: [otherRouter, ...appRouter],
@@ -55,6 +58,15 @@ const app = {
         },
         setCalYear(state, y){
             state.calendarYear = y;
+        },
+        setisTrueChangeYear(state, y){
+            state.isTrueChangeYear = y;
+        },
+        setarchiveMoveObj(state, ob){
+            state.archiveMoveObj = ob;
+        },
+        setmoveObjEd(state, ob){
+            state.moveObjEd = ob;
         },
         setlitigantBages(state,l){
             state.litigantBages = l;

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import iView from 'iview';
+import iView from 'view-design';
 import VueOccupy from 'vue-occupy'
 import {
     router
@@ -16,7 +16,8 @@ import '../static/UE/ueditor.config.js';
 import '../static/UE/ueditor.all.min.js';
 import '../static/UE/lang/zh-cn/zh-cn.js';
 import util from '@/libs/util';
-
+// import style
+// import 'view-design/dist/styles/iview.css';
 Vue.use(iView);
 Vue.use(VueOccupy);
 new Vue({

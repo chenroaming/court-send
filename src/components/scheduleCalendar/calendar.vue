@@ -4,7 +4,7 @@
                     :month="month"
                     :infoscount="count"
                     @updateValue="updateView"
-                    @showCourtDate='showCourtDate'></header-bar>
+                    @showCourtDate='showCourtDate' ref="heads"></header-bar>
         <div class="schedule-calendar-body">
             <week :startWeek="startWeek"></week>
             <month :year="year"
@@ -83,8 +83,13 @@ export default {
       this.$emit("even-courtDate");
     },
     cloaseReload(){
-      console.log(1111)
+      // console.log(1111)
       this.OCRLoading = false;
+    },
+    changeYearMonth(y,m){
+      this.year = y;
+      this.month = m;
+      console.log(m)
     },
     cellDragenter(e, date, type, index) {
       this.$emit("event-dragenter", e, this.dragItem, date);

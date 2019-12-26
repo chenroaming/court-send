@@ -886,7 +886,7 @@ export default {
                                     color:function(params) {
                                     //自定义颜色
                                     var colorList = [          
-                                            '#FF0000', '#FFFF00', '#00B050', '#00B0F0', '#7030A0',
+                                            '#FF0000', '#FFAA25', '#00B050', '#00B0F0', '#7030A0',
                                         ];
                                         return colorList[params.dataIndex]
                                      }

@@ -37,12 +37,10 @@ html {
             </div>
           </div>
           <div style="width: 100%;height:100%;overflow:auto;" v-on="dragEvents">
-            <Spin size="large" fix v-if="spinShow2"></Spin>
             <tree :data="catalogueShow"  show-checkbox multiple allow-batch whole-row
               :contextmenu="showMenu"
               :cloaseM="cloaseMenu"
              @item-click="itemClick"></tree>
-             <p v-show="catalogueShow.length == 0" style="text-align:center">暂无数据</p>
           </div>
           <ul>
             <li class="ivu-transfer-list-content-not-found">列表为空</li>
@@ -271,11 +269,18 @@ import {
   verifyDiploms,
   createProcessExc,
   saveEviToArchive,
-  delDiploms
+  delDiploms,
+  uploadElectronicFile
 } from "@/api/archive.js";
 export default {
   components: {
     tree
+  },
+   props : {
+      dipName:{
+          type:String,
+          default:'',
+      },
   },
   data() {
     return {
@@ -287,7 +292,6 @@ export default {
       originalSh:'0',
       selectOs:{},
       spinShow:false,
-      spinShow2:false,
       dirName:"",
       nowfileid:"",
       filesModal:false,
@@ -328,7 +332,7 @@ export default {
           align: "center",
           ellipsis: true,
           resizable:true,
-          width:170,
+          width:150,
           render:(h,params)=>{
                 return h('p',{
                   style:{
@@ -409,7 +413,7 @@ export default {
           align: "center",
           ellipsis: true,
           resizable:true,
-          width:170,
+          width:150,
           render:(h,params)=>{
                 return h('p',{
                   style:{
@@ -856,7 +860,6 @@ export default {
       this.menuOpen = true;
     },
     getCaseList(caseNo) {
-      this.spinShow2 = true;
       let params = {
         caseNo,
         pageSize: 20,
@@ -865,13 +868,11 @@ export default {
       this.nowCase = caseNo;
       this.catalogueShow = this.catalogueData = [];
       getDiplomsLawCaseList(params).then(res => {
-        this.spinShow2 = false;
         if (R.equals(res.data.state, 100)) {
           let data = res.data.fileList;
           R.map(item => {
             let object = {};
             object.caseId = item.fileOneId;
-            object.isFirst = true;
             object.fids = item.fileOneId;
             object.lawcaseId = item.lawcaseId;
             object.text = item.fileOneName;
@@ -979,8 +980,6 @@ export default {
         } else {
           this.$Message.error(res.data.message);
         }
-      }).catch(res => {
-        this.spinShow2 = false;
       });
       // .catch(err => {
       //   this.$Message.error("服务器错误，请稍后再试！");
@@ -1150,9 +1149,8 @@ export default {
       this.selectOs = node;
       // if (!R.has("children")(node.model)) {
         this.pageNumber = 1;
-        console.log(node.model)
       let params = {};
-      if (node.model.isFirst) {
+      if (!R.has("id")(node.model)) {
         params = {
           directory: `${node.model.caseId},`,
           pageSize: this.pageSize,
@@ -1322,6 +1320,38 @@ export default {
       });
       // }
     },
+    NowSel(){
+      if(this.data1Selection.length < 1){
+         this.$Message.info('请在文件列表勾选文件');
+      }else{
+        let ary = [];
+        let str = '';
+        this.data1Selection.map(item => {
+          str = str + item.path[0].filePath + ","
+
+        })
+        uploadElectronicFile(str).then(res => {
+          if(res.data.state == 100){
+            res.data.fileList.map(it => {
+              let aryss = it.split(".");
+              let xar = aryss[aryss.length-2].split("/");
+              let type = aryss[aryss.length-1];
+              let name = xar[xar.length-1];
+              const dt = {
+                name:name + "." + type,
+                urlName:it
+              }
+              ary.push(dt)
+            })
+            console.log(ary)
+            console.log(this.dipName);
+            this.$emit('onChangeDips',ary,this.dipName);
+          }else{
+            this.$Message.info(res.data.message);
+          }
+        })
+      }
+    },
     changePage(num){
       this.pageNumber = num;
       this.getfileList()
@@ -1388,30 +1418,29 @@ export default {
             this.isImage = false;
             this.vedioShow = false;
             if(res.data.result.indexOf("http") != -1){
-               //-----临时代码--开始
-              let url = res.data.result;
-              if(url.indexOf('dqfile.hlcourt.gov.cn') != -1){
-                    url = url.replace("http://dqfile.hlcourt.gov.cn", "https://hlcourt.obs.cn-south-1.myhuaweicloud.com:443")
-              }
-              //-----临时代码---结束
-              this.fileShow =
-              "https://view.officeapps.live.com/op/view.aspx?src=" +
-              url;
-            }else{
-              let str1 = res.data.result.substr(0, 1);
-              if(str1 == '/'){
+                //-----临时代码--开始
+                let url = res.data.result;
+                if(url.indexOf('dqfile.hlcourt.gov.cn') != -1){
+                      url = url.replace("http://dqfile.hlcourt.gov.cn", "https://hlcourt.obs.cn-south-1.myhuaweicloud.com:443")
+                }
+                //-----临时代码---结束
                 this.fileShow =
-                "https://view.officeapps.live.com/op/view.aspx?src=https://" + 
-                window.location.host +
-                res.data.result;
+                "https://view.officeapps.live.com/op/view.aspx?src=" +
+                url;
               }else{
-                this.fileShow =
-                "https://view.officeapps.live.com/op/view.aspx?src=https://" + 
-                window.location.host + '/'
-                res.data.result;
+                let str1 = res.data.result.substr(0, 1);
+                if(str1 == '/'){
+                  this.fileShow =
+                  "https://view.officeapps.live.com/op/view.aspx?src=https://" + 
+                  window.location.host +
+                  res.data.result;
+                }else{
+                  this.fileShow =
+                  "https://view.officeapps.live.com/op/view.aspx?src=https://" + 
+                  window.location.host + '/'
+                  res.data.result;
+                }
               }
-            }
-            
           }
         } else {
           this.$Message.error(res.data.message);
@@ -1566,7 +1595,7 @@ export default {
     },
     //生成归档卷宗接口
     createProcessExc(){
-      
+      console.log(this.selectOs.model)
       if(this.selectOs.model){
         createProcessExc(this.selectOs.model.lawcaseId).then(res => {
           if(res.data.state == 100){
@@ -1646,7 +1675,7 @@ export default {
       // let index = fileName.indexOf(".");
       // fileName = fileName.substring(index);
       let fileType = fileName.split('.')[fileName.split('.').length-1]
-      if (fileType !== "pdf" && fileType !== "PDF") {
+      if (fileType !== "pdf") {
         return false;
       } else {
         return true;

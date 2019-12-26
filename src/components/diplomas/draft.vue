@@ -24,8 +24,9 @@
                     <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.plaintiffName"></div>
                     与被告<div style="width:35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.defendantName"></div>
                     <div style="width:35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.briefName"></div>
-                    一案，现依法向你公告送达<div style="width:50%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.noticeDocument"></div>。自公告之日起经过六十日，即视为
-送达。提出答辩状和举证的期限为公告期满后的十五日内
+                    一案，现依法向你公告送达<div style="width:50%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.noticeDocument"></div>。自公告之日起经过
+                    <div style="width:15%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.serviceDeadline"></div>日，即视为
+送达。提出答辩状和举证的期限<div style="width:25%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.limitTime"></div>
 （最后一日遇节假日顺延）。并定于举证期满后的次日上午
 八时三十分（遇节假日顺延），在本院
                     <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.tribunalAddress"></div>
@@ -40,6 +41,13 @@
                 <Row>
                     <Col span="8" push="18" class="maininfo-col headerCase">
                         <p>{{backFill.noticeTime}}</p>
+                    </Col>
+                </Row>
+                <br/>
+                <br/>
+                <Row>
+                    <Col span="24"  class="maininfo-col headerCase">
+                        邮寄地址：<div style="width:50%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.judgeAddress"></div>
                     </Col>
                 </Row>
                 
@@ -83,6 +91,8 @@ export default {
                     litigantId:litigantId.toString(),
                     name:panelList,
                     caseNo:this.backFill.caseNo,
+                    judgeAddress:this.backFill.judgeAddress,
+                    serviceDeadline:this.backFill.serviceDeadline,
                     briefName:this.backFill.briefName,
                     litigantName:this.backFill.litigantName,
                     startTime:this.backFill.startTime,
@@ -116,6 +126,7 @@ export default {
                     programType:"5",
                     type:'add',
                     noticeDocument:this.backFill.noticeDocument,
+                    limitTime:this.backFill.limitTime,
                 } 
               dbList(
                   data

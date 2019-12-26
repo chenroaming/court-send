@@ -6,8 +6,8 @@
           <Input v-model="searchData.caseNo" placeholder="请输入案号" style="width: 200px" />
         </FormItem>
         <FormItem label="案由">
-          <Select clearable filterable v-model="searchData.briefName" placeholder="请选择案由" style="width: 200px;vertical-align:middle;">
-            <Option v-for="item in reasonList" :value="item.brief" :key="item.brief">{{ item.brief }}</Option>
+          <Select clearable filterable transfer v-model="searchData.briefName" placeholder="请选择案由" style="width: 200px;vertical-align:middle;">
+            <Option style="max-width:200px" v-for="item in reasonList" :value="item.brief" :key="item.brief">{{ item.brief }}</Option>
           </Select>
         </FormItem>
         <FormItem label="状态">
@@ -35,7 +35,7 @@
         <div style="text-align:right;" class="btn-group">
           <FormItem>
               <Button type="primary" @click="searchList">查询</Button>
-              <Button type="ghost" @click="emptySearchList" style="margin-left: 8px">清空</Button>
+              <Button @click="emptySearchList" style="margin-left: 8px">清空</Button>
           </FormItem>
         </div>
       </Form>

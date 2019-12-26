@@ -15,13 +15,14 @@
             </div>
             <Table :columns="columns" :data="this.data"></Table>
             <div class="maininfo-col-label" style="display:inline-block;padding:10px;margin:10px;">当事人关系：</div>
-            <template v-if="this.data.length>1"> <button type="button" class="ivu-btn ivu-btn-ghost"  @click="addLitigantRelation">添加</button> </template>
+            <template v-if="this.data.length>1"> <Button type="button"   @click="addLitigantRelation">添加</Button> </template>
              <Table :columns="columns1"  :data="this.relation" width="100%"></Table>
              
         </Card>
         <Modal :title="this.type === 'plaintiff' ? this.litigantId != '' ? '修改原告' : '添加原告' : this.type === 'defendant' ? this.litigantId != '' ? '修改被告' : '添加被告' : this.litigantId != '' ? '修改第三人' : '添加第三人'" v-model="showAdd" width="546px" :loading="loading" ok-text="提交" @on-ok="submit" :mask-closable="false">
             <div>
-                <Form ref="refAddLitigant" :model="addFormItem" :rules="natureRule" :label-width="100" inline>
+                <!-- :rules="natureRule" -->
+                <Form ref="refAddLitigant" :model="addFormItem"  :label-width="100" inline>
                     <FormItem label="类型" style="width: 245px;">
                         <Select v-model="addFormItem.litigantType"  transfer placeholder="请选择">
                             <Option value="自然人">自然人</Option>
@@ -128,7 +129,7 @@
                     <FormItem label="备注" style="width: 505px">
                         <Input v-model="addFormItem.addressRemark" placeholder="请地址备注"></Input>
                     </FormItem>
-                    <FormItem :label="addFormItem.litigantType == '自然人' ? '送达地址' : '确认公司经营地址'" style="width: 505px">
+                    <FormItem :label="addFormItem.litigantType == '自然人' ? '送达地址' : '确认送达地址'" style="width: 505px">
                         <Input v-model="addFormItem.sendAddress" placeholder="请输入地址"></Input>
                     </FormItem>
                     <FormItem label="备注" style="width: 505px">
@@ -180,6 +181,9 @@
                     <FormItem label="工作单位" v-if="addFormItem.lawerType == 1 || addFormItem.lawerType == 2" style="width: 505px;">
                         <Input v-model="addFormItem.lawFirm" placeholder="请输入代理人一工作证单位"  ></Input>
                     </FormItem>
+                    <FormItem label="电子邮箱"  style="width: 505px;">
+                        <Input v-model="addFormItem.agentEmail" placeholder="请输入代理人一电子邮箱"  ></Input>
+                    </FormItem>
                     </div>
                     <div v-show="lawyerAdd2">
                     <FormItem label="代理人二身份" style="width: 505px;">
@@ -210,7 +214,9 @@
                     <FormItem label="工作单位" v-show="addFormItem.lawerType1 == 1 || addFormItem.lawerType1 == 2" style="width: 505px;">
                         <Input v-model="addFormItem.lawFirm1" placeholder="请输入代理人二工作证单位"  ></Input>
                     </FormItem>
-                    
+                    <FormItem label="电子邮箱"  style="width: 505px;">
+                        <Input v-model="addFormItem.agentEmail1" placeholder="请输入代理人二电子邮箱"  ></Input>
+                    </FormItem>
                     </div>
                     <FormItem v-show="!lawyerAdd2">
                         <div class="adds"  @click="addShowLawyer" style="text-align:center">
@@ -350,6 +356,7 @@ export default {
                 lawermobile: '',
                 lawIdentiCard: '',
                 lawerNum: '',
+                agentEmail:"",
                 lawFirm: '',
                 relationType: '',
                 relationLitigantId: '',
@@ -358,7 +365,8 @@ export default {
                 lawerName1: "",
                 lawermobile1: "",
                 lawIdentiCard1: "",
-                lawerNum1: ""
+                lawerNum1: "",
+                agentEmail1:""
                 
             },
             lawerType: [
@@ -516,6 +524,7 @@ export default {
                                                                     this.addFormItem.lawIdentiCard = arry[0].agentIdentiCard;
                                                                     this.addFormItem.lawerNum = arry[0].lawerNum;
                                                                     this.addFormItem.lawFirm = arry[0].lawFirm;
+                                                                    this.addFormItem.agentEmail = arry[0].agentEmail;
                                                                 } else if (arry.length == 2) {
                                                                     this.lawyerAdd1 = true;
                                                                     this.lawyerAdd2 = true;
@@ -525,6 +534,7 @@ export default {
                                                                     this.addFormItem.lawermobile = arry[0].agentMobile;
                                                                     this.addFormItem.lawIdentiCard = arry[0].agentIdentiCard;
                                                                     this.addFormItem.lawerNum = arry[0].lawerNum;
+                                                                    this.addFormItem.agentEmail = arry[0].agentEmail;
                                                                     this.addFormItem.agentId1 = arry[1].id;
                                                                     this.addFormItem.lawerType1 = arry[1].agentType
                                                                     this.addFormItem.lawerName1 = arry[1].agentName;
@@ -532,6 +542,7 @@ export default {
                                                                     this.addFormItem.lawIdentiCard1 = arry[1].agentIdentiCard;
                                                                     this.addFormItem.lawerNum1 = arry[1].lawerNum;
                                                                     this.addFormItem.lawFirm1 = arry[1].lawFirm;
+                                                                    this.addFormItem.agentEmail1 = arry[1].agentEmail;
                                                                 }
                                                             } else {
                                                                 this.addFormItem.agentId = "";
@@ -950,6 +961,7 @@ export default {
             this.addFormItem.lawerNum = value.lawerNum;
             this.addFormItem.agentId = value.agentId;
             this.addFormItem.lawIdentiCard = value.agentIdentiCard;
+            this.addFormItem.agentEmail = value.agentEmail;
             this.agentData1 = [];
             return false;
             console.log(value)
@@ -1051,6 +1063,7 @@ export default {
                                 phone:ary[i].agentMobile,
                                 lawerNum:ary[i].lawerNum,
                                 agentId:ary[i].id,
+                                agentEmail:ary[i].agentEmail,
                                 agentIdentiCard:ary[i].agentIdentiCard
                             }
                             this.arr1.push(drt)
@@ -1094,6 +1107,7 @@ export default {
             this.addFormItem.lawermobile1 = this.trimK(value.phone);
             this.addFormItem.lawerNum1 = value.lawerNum;
             this.addFormItem.agentId1 = value.agentId;
+            this.addFormItem.agentEmail1 = value.agentEmail;
             this.addFormItem.lawIdentiCard1 = value.agentIdentiCard;
             this.agentData1 = [];
             return false;
@@ -1145,6 +1159,7 @@ export default {
                                 phone:ary[i].agentMobile,
                                 lawerNum:ary[i].lawerNum,
                                 agentId:ary[i].id,
+                                agentEmail:ary[i].agentEmail,
                                 agentIdentiCard:ary[i].agentIdentiCard
                             }
                             this.arr2.push(drt)
@@ -1246,6 +1261,8 @@ export default {
                 this.addFormItem.lawIdentiCard1 = '';
                 this.addFormItem.lawerNum1 = '';
                 this.addFormItem.lawFirm1 = '';
+                this.addFormItem.agentEmail = '';
+                this.addFormItem.agentEmail1 = '';
                 this.addFormItem.nativePlaceRemark = '';
                 console.log(this.addFormItem.nativePlaceRemark)
                 this.addFormItem.addressRemark = '';
@@ -1352,20 +1369,20 @@ export default {
             return s ? s.replace(/(^\s*)|(\s*$)/g, "") : '' ;
         },
         submit () {
-            let isTures = true;
-            this.$refs['refAddLitigant'].validate(valid => {
-                if (valid) {
-                    isTures = true;
-                    // 如果验证通过，执行的一些操作，比如调接口等
-                } else {
-                    isTures = false;
-                    // 如果验证不通过执行的一些操作
-                }
-            })
-            if(!isTures){
-                this.changeLoading();
-                return false;
-            }
+            // let isTures = true;
+            // this.$refs['refAddLitigant'].validate(valid => {
+            //     if (valid) {
+            //         isTures = true;
+            //         // 如果验证通过，执行的一些操作，比如调接口等
+            //     } else {
+            //         isTures = false;
+            //         // 如果验证不通过执行的一些操作
+            //     }
+            // })
+            // if(!isTures){
+            //     this.changeLoading();
+            //     return false;
+            // }
             var litigaStatus;
             var adrStr = '';
             console.log(this.adressList)
@@ -1505,7 +1522,9 @@ export default {
                                 this.addFormItem.lawermobile1,
                                 this.addFormItem.lawIdentiCard1,
                                 this.addFormItem.lawerNum1,
-                                this.addFormItem.lawFirm1
+                                this.addFormItem.lawFirm1,
+                                this.addFormItem.agentEmail,
+                                this.addFormItem.agentEmail1,
                             )
                                 .then(res => {
                                     if (res.data.state === 100) {
@@ -1544,6 +1563,8 @@ export default {
                                         this.addFormItem.lawerNum1 = '';
                                         this.addFormItem.lawFirm1 = '';
                                         this.addFormItem.lawIdentiCard1 = '';
+                                        this.addFormItem.agentEmail = '';
+                                        this.addFormItem.agentEmail1 = '';
                                         this.showAdd = false;
                                         this.$emit('refreshList');
                                     } else {
@@ -1603,7 +1624,9 @@ export default {
                                         this.addFormItem.lawermobile1,
                                         this.addFormItem.lawIdentiCard1,
                                         this.addFormItem.lawerNum1,
-                                        this.addFormItem.lawFirm1
+                                        this.addFormItem.lawFirm1,
+                                        this.addFormItem.agentEmail,
+                                        this.addFormItem.agentEmail1,
                                     )
                                         .then(res => {
                                             if (res.data.state === 100) {
@@ -1642,6 +1665,8 @@ export default {
                                                 this.addFormItem.lawerNum1 = '';
                                                 this.addFormItem.lawFirm1 = '';
                                                 this.addFormItem.lawIdentiCard1 = '';
+                                                this.addFormItem.agentEmail = '';
+                                                this.addFormItem.agentEmail1 = '';
                                                 this.showAdd = false;
                                                 this.$emit('refreshList');
                                             } else {
@@ -1708,6 +1733,8 @@ export default {
                                     this.addFormItem.lawIdentiCard1,
                                     this.addFormItem.lawerNum1,
                                     this.addFormItem.lawFirm,
+                                    this.addFormItem.agentEmail,
+                                    this.addFormItem.agentEmail1,
                                 )
                                     .then(res => {
                                         if (res.data.state === 100) {
@@ -1746,6 +1773,8 @@ export default {
                                             this.addFormItem.lawerNum1 = '';
                                             this.addFormItem.lawFirm1 = '';
                                             this.addFormItem.lawIdentiCard1 = '';
+                                            this.addFormItem.agentEmail = '';
+                                            this.addFormItem.agentEmail1 = '';
                                             this.showAdd = false;
                                             this.$emit('refreshList');
                                         } else {
@@ -1829,6 +1858,8 @@ export default {
                                 this.addFormItem.lawIdentiCard1,
                                 this.addFormItem.lawerNum1,
                                 this.addFormItem.lawFirm1,
+                                this.addFormItem.agentEmail,
+                                this.addFormItem.agentEmail1,
                             )
                                 .then(res => {
                                     if (res.data.state === 100) {
@@ -1866,6 +1897,8 @@ export default {
                                         this.addFormItem.lawerNum1 = '';
                                         this.addFormItem.lawFirm1 = '';
                                         this.addFormItem.lawIdentiCard1 = '';
+                                        this.addFormItem.agentEmail = '';
+                                        this.addFormItem.agentEmail1 = '';
                                         this.showAdd = false;
                                         this.$emit('refreshList');
                                     } else {
@@ -1926,6 +1959,8 @@ export default {
                                         this.addFormItem.lawIdentiCard1,
                                         this.addFormItem.lawerNum1,
                                         this.addFormItem.lawFirm1,
+                                        this.addFormItem.agentEmail,
+                                        this.addFormItem.agentEmail1,
                                     )
                                         .then(res => {
                                             if (res.data.state === 100) {
@@ -1963,6 +1998,8 @@ export default {
                                                 this.addFormItem.lawerNum1 = '';
                                                 this.addFormItem.lawFirm1 = '';
                                                 this.addFormItem.lawIdentiCard1 = '';
+                                                this.addFormItem.agentEmail = '';
+                                                this.addFormItem.agentEmail1 = '';
                                                 this.showAdd = false;
                                                 this.$emit('refreshList');
                                             } else {
@@ -2027,7 +2064,9 @@ export default {
                                     this.addFormItem.lawermobile1,
                                     this.addFormItem.lawIdentiCard1,
                                     this.addFormItem.lawerNum1,
-                                    this.addFormItem.lawFirm1
+                                    this.addFormItem.lawFirm1,
+                                    this.addFormItem.agentEmail,
+                                    this.addFormItem.agentEmail1,
                                 )
                                     .then(res => {
                                         if (res.data.state === 100) {
@@ -2065,6 +2104,8 @@ export default {
                                             this.addFormItem.lawerNum1 = '';
                                             this.addFormItem.lawFirm1 = '';
                                             this.addFormItem.lawIdentiCard1 = '';
+                                            this.addFormItem.agentEmail = '';
+                                            this.addFormItem.agentEmail1 = '';
                                             this.showAdd = false;
                                             this.$emit('refreshList');
                                         } else {

@@ -144,7 +144,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">审判庭信息库</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -173,9 +173,9 @@
                             </Select>
                         </FormItem>
                         <div style="display: inline-block; padding-left: 20px">
-                            <Button @click="getList(1)" type="ghost">查询</Button>
-                            <Button @click="clean" style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button @click="getList(1)" >查询</Button>
+                            <Button @click="clean" style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
                         </div>
                     </Form>
                 </Col>
@@ -183,7 +183,7 @@
             <ButtonGroup style="margin-top: 10px; margin-bottom: 10px">
                 <Button @click="toAdd" size="large" type="primary">添加</Button>
                 <!-- <Button @click="exportExcel" size="large">导出excel</Button> -->
-                <Button @click="modal2 = true" size="large" type="ghost">删除</Button>
+                <Button @click="modal2 = true" size="large" >删除</Button>
             </ButtonGroup>
             <Table stripe ref="tribunalTable" :columns="tribunalcol" :data="tribunaldata" @on-selection-change="tableCheck"></Table>
             <Spin size="large" fix v-if="spinShow"></Spin>

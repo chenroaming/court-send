@@ -29,8 +29,11 @@
                 
                 
                 因<div style="width: 35%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.you"></div>下落不明，现依法向
-                <div style="width: 35%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.you"></div>公告送达本院<div class="minInput"><input type="text" v-model="backFill.caseNo"></div>民事判决书，本院依法判决：
-                <div style="min-width:100%;max-width:150%; display:inline-block;text-align: center;"  ><textarea style="width: 100%;    padding: 10px;height: 100px;margin: 10px;resize:none" name="" id="" cols="30" rows="10"  v-model="backFill.sentenceContent"></textarea></div>。自发出本公告之日起，经过 60 日即视为送达。如不服本判决，可在公告期满后 15 日内，向本院递交上诉状，并按对方当 事人的人数提出副本，上诉于福建省厦门市中级人民法院。
+                <div style="width: 35%; display:inline-block;border-bottom:1px solid black;text-align: center;"><input type="text" v-model="backFill.you"></div>公告送达本院<div class="minInput"><input type="text" v-model="backFill.caseNo"></div>
+                &emsp;<div class="minInput"><input type="text" v-model="backFill.judgment"></div>
+                <div style="min-width:100%;max-width:150%; display:inline-block;text-align: center;"  ><textarea style="width: 100%;    padding: 10px;height: 100px;margin: 10px;resize:none" name="" id="" cols="30" rows="10"  v-model="backFill.sentenceContent"></textarea></div>。自发出本公告之日起，
+                经过 <div class="minInput" style="width:12%"><input type="text" v-model="backFill.serviceDate"></div>  日即视为送达。如不服本判决，
+                可在公告期满后 <div class="minInput" style="width:12%"><input type="text" v-model="backFill.appealDate"></div> 日内，向本院递交上诉状，并按对方当 事人的人数提出副本，上诉于福建省厦门市中级人民法院。
                 <div class="textIndent">特此公告。</div>
  
                 <Row>
@@ -39,10 +42,10 @@
                         <!-- <p>（院印）</p> -->
                     </Col>
                 </Row>
-                <div class="textIndent">法院联系人：<div style="text-indent: 0em;;width: 15%; display:inline-block;text-align: center;"><input type="text" v-model="backFill.clerkName"></div> 电话：<div style="text-indent: 0em;;width: 15%; display:inline-block;text-align: center;"><input type="text" v-model="backFill.clerkTelephone"></div></div>
+                <div >联系人：厦门市湖里区人民法院殿前人民法庭书记员<div class="minInput" style="width:20%"><input type="text" v-model="backFill.clerkName"></div>
+                电话：<div class="minInput" style="width:20%"><input type="text" v-model="backFill.clerkTelephone"></div></div>
                 
-                <div class="textIndent">邮寄样报地址：<div style="text-indent: 0em;;width: 65%; display:inline-block;text-align: center;">{{backFill.courtAddressAndcourtAllName}}</div></div>
-                <div class="textIndent">法院殿前人民法庭。邮编：<div style="text-indent: 0em;;width: 15%; display:inline-block;text-align: center;">{{backFill.codeNumber}}</div></div>
+                <div >地址：厦门市湖里区华荣路54号。</div>
          </div>
          
        </Form>
@@ -66,7 +69,7 @@ export default {
 
         //     }
         modelHid:true,
-        title:'判决书'
+        title:'公告(裁判文书)'
         }
     },
      props: {
@@ -79,6 +82,9 @@ export default {
                     litigantId:litigantId.toString(),
                     name:panelList,
                     caseNo:this.backFill.caseNo,
+                    judgment:this.backFill.judgment,
+                    serviceDate:this.backFill.serviceDate,
+                    appealDate:this.backFill.appealDate,
                     briefName:this.backFill.briefName,
                     litigantName:this.backFill.litigantName,
                     startTime:this.backFill.startTime,

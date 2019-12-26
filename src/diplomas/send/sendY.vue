@@ -6,7 +6,7 @@
             案件搜索
         </p>
         <div style="margin-bottom: 16px">
-            <Form :label-width="60" @keydown.native.enter.prevent="queryCase">
+            <Form :label-width="70" @keydown.native.enter.prevent="queryCase">
                 <FormItem label="案号">
                     <Input v-model="searchData.caseNo" placeholder="请输入案号"></Input>
                 </FormItem>
@@ -23,7 +23,7 @@
             </Form>
         </div>
         <ButtonGroup vertical>
-            <Button v-for="(item, key) in caseList" type="ghost" :key="key" v-show="parseInt(key/10) === (pagenumber - 1)" @click="getCaseInfo(item.id)" class="caseBtn">
+            <Button v-for="(item, key) in caseList" style="min-height:52px;padding:6px 15px;" type="dashed" :key="key" v-show="parseInt(key/10) === (pagenumber - 1)" @click="getCaseInfo(item.id)" class="caseBtn">
                 <p>
                     <Tooltip :content="item.caseNo">
                         案号：{{ item.caseNo }}
@@ -41,7 +41,7 @@
     <Card v-show="caseInfoShow">
         <p slot="title">
             案件信息
-            <span class="case-finish" style="right: 135px;" @click="sendTable">
+            <span class="case-finish" style="right: 160px;" v-show="userCourtName == '湖里法院'" @click="sendTable">
                 <Spin fix v-if="spinShow"></Spin>
                 送达流程登记表
             </span>
@@ -65,13 +65,13 @@
             </Row>
             <Row>
                 <Col span="3" class="maininfo-col maininfo-col-label">
-                    原告
+                   {{caseInfo.briefName == '申请支付令' ? "申请人" : "原告"}} 
                 </Col>
                 <Col span="9" class="maininfo-col">
                     {{ caseInfo.plaintiffName }}
                 </Col>
                 <Col span="3" class="maininfo-col maininfo-col-label">
-                    被告
+                    {{caseInfo.briefName == '申请支付令' ? "被申请人" : "被告"}} 
                 </Col>
                 <Col span="9" class="maininfo-col">
                     {{ caseInfo.defendantName }}
@@ -151,7 +151,7 @@
                 <Col span="3" style="text-align: right; padding-right: 5px">
                     联系电话：
                 </Col>
-                <Col span="5">
+                <Col span="5" style="word-wrap: break-word;word-break: break-all;">
                     {{ item.litigantPhone }}
                 </Col>
                 <Col span="3" style="text-align: right; padding-right: 5px">
@@ -193,7 +193,8 @@
                 <Col span="21" v-if="item.diploms[0] != null">
                     <!-- <a v-for="item in item.diploms" :href="item.path" :download="item.name +'.'+ item.path.split('.')[1]">{{ item.name }}、</a> -->
                     <!-- <a v-for="item in item.diploms" :href="item.path" download="">{{ item.name }}、</a> -->
-                    <a v-for="item in item.diploms" @click="showDipmos(item.path)" >{{ item.name }}、</a>
+                    <a v-for="item in item.diploms" @click="showDipmos(item.path)" v-if="item.path !='' && item.path !=null">{{ item.name }}、</a>
+                    <span v-else>{{ item.name }}、</span>
                 </Col>
                 <Col span="21" v-else>
                     <span>空</span>
@@ -207,7 +208,7 @@
                     <span v-for="item in item.otherDiploms">
                         <!-- <a :href="item.path" v-if="item.type == 2" :download="item.name +'.'+ item.path.split('.')[1]">{{ item.name }}、</a> -->
                         <!-- <a :href="item.path" v-if="item.type == 2" download="">{{ item.name }}、</a>                        -->
-                        <a  @click="showDipmos(item.path)" v-if="item.type == 2" >{{ item.name }}、</a>                       
+                        <a  @click="showDipmos(item.path)" v-if="item.type == 2 && item.path !='' && item.path !=null" >{{ item.name }}、</a>                       
                         <span v-else>{{ item.name }}、</span>
                     </span>
                     <!-- <a  :href="item.path" :download="item.name +'.'+ item.path.split('.')[1]">{{ item.name }}、</a> -->
@@ -222,7 +223,8 @@
                 </Col>
                 <Col span="21" v-if="item.materials.length != 0">
                     <!-- <a v-for="item in item.materials" :href="item.path" :download="item.name">{{ item.name }}、</a> -->
-                    <a v-for="item in item.materials" @click="showDipmos(item.path)" >{{ item.name }}、</a>
+                    <a v-for="item in item.materials" @click="showDipmos(item.path)" v-if="item.path !='' && item.path !=null">{{ item.name }}、</a>
+                    <span v-else>{{ item.name }}、</span>
                 </Col>
                 <Col span="21" v-else>
                     <span>无</span>
@@ -334,6 +336,7 @@
         v-model="showHistoryModel"
         title="历史记录"
         width="720"
+        :mask-closable="false"
         ok-text="关闭"
         cancel-text="">
           <div v-for="(item, key) in historyInfo" :key="key" class="send-info">
@@ -374,7 +377,8 @@
                   </Col>
                   <Col span="21" v-if="item.diploms[0] != null">
                       <!-- <a v-for="item in item.diploms" :href="item.path" :download="item.name +'.'+ item.path.split('.')[1]">{{ item.name }}、</a> -->
-                      <a v-for="item in item.diploms"  @click="showDipmos(item.path)"  download="">{{ item.name }}、</a>                        
+                      <a v-for="item in item.diploms"  @click="showDipmos(item.path)"  v-if="item.path !='' && item.path !=null">{{ item.name }}、</a>  
+                      <span v-else>{{ item.name }}、</span>                      
                   </Col>
                   <Col span="21" v-else>
                       <span>无</span>
@@ -387,7 +391,7 @@
                 <Col span="21" v-if="item.otherDiploms[0] != null">
                     
                     <span v-for="item in item.otherDiploms">
-                        <a  @click="showDipmos(item.path)" v-if="item.type == 2" :download="item.name +'.'+ item.path.split('.')[1]">{{ item.name }}、</a>
+                        <a  @click="showDipmos(item.path)" v-if="item.type == 2 && item.path !='' && item.path !=null">{{ item.name }}、</a>
                         <span v-else>{{ item.name }}、</span>
                     </span>
                 </Col>
@@ -419,8 +423,9 @@
                   <Col span="3" style="text-align: right; padding-right: 5px">
                       材料列表：
                   </Col>
-                  <Col span="21" v-if="item.evidenceAttachment.length != 0">
-                      <a v-for="item in item.evidenceAttachment" @click="showDipmos(item.address)"  :download="item.name">{{ item.name }}、</a>
+                  <Col span="21" v-if="item.materials.length != 0">
+                      <a v-for="item in item.materials" @click="showDipmos(item.path)"  v-if="item.path !='' && item.path !=null">{{ item.name }}、</a>
+                      <span v-else>{{ item.name }}、</span>
                   </Col>
                   <Col span="21" v-else>
                       <span>无</span>
@@ -458,7 +463,10 @@
                           {{ p.split('|')[1] }}
                           <Icon v-if="!key" type="arrow-down-b"></Icon>
                       </p>
-                      <p v-if="!item.send.logisticsInfo.split(';').length">'暂无信息</p>
+                      <!-- <p v-if="!item.send.logisticsInfo.split(';').length">暂无信息</p> -->
+                  </Col>
+                  <Col else span="21">
+                      <p >暂无信息</p>
                   </Col>
               </Row>
               <Row>
@@ -550,6 +558,7 @@ export default {
       pagenumber: 1,
       modalWidth:width,
       filePathAry:[],
+      userCourtName:this.$store.state.app.courtName,
       viewDipmos:false,
       queryLoading: false,
       caseLoading: false,
@@ -583,6 +592,7 @@ export default {
         this.lawCaseId = caseId;
       }
     }
+    console.log(this.userCourtName)
     this.getBrief();
   },
   methods: {

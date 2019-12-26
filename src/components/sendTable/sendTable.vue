@@ -1113,7 +1113,7 @@ export default {
                                 }
                                 plaintiff.plaintiffSendForHome.push(plaintiffSendForHome);
                             },
-                            3: (sendInfo) => { 
+                            3: (sendInfo) => {
                                 const plaintiffSendForMail = {//邮件送达类型
                                     id:sendInfo.id,
                                     sendEmail:!sendInfo.sendEmail ? '' : sendInfo.sendEmail,

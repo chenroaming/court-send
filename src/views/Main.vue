@@ -48,13 +48,13 @@
                 </div>
                 <div class="header-avator-con">
                     
-                    <message-tip v-model="mesCount" style="position: absolute;right: 195px;top:2px"></message-tip>
+                    <message-tip v-model="mesCount" style="position: absolute;right: 205px;top:2px"></message-tip>
                     <div class="user-dropdown-menu-con"  style="position: absolute;right: 50px;">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
                                     <span class="main-user-name">{{ userName }}</span>
-                                    <Icon type="arrow-down-b"></Icon>
+                                    <Icon type="md-arrow-dropdown" />
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="changePwd">修改密码</DropdownItem>
@@ -256,6 +256,7 @@ export default {
     },
     websocketonmessage() {
       var data = JSON.parse(event.data);
+      console.log(data)
       let newList = [];
       let readList = [];
       data.map(item => {
@@ -270,7 +271,7 @@ export default {
       if (newList.length != 0) {
         this.$Notice.info({
           title: "你有新消息，请注意查收",
-          desc: "信箱中共有" + newList.length + "条未读消息"
+          desc: "信箱中共有" + newList.length + "条新消息"
         });
         this.audio();
       }

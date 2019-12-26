@@ -6,13 +6,13 @@
         <span style="color:#464c5b;font-size:16px;font-weight:700">文书批量管理</span>
         </Col>
         <Col span="21">
-        <Button style="margin-left: 10px" type="ghost" @click="createSend">
+        <Button style="margin-left: 10px"  @click="createSend">
           批量打印快递单
         </Button>
-        <Button style="margin-left: 10px" type="ghost" @click="createDip">
+        <Button style="margin-left: 10px"  @click="createDip">
           批量生成并下载文书
         </Button>
-        <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+        <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
           查询展开
           <Icon type="arrow-down-b"></Icon>
         </Button>
@@ -37,9 +37,9 @@
             <DatePicker style="width:175px;" type="daterange" placeholder="选择日期" v-model="searchData.date" />
           </FormItem>
           <div style="display: inline-block; padding-right: 30px;float: right;">
-            <Button type="ghost" @click="search">查询</Button>
-            <Button style="margin-left: 10px" type="ghost" @click="empty">清空</Button>
-            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+            <Button  @click="search">查询</Button>
+            <Button style="margin-left: 10px"  @click="empty">清空</Button>
+            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
           </div>
         </Form>
         </Col>

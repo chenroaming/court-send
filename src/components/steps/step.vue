@@ -66,6 +66,7 @@
                     }
                 ];
             },
+            // <Icon type="ios-checkmark-circle" />
             iconClasses () {
                 let icon = '';
 
@@ -73,9 +74,9 @@
                     icon = this.icon;
                 } else {
                     if (this.currentStatus == 'finish') {
-                        icon = 'ios-checkmark-empty';
+                        icon = 'ios-checkmark';
                     } else if (this.currentStatus == 'error') {
-                        icon = 'ios-close-empty';
+                        icon = 'ios-close';
                     }
                 }
 

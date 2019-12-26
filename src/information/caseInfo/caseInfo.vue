@@ -74,7 +74,7 @@
                 </Col>
                 <Col span="21">
                     
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -89,7 +89,7 @@
                         </FormItem>
                         <FormItem label="案由" >
                           <Select v-model="searchData.briefName" clearable filterable style="width: 200px;vertical-align:middle;">
-                            <Option v-for="item in briefList" :value="item.brief" :key="item.brief">{{ item.brief }}</Option>
+                            <Option style="max-width:200px" v-for="item in briefList" :value="item.brief" :key="item.brief">{{ item.brief }}</Option>
                           </Select>
                         </FormItem>
                         <!-- <FormItem label="当事人">
@@ -99,14 +99,14 @@
                             <DatePicker style="width:175px;" type="daterange" placeholder="选择日期" v-model="searchData.date" />
                         </FormItem>
                         <div style="display: inline-block; padding-right: 30px;float: right;">
-                            <Button type="ghost" @click="search">查询</Button>
-                            <Button style="margin-left: 10px" type="ghost" @click="empty">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button  @click="search">查询</Button>
+                            <Button style="margin-left: 10px"  @click="empty">清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px">关闭</Button>
                         </div>
                     </Form>
                 </Col>
             </Row>
-<!--             <Button  style="margin-left: 10px;margin-bottom: 10px;" type="ghost" @click="withdrawn">
+<!--             <Button  style="margin-left: 10px;margin-bottom: 10px;"  @click="withdrawn">
                         撤案
             </Button> -->
             <Button  style="margin-left: 10px;margin-bottom: 10px;" type="primary" @click="overCase">

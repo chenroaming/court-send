@@ -6,7 +6,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">案件关联</span>
                 </Col> -->
                 <Col span="24">
-                    <Button v-show="!searchFormShow" @click.native="searchFormShow = true" style="margin-bottom: 10px" type="ghost">
+                    <Button v-show="!searchFormShow" @click.native="searchFormShow = true" style="margin-bottom: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -44,9 +44,9 @@
                             <Input style="width: 200px" v-model="searchData.litigantName" />
                         </FormItem>
                         <div style="text-align: right; padding-left: 20px">
-                            <Button type="ghost" @click="searchList">查询</Button>
-                            <Button style="margin-left: 10px" type="ghost" @click="emptySearchList">清空</Button>
-                            <Button @click.native="searchFormShow = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button  @click="searchList">查询</Button>
+                            <Button style="margin-left: 10px"  @click="emptySearchList">清空</Button>
+                            <Button @click.native="searchFormShow = false" style="margin-left: 10px" >关闭</Button>
                         </div>
                     </Form>
                 </Col>
@@ -86,7 +86,7 @@
                     <FormItem label="案号">
                         <Input placeholder="请输入案号" style="width: 150px" v-model="searchConnectData.caseNo" @keydown.native.enter.prevent ="searchConnectList" />
                         <Button type="primary" @click="searchConnectList">查询</Button>
-                        <Button style="margin-left: 10px" type="ghost" @click="emptySearchListFu">清空</Button>
+                        <Button style="margin-left: 10px"  @click="emptySearchListFu">清空</Button>
                     </FormItem>
                 </Form>
                 <!-- <div class="table-btn-group" style="margin-top:5px;">

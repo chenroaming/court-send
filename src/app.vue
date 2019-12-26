@@ -34,4 +34,13 @@ background-color: #f4f8ff;
 .ivu-card{
   /* background-color: #F3FEF8; */
 }
+.ivu-table,.ivu-btn-small {
+    font-size: 12px !important;
+}
+.ivu-btn,.ivu-input,.ivu-select,.ivu-select-input,.ivu-select-item,.ivu-checkbox-wrapper{
+    font-size: 12px !important;
+}
+.ivu-form .ivu-form-item-label{
+    font-size: 12px !important;
+}
 </style>

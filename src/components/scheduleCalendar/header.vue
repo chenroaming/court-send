@@ -22,7 +22,7 @@
         <button type="button"
                 class="schedule-calendar-arrow double-arrow"
                 @click="nextYear">&gt;&gt;</button>
-                <Input v-model="value13" style="float: right;    float: right;
+                <Input v-model="value13" clearable style="float: right;    float: right;
     width: 22%;
     position: absolute;
     left: 20px;
@@ -35,7 +35,7 @@
                     </Input>
         <div class="infosa" ref="Infos">
           <span  @click="showInfo">
-               <Icon type="cube" ></Icon>
+               <Icon type="md-cube" />
                数据
           </span>
            <div class="judgeInfo" style="width:320px" v-show="totalInfos">
@@ -54,11 +54,11 @@
             </div>
         </div>
         <div class="funnel-wrapper" ref="judge" >
-          <Icon type="md-calendar" />
-          <Button style="margin-right:35px;border: 1px solid #fff;" type="info" @click="showCourtDate" ghost size="large">排期</Button> 
+          <!-- <Icon type="md-calendar" /> -->
+          <Button style="margin-right:35px;border: 1px solid #fff;color:#fff" type="info" @click="showCourtDate" ghost size="large">排期</Button> 
             <span  @click="showJudgeInfo">
-                
-               <Icon type="funnel"></Icon>
+                <Icon type="ios-funnel" />
+               <!-- <Icon type="funnel"></Icon> -->
                筛选
             </span>
            
@@ -131,11 +131,14 @@ export default {
           if (this.select3=='案号') {
             this.caseNo=this.value13
             this.litigantName=''
+            if(cur == ''){
+              this.$store.commit("setisTrueChangeYear", false);
+            }
         }else{
             this.litigantName=this.value13
             this.caseNo=''
         }
-        this.updateValue();
+        // this.updateValue();
       }
   },
   methods: {
@@ -148,6 +151,11 @@ export default {
       litigantName=this.litigantName
     ) {
         console.log(caseNo)
+        if(caseNo != ""){
+          this.$store.commit("setisTrueChangeYear", true);
+        }else{
+          this.$store.commit("setisTrueChangeYear", false);
+        }
       this.$emit("updateValue", year, month, judgeId,openState,caseNo,litigantName);
       this.judgeInfoVisible = false;
       this.totalInfos = false;
@@ -222,7 +230,7 @@ export default {
             this.litigantName=this.value13
             this.caseNo=''
         }
-        console.log(this.caseNo)
+        console.log(8555566999)
         this.updateValue();
     },
     clickOutSide(e) {
@@ -287,6 +295,9 @@ export default {
     background: @sc-primary-color;
     color: @sc-body-color;
     user-select: none;
+    .ivu-input-icon{
+      right: 40px !important;
+    }
   }
   &arrow {
     font-family: consolas;

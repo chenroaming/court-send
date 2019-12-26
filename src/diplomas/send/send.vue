@@ -23,7 +23,7 @@
                 </Form>
             </div>
             <ButtonGroup vertical>
-                <Button v-for="(item, key) in caseList" type="ghost" :key="key" v-show="parseInt(key/10) === (caseP - 1)" @click="showLeft(item.id)" class="caseBtn">
+                <Button v-for="(item, key) in caseList"  :key="key" v-show="parseInt(key/10) === (caseP - 1)" @click="showLeft(item.id)" class="caseBtn">
                     <p>
                         <Tooltip :content="item.caseNo">
                             案号：{{ item.caseNo }}

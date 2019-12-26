@@ -6,7 +6,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">个人台账页</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -21,10 +21,10 @@
                             <Input style="width: 128px" v-model="formItem.courtNumber"/>
                         </FormItem> -->
                         <FormItem>
-                            <Button @click="query()" type="ghost">查询</Button>
-                            <Button @click="formItem = {};query()" style="margin-left: 10px" type="ghost">清空</Button>
-                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button> -->
-                            <!-- <Button @click="expressDetail()" style="margin-left: 10px" type="ghost">导出台账</Button> -->
+                            <Button @click="query()" >查询</Button>
+                            <Button @click="formItem = {};query()" style="margin-left: 10px" >清空</Button>
+                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button> -->
+                            <!-- <Button @click="expressDetail()" style="margin-left: 10px" >导出台账</Button> -->
                         </FormItem>
                     </Form>
                 </Col>

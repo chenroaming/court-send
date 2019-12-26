@@ -24,7 +24,7 @@
         <div style="text-align:right;" class="btn-group">
           <FormItem>
               <Button type="primary" @click="searchList">查询</Button>
-              <Button type="ghost" @click="emptySearchList" style="margin-left: 8px">清空</Button>
+              <Button @click="emptySearchList" style="margin-left: 8px">清空</Button>
           </FormItem>
         </div>
       </Form>

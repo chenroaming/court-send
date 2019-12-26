@@ -8,8 +8,11 @@
 </style>
 
 <template>
-  <div>
+  <div >
+     <!--  -->
     <li role="treeitem"
+        
+        :fileid="model.caseId" 
         :class="classes"
         :draggable="draggable"
         @dragstart.stop="onItemDragStart($event, _self, _self.model)"
@@ -17,15 +20,15 @@
         @dragover.stop.prevent="isDragEnter = true"
         @dragenter.stop.prevent="isDragEnter = true"
         @dragleave.stop.prevent="isDragEnter = false"
-        @drop.stop.prevent="handleItemDrop($event, _self, _self.model)">
+        @drop.stop.prevent="handleItemDrop($event, _self, _self.model)" v-on="dragEventss">
         <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleItemToggle"></i>
-        <div :class="anchorClasses" @contextmenu.prevent="show1(model)" y='1' :title="model[textFieldName]" v-on="events">
+        <div auu="255" :class="anchorClasses" @contextmenu.prevent="show1(model)" y='1' :title="model[textFieldName]" v-on="events">
           <!-- @contextmenu.prevent="show1(model[textFieldName],dex)" -->
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
             <slot :vm="this" :model="model">
                 <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
-                <span  v-html="model[textFieldName]"></span>
+                <span   v-html="model[textFieldName]"></span>
             </slot>
         </div>
         <!-- <div class="rightEv">
@@ -79,6 +82,9 @@
   </div>
 </template>
 <script>
+import {
+  updateFileDirType
+} from "@/api/archive.js";
 export default {
   name: "TreeItem",
   props: {
@@ -132,6 +138,7 @@ export default {
       isDragEnter: false,
       model: this.data,
       maxHeight: 0,
+      dragEventss:{},
       isCl:this.$store.getters.isCl,
       events: {}
     };
@@ -287,6 +294,24 @@ export default {
     handleItemDrop(e, oriNode, oriItem) {
       this.$el.style.backgroundColor = "inherit";
       this.onItemDrop(e, oriNode, oriItem);
+    },
+    ondrops(e){
+      let ary = [];
+      ary.push(this.$store.state.app.archiveMoveObj.fileId)
+      var msg = this.$Message.loading({
+        content: "文件移动中请稍后。。",
+        duration: 0
+      });
+      updateFileDirType(ary,this.model.fids).then(res => {
+        msg();
+        if(res.data.state == 100){
+          this.$store.commit('setmoveObjEd', true);
+          this.$Message.success('移动成功');
+        }else{
+          this.$Message.info(res.data.message);
+        }
+      })
+      
     }
   },
   created() {
@@ -296,6 +321,10 @@ export default {
       mouseover: this.handleItemMouseOver,
       mouseout: this.handleItemMouseOut
     };
+    const dragEventss = {
+      drop:this.ondrops,
+    }
+    this.dragEventss = dragEventss;
     for (let itemEvent in this.itemEvents) {
       let itemEventCallback = this.itemEvents[itemEvent];
       if (events.hasOwnProperty(itemEvent)) {

@@ -65,17 +65,17 @@
                 <div class="form-con" v-show="qrShow && !isSelectRole">
                   <Form :model="userInfo1" :rules="rules" v-show="userType == 'litigant'">
                       <FormItem prop="phone">
-                          <Input v-model="userInfo1.idCard" placeholder="请输入身份证号">
-                              <span slot="prepend">
+                          <Input v-model="userInfo1.idCard" prefix="ios-contact" placeholder="请输入身份证号">
+                              <!-- <span slot="prepend">
                                   <Icon :size="16" type="person"></Icon>
-                              </span>
+                              </span> -->
                           </Input>
                       </FormItem>
                        <FormItem prop="password">
-                            <Input type="password" v-model="userInfo1.password" placeholder="请输入密码">
-                                <span slot="prepend">
-                                    <Icon :size="14" type="locked"></Icon>
-                                </span>
+                            <Input type="password" prefix="ios-lock" v-model="userInfo1.password" placeholder="请输入密码">
+                                <!-- <span slot="prepend">
+                                    <Icon :size="14" type="ios-lock" />
+                                </span> -->
                             </Input>
                         </FormItem>
                         <FormItem>
@@ -90,17 +90,17 @@
                   </Form>
                 <Form ref="loginForm" :model="userInfo" :rules="rules" v-show="userType == 'judge'">
                     <FormItem prop="userName">
-                        <Input v-model="userInfo.userName" placeholder="请输入用户名">
-                            <span slot="prepend">
+                        <Input v-model="userInfo.userName"  prefix="ios-contact" placeholder="请输入用户名">
+                            <!-- <span slot="prepend">
                                 <Icon :size="16" type="person"></Icon>
-                            </span>
+                            </span> -->
                         </Input>
                     </FormItem>
                     <FormItem prop="password">
-                        <Input type="password" v-model="userInfo.password" placeholder="请输入密码">
-                            <span slot="prepend">
+                        <Input type="password" prefix="ios-lock" v-model="userInfo.password" placeholder="请输入密码">
+                            <!-- <span slot="prepend">
                                 <Icon :size="14" type="locked"></Icon>
-                            </span>
+                            </span> -->
                         </Input>
                     </FormItem>
                     <FormItem>

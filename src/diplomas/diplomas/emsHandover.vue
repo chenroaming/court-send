@@ -6,7 +6,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">邮件交接单</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -36,10 +36,10 @@
                             <Input style="width: 128px" v-model="formItem.courtNumber"/>
                         </FormItem> -->
                         <FormItem>
-                            <Button @click="query()" type="ghost">查询</Button>
-                            <Button @click="formItem = {};query()" style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
-                            <Button @click="expressDetail()" style="margin-left: 10px" type="ghost">邮件excel下载</Button>
+                            <Button @click="query()" >查询</Button>
+                            <Button @click="formItem = {};query()" style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
+                            <Button @click="expressDetail()" style="margin-left: 10px" >邮件excel下载</Button>
                         </FormItem>
                     </Form>
                 </Col>
@@ -108,15 +108,15 @@
                             </Select>
                         </FormItem>
                         <FormItem>
-                            <Button @click="expressDetailQuery()" type="ghost">查询</Button>
-                            <Button @click="formItemExpress = {}" style="margin-left: 10px" type="ghost">清空</Button>
-                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button> -->
+                            <Button @click="expressDetailQuery()" >查询</Button>
+                            <Button @click="formItemExpress = {}" style="margin-left: 10px" >清空</Button>
+                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button> -->
                         </FormItem>
                     </Form>
             <Button @click="downloadPath()" style="margin-bottom:10px;    margin-bottom: 10px;
     position: absolute;
     right: 20px;
-    top: 65px;" type="ghost">下载</Button>
+    top: 65px;" >下载</Button>
             <Table border :columns="sendDetailCol" :data="this.queryLawCaseSendInfoList" @on-selection-change="tableCheck" highlight-row>
               <Spin size="large" fix v-if="SendInfoListShow"></Spin>
             </Table>

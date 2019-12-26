@@ -53,6 +53,12 @@
     color: #40a9ff;
     float: right;
 }
+.bookbuilding-table .ivu-menu-vertical .ivu-menu-submenu-title{
+      padding: 0 !important;
+} 
+.bookbuilding-table .ivu-menu-vertical .ivu-menu-item{
+    padding: 6px 24px;
+}
 </style>
 
 <template>
@@ -73,7 +79,7 @@
                 </Row> -->
             </div>
             <div style="margin-bottom: 16px">
-                <Form :label-width="60" @keydown.native.enter.prevent="queryCase">
+                <Form :label-width="70" @keydown.native.enter.prevent="queryCase">
                     <FormItem label="案号">
                         <Input v-model="caseNo" placeholder="请输入案号"></Input>
                     </FormItem>
@@ -90,7 +96,7 @@
                 </Form>
             </div>
             <ButtonGroup vertical>
-                <Button v-for="(item, key) in caseList" type="ghost" :key="key" v-show="parseInt(key/10) === (caseP - 1)" @click="showLeft(item.id)" class="caseBtn">
+                <Button v-for="(item, key) in caseList" style="min-height:52px;padding:6px 15px;" type="dashed"  :key="key" v-show="parseInt(key/10) === (caseP - 1)" @click="showLeft(item.id)" class="caseBtn">
                     <p>
                         <Tooltip :content="item.caseNo">
                             案号：{{ item.caseNo }}
@@ -165,15 +171,17 @@
               <!-- <Button @click="payKeyCreate()" type="info" style="background-color: #15A05D; border-color: #15A05D;"></Button> -->
 
               
-              <a :href="downUrl"></a>
-                    <Upload :show-upload-list="false" :on-success="uploadSuccess" :action='uploadUrl' style="float:right;margin-left:5px" :format="['doc','docx']" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-                            <Button type="ghost" icon="ios-cloud-upload-outline">文书识别码生成</Button>
-                    </Upload>
+              <!-- <a :href="downUrl"></a> -->
+              <Button  type="info" style="width:136px;background-color: #15A05D;float:right; margin-left:5px;border-color: #15A05D;" >生成文书草稿</Button>
+            <Upload :show-upload-list="false" :on-success="uploadSuccess" :action='uploadUrl' style="border-radius: 4px;float:right;margin-left:5px;width:136px;" :format="['doc','docx']" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <Button style="background-color: rgb(21, 160, 93);border-color: rgb(21, 160, 93);color:#fff;border-radius: 4px;width:136px;"  icon="ios-cloud-upload-outline">生成案件检索码</Button>
+            </Upload>
 
-              <Button @click="editor('封皮',info[0])" type="info" style="background-color: #15A05D;float:right; margin-left:5px;border-color: #15A05D;" >封皮编辑并生成</Button>
+              <!--  -->
               
-                <Button @click="showFinace()" type="info" style="background-color: #15A05D; border-color: #15A05D;">查看诉前附件</Button>
-                <Button @click="dipshowF('封皮')" type="info" style="background-color: #15A05D; border-color: #15A05D;">封皮生成</Button>
+                <Button @click="showFinace()" type="info" style="background-color: #15A05D; border-color: #15A05D;width:136px;">查看案件信息</Button>
+                <!-- <Button @click="dipshowF('封皮')" type="info" style="background-color: #15A05D; border-color: #15A05D;width:136px;">生成卷宗封面</Button> -->
+                <Button @click="editor('封皮',info[0])" type="info" style="background-color: #15A05D; border-color: #15A05D;width:136px;">生成卷宗封面</Button>
 
             </div>
         </Card>
@@ -246,7 +254,7 @@
                 </div>
                 <div style="line-height: 38px;border-right:1px solid #e9eaec;" v-if="item.diplomsName">
 
-                    &nbsp;&nbsp; 文书列表选择
+                    &nbsp;&nbsp; 送达文书
                     <Checkbox :indeterminate="item.indeterminate" :value="item.checkAll" @click.prevent.native="handleCheckAll(item)" style="float:right">全选</Checkbox>
                 </div>
                 <div v-if="item.diplist" class="maininfo-warp"  style="border-left:none">
@@ -269,102 +277,25 @@
                                     <Badge   count="已编辑" class-name="demo-badge-alone"></Badge>
                                 </template>
                                 <template v-if="d.name !='送达地址有关事项告知书'">
-                                 <span v-if="d.name !='诉讼权利义务告知书' && d.name !='送达地址有关事项告知书'&& d.name !='审判流程信息公开告知内容' && d.name !='调解确认裁定书' && d.name != '领取诉讼文书通知书' " @click="editor(d.name,item)" class="edit">编辑</span>
+                                 <span v-if="d.name !='诉讼权利义务告知书' && d.name !='送达地址有关事项告知书'&& d.name !='审判流程信息公开告知内容' && d.name !='调解确认裁定书'  " @click="editor(d.name,item)" class="edit">编辑</span>
                                 </template>
+                            </Col>
+                            <Col span="6" class="otherCol" style="">
+                                <template >
+                                    <Checkbox label="其他" style="width:20px;overflow: hidden;height:36px;float: left;margin-right:1px;"></Checkbox>
+                                    <Input v-model="item.otherSendDip"  placeholder="其他" style="width: 82px;height:32px;display:inline-block;margin-top: 3px;float: left;"></Input>
+                               </template>
+                                <!-- <template > -->
+                                     <Upload multiple :show-upload-list="false" :on-success="uploadSuccessqtsend" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                <!-- </template> -->
+                                <div style="display:block;text-align:right;padding-right:5px;margin-top:39px;word-wrap: break-word;word-break: break-all;">
+                                    <p v-for="op in item.qtsendFilelist">{{op.name}}<span @click="delQisendFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                </div>
                             </Col>
                         </Row>
                     </CheckboxGroup>
-                </div>
-                <div style="line-height: 38px;border-right:1px solid #e9eaec;border-top:1px solid #e9eaec;" >
-                     &nbsp;&nbsp; 其他文书
-                </div>
-                <div v-if="item.diplist" style="border-top:1px solid #e9eaec;" >
-                        <Row>
-                            <CheckboxGroup v-model="item.disabledGroup" @on-change="otherdipCheckedChange(item)">
-                                <Row style="margin-bottom:10px;">
-                                <Col span="6" class="otherCol">
-                                    <div>
-                                        <Checkbox label="证据材料" ></Checkbox>
-                                        <span class="selDipcs" @click="selectArc(item,'证据材料')">选择</span>
-                                    </div>
-                                    
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.zjclfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'证据材料')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                <Col span="6" class="otherCol">
-                                    <Checkbox label="起诉状" ></Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'起诉状')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.qsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'起诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                <Col span="6" class="otherCol">
-                                    <Checkbox label="反诉状" ></Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'反诉状')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.fsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'反诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                <Col span="6" class="otherCol">
-                                    <Checkbox label="答辩状" ></Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'答辩状')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.dbfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'答辩状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                </Row>
-                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                    <Checkbox label="上诉状" ></Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'上诉状')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.ssfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'上诉状')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                    <Checkbox label="民事裁定书" ></Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'民事裁定书')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.mscdsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'民事裁定书')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                                
-                            </CheckboxGroup>
-                                <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                    <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input>
-                                    </Checkbox>
-                                    <span class="selDipcs" @click="selectArc(item,'其他')">选择</span>
-                                    <div style="display:block;text-align:right;padding-right:5px;">
-                                        <p v-for="op in item.qtfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'其他')"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                    </div>
-                                </Col>
-                            <CheckboxGroup v-model="item.otherGroup"  @on-change="dipOtherGroupChange(item)">
-                            <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="上传证据"></Checkbox>
-                                <Upload multiple :show-upload-list="false"  :on-success="uploadZhengJ" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传证据</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'上传证据')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.ZhengJfileNlist">{{op.name}}<span @click="delZhengJFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            </CheckboxGroup>
-                            
-                        </Row>
-
-                    <Row>
-                        <CheckboxGroup v-model="item.disabledGroup"  @on-change="otherdipCheckedChange(item)">
-                            <Col span="6" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="公告"></Checkbox>
-                                <span class="edit" style="float: right;" @click="editor('公告xin',item)">编辑</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-if="item.noticeNew.name != '' ">{{item.noticeNew.name}}<span @click="delNoticeFile(item,item.noticeNew.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            
-                        </CheckboxGroup>
-                    </Row>`
                 </div>
                 <div style="line-height: 38px;border-right:1px solid #e9eaec;border-top:1px solid #e9eaec;" >
                      &nbsp;&nbsp; 裁判文书(上传文件格式支持：doc、docx、pdf)
@@ -373,125 +304,286 @@
                     <Row>
                         <CheckboxGroup v-model="item.otherGroup" @on-change="dipOtherGroupChange(item)">
                             <Row>
-                            <Col span="8" class="otherCol">
-                                <Checkbox label="申请书" ></Checkbox>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="判决书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadMinShi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
                                 
-                                <Upload multiple :show-upload-list="false"  :on-success="uploadSuccessShen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
-                                    <Button type="ghost"  icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'申请书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.shenfileNlist">{{op.name}}<span @click="delShenFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
+                                    <span class="selDipcs" @click="selectArc(item,'判决书')">选择</span>
+                                    <span class="selDipcs" style="margin-right:5px;" @click="creatJudgement(item,'判决书')">生成</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.minShifileNlist">{{op.name}}<span @click="delMinShiFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="裁定书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessCai" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'裁定书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.caifileNlist">{{op.name}}<span @click="delCaiFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" >
+                                    <Checkbox label="支付令" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'支付令')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.zhifileNlist">{{op.name}}<span @click="delZhiFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
                             
-                            
-
-                            <Col span="8" class="otherCol" >
-                                <Checkbox label="支付令" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'支付令')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.zhifileNlist">{{op.name}}<span @click="delZhiFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" class="otherCol" >
-                                <Checkbox label="支付令证据材料" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhizhen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'支付令证据材料')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.zhizhenfileNlist">{{op.name}}<span @click="delZhizhenFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
                              </Row>
                              
 
-                            <Row style="margin-top:10px">
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="公告判决书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false"  :on-success="uploadSuccessPay" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'公告判决书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.payfileNlist">{{op.name}}<span @click="delPayFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="调解书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'调解书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.zhenfileNlist">{{op.name}}<span @click="delZhenFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="裁定书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessCai" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'裁定书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.caifileNlist">{{op.name}}<span @click="delCaiFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
+                            <Row style="">
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="调解书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'调解书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.zhenfileNlist">{{op.name}}<span @click="delZhenFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" v-if="userCourtName != '殿前法庭'">
+                                    <Checkbox label="申请书" ></Checkbox>
+                                    
+                                    <Upload multiple :show-upload-list="false"  :on-success="uploadSuccessShen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
+                                        <Button   icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'申请书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.shenfileNlist">{{op.name}}<span @click="delShenFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>                         
+                                <Col span="8" class="otherCol" v-if="userCourtName != '殿前法庭'">
+                                    <Checkbox label="支付令证据材料" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessZhizhen" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'支付令证据材料')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.zhizhenfileNlist">{{op.name}}<span @click="delZhizhenFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName == '殿前法庭'">
+                                    <template >
+                                        <Checkbox label="其他法律文书" style="width:20px;overflow: hidden;height:36px;float: left;margin-right:1px;"></Checkbox>
+                                        <Input v-model="item.otherLaws"  placeholder="其他" style="width: 110px;height:32px;display:inline-block;float: left;margin-top:3px"></Input>
+                                    </template>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'其他法律文书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;margin-top:38px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.qifileNlist">{{op.name}}<span @click="delQiFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                            
+                            <!-- 调解书 -->
+                            <!-- 裁定书 -->
                              </Row>
 
                              <Row style="margin-top:10px">
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="决定书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessJue" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'决定书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.juefileNlist">{{op.name}}<span @click="delJueFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="民事判决书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadMinShi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                               
-                                <span class="selDipcs" @click="selectArc(item,'民事判决书')">选择</span>
-                                 <span class="selDipcs" style="margin-right:5px;" @click="creatJudgement(item,'民事判决书')">生成</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.minShifileNlist">{{op.name}}<span @click="delMinShiFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="其他法律文书" ></Checkbox>
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'其他法律文书')">选择</span>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.qifileNlist">{{op.name}}<span @click="delQiFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
-                            <Col span="8" v-show="item.sendType === 7" class="otherCol" style="border-top: 1px solid #e9eaec;">
-                                <Checkbox label="撤诉裁定书" ></Checkbox>
-                                
-                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessCq" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
-                                <span class="selDipcs" @click="selectArc(item,'撤诉裁定书')">选择</span>
-                                <Button @click="createCai()" style="float: right;margin-top: 4px;"  type="info">生成</Button>
-                                <div style="display:block;text-align:right;padding-right:5px;">
-                                    <p v-for="op in item.cqfileNlist">{{op.name}}<span @click="delCqFile(item,op.name)"><Icon type="close-circled"  style="cursor:pointer;margin-left:10px;"></Icon></span></p>
-                                </div>
-                            </Col>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                    <Checkbox label="公告判决书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false"  :on-success="uploadSuccessPay" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'公告判决书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.payfileNlist">{{op.name}}<span @click="delPayFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                    <Checkbox label="决定书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessJue" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'决定书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.juefileNlist">{{op.name}}<span @click="delJueFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/> </span></p>
+                                    </div>
+                                </Col>
+                            <!-- //** -->
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                    <template >
+                                        <Checkbox label="其他法律文书" style="width:20px;overflow: hidden;height:36px;float: left;margin-right:1px;"></Checkbox>
+                                        <Input v-model="item.otherLaws"  placeholder="其他" style="width: 110px;height:32px;display:inline-block;float: left;margin-top:3px"></Input>
+                                    </template>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'其他法律文书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;margin-top:38px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.qifileNlist">{{op.name}}<span @click="delQiFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col span="8" v-show="item.sendType === 7" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="撤诉裁定书" ></Checkbox>
+                                    
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessCq" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'撤诉裁定书')">选择</span>
+                                    <Button @click="createCai()" style="float: right;margin-top: 4px;"  type="info">生成</Button>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.cqfileNlist">{{op.name}}<span @click="delCqFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
                              </Row>
                         </CheckboxGroup>
                     </Row>
                 </div>
+                <div style="line-height: 38px;border-right:1px solid #e9eaec;border-top:1px solid #e9eaec;" >
+                     &nbsp;&nbsp; 其他文书(上传文件格式支持：doc、docx、pdf)
+                </div>
+                <div v-if="item.diplist" style="border-top:1px solid #e9eaec;" >
+                        <Row>
+                            <Row style="">
+                            <CheckboxGroup v-model="item.disabledGroup" @on-change="otherdipCheckedChange(item)">
+                                <Row style="">
+                                    <Col span="8" class="otherCol">
+                                        <div>
+                                            <Checkbox label="证据材料" ></Checkbox>
+                                            <span class="selDipcs" @click="selectArc(item,'证据材料')">选择</span>
+                                        </div>
+                                        
+                                        <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                            <p v-for="op in item.zjclfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'证据材料')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                        </div>
+                                    </Col>
+                                    <Col span="8" class="otherCol">
+                                        <Checkbox label="起诉状" ></Checkbox>
+                                        <span class="selDipcs" @click="selectArc(item,'起诉状')">选择</span>
+                                        <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                            <p v-for="op in item.qsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'起诉状')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                        </div>
+                                    </Col>
+                                    <Col span="8" class="otherCol">
+                                        <Checkbox label="反诉状" ></Checkbox>
+                                        <span class="selDipcs" @click="selectArc(item,'反诉状')">选择</span>
+                                        <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                            <p v-for="op in item.fsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'反诉状')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Col span="8" class="otherCol">
+                                    <Checkbox label="答辩状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'答辩状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.dbfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'答辩状')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <!-- <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="上诉状" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'上诉状')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-for="op in item.ssfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'上诉状')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col> -->
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                    <Checkbox label="民事裁定书" ></Checkbox>
+                                    <span class="selDipcs" @click="selectArc(item,'民事裁定书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.mscdsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'民事裁定书')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName == '殿前法庭'">
+                                    <Checkbox label="鉴定评估意见书" ></Checkbox>
+                                    <Upload multiple :show-upload-list="false" :on-success="uploadSuccessSugges" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                        <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'鉴定评估意见书')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.mscdsfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'鉴定评估意见书')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                                
+                                 
+                            </CheckboxGroup>
+                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" >
+                                <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input>
+                                </Checkbox>
+                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQtiQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                    <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                </Upload>
+                                <span class="selDipcs" @click="selectArc(item,'其他')">选择</span>
+                                <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                    <p v-for="op in item.qtfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'其他')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                </div>
+                            </Col>
+                            </Row> 
+                            <!-- 湖里法庭--开始 -->
+                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName == '湖里法庭'">
+                                <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input>
+                                </Checkbox>
+                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQtiQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                    <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                </Upload>
+                                <span class="selDipcs" @click="selectArc(item,'其他')">选择</span>
+                                <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                    <p v-for="op in item.qtfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'其他')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                </div>
+                            </Col>
+                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName == '湖里法庭'">
+                                <Checkbox v-model="item.checkBo" ><Input v-model="item.other"  placeholder="其他" style="width: 110px;height:36px;display:inline-block"></Input>
+                                </Checkbox>
+                                <Upload multiple :show-upload-list="false" :on-success="uploadSuccessQtiQi" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px">
+                                    <Button  icon="ios-cloud-upload-outline">上传文件</Button>
+                                </Upload>
+                                <span class="selDipcs" @click="selectArc(item,'其他')">选择</span>
+                                <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                    <p v-for="op in item.qtfileNlist">{{op.name}}<span @click="delFileList(item,op.name,'其他')"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                </div>
+                            </Col>
+                            <!-- 湖里法庭--结束-->
+                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                <Checkbox v-model="item.checkBo1" ><Input v-model="item.other1"  placeholder="其他" style="width: 200px;height:36px;display:inline-block"></Input>
+                                </Checkbox>
+                            </Col>
+                            <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;" v-if="userCourtName != '殿前法庭'">
+                                <Checkbox v-model="item.checkBo2" ><Input v-model="item.other2"  placeholder="其他" style="width: 200px;height:36px;display:inline-block"></Input>
+                                </Checkbox>
+                            </Col>
+                            <CheckboxGroup v-model="item.disabledGroup"  @on-change="otherdipCheckedChange(item)" v-if="userCourtName != '殿前法庭'">
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="公告"></Checkbox>
+                                    <span class="edit" style="float: right;" @click="editor('公告xin',item)">编辑</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;">
+                                        <p v-if="item.noticeNew.name != '' ">{{item.noticeNew.name}}<span @click="delNoticeFile(item,item.noticeNew.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                            </CheckboxGroup>
+                            <CheckboxGroup v-model="item.otherGroup"  @on-change="dipOtherGroupChange(item)" style="display:none">
+                                <Col span="8" class="otherCol" style="border-top: 1px solid #e9eaec;">
+                                    <Checkbox label="上传证据"></Checkbox>
+                                    <Upload multiple :show-upload-list="false"  :on-success="uploadZhengJ" :data="{id: item.litigantId}" action='/api/court/send/uploadZhifu.jhtml' style="float:right;margin-left:5px" >
+                                        <Button  icon="ios-cloud-upload-outline">上传证据</Button>
+                                    </Upload>
+                                    <span class="selDipcs" @click="selectArc(item,'上传证据')">选择</span>
+                                    <div style="display:block;text-align:right;padding-right:5px;word-wrap: break-word;word-break: break-all;">
+                                        <p v-for="op in item.ZhengJfileNlist">{{op.name}}<span @click="delZhengJFile(item,op.name)"><Icon type="ios-close-circle" style="cursor:pointer;margin-left:10px;"/></span></p>
+                                    </div>
+                                </Col>
+                            </CheckboxGroup>
+                            
+                        </Row>
+
+                    <Row>
+                        
+                        
+                    </Row>`
+                </div>
+                
                 <Row v-show="item.sendType === 3" style="margin-top:10px">
                     <Col span="3" style="text-align: right; padding-right: 5px;line-height:32px;" >
                         <span style="color: #ed3f14">*</span>
@@ -561,8 +653,8 @@
                             
                         </Col>
                         <Col span="2" style="margin-top:5px;">
-                            <Icon @click.native="delemsAdress(item, eo)" v-show="eo.id != 0" class="icoadress" type="trash-a"></Icon>
-                            <Icon type="plus-round"  v-show="eo.id == item.adId - 1 && item.emsAdressList.length != item.addressList.length" @click.native="addemsAdress(item)" class="icoadress"></Icon>
+                            <Icon @click.native="delemsAdress(item, eo)" v-show="eo.id != 0" class="icoadress" type="md-trash" />
+                            <Icon type="md-add"  v-show="eo.id == item.adId - 1 && item.emsAdressList.length != item.addressList.length" @click.native="addemsAdress(item)" class="icoadress" />
                         </Col>
                     </div>                    
                 </Row>
@@ -686,13 +778,13 @@
                 </Row>
             </div>
             <div style="margin-top: 10px; text-align: right;">
-                <Button type="info" v-if="item.sendType === 1" @click="addAdreModel(item)"  style="margin-left: 15px;">添加地址</Button>
-                <Button type="info" v-if="item.sendType === 1 || item.sendType === 6" @click="printBill(item)"  style="margin-right: 15px;">快递单打印</Button>
-                <Button @click="dipshow(item)" :loading="item.creatLoading" type="info">生成并预览</Button>
-                <Button v-show="item.print != 0 && item.sendType === 0" @click="sureSend(item)"  type="success">
+                <Button type="info" v-if="item.sendType === 1" @click="addAdreModel(item)"  style="margin-left: 15px;width: 100px">添加地址</Button>
+                <Button type="info" v-if="item.sendType === 1 || item.sendType === 6" @click="printBill(item)"  style="margin-right: 15px;width: 100px">快递单打印</Button>
+                <Button style="width: 100px" @click="dipshow(item)" :loading="item.creatLoading" type="info">生成并预览</Button>
+                <Button style="width: 100px" v-show="item.print != 0 && item.sendType === 0" @click="sureSend(item)"  type="success">
                     确认领取
                 </Button>
-                <Button v-show="item.print != 0" @click="printSend(item)" type="success" style="margin-right: 16px">打印</Button>
+                <Button v-show="item.print != 0" @click="printSend(item)" type="success" style="margin-right: 16px;width: 100px">打印</Button>
                 <Button @click="sendME(item)" style="width: 100px" :disabled="item.buttonP == false" :loading="item.sendMELoading" type="success">发送</Button>
                 <!-- <Button type="success">打印</Button> -->
                 <!-- <Button>取消</Button> -->
@@ -745,16 +837,20 @@
                     <div class="components-container">
 
                         <div class="editor-container">
+                            
                             <receipt :backFill="backFill" ref="cita"  @model="modelIshid" v-if="panelList=='送达回证' && userCourtName == '殿前法庭'"></receipt>
                             <receiptHl :backFill="backFill" ref="cita"  @model="modelIshid" v-if="panelList=='送达回证' && userCourtName != '殿前法庭'"></receiptHl>
                             <citation :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='传票' && userCourtName == '殿前法庭'"></citation>
+                            <!-- <acceptCase :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='受理案件通知书' && userCourtName == '殿前法庭'"></acceptCase> -->
+                            <getCosts :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='收取诉讼费通知书' && userCourtName == '殿前法庭'"></getCosts>
+                            <costDrawback :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='诉讼费退款通知书' && userCourtName == '殿前法庭'"></costDrawback>
                             <citationHl :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='传票' && userCourtName != '殿前法庭'"></citationHl>
-                            <joinLitigationAdviceNote :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='参加诉讼通知书'"></joinLitigationAdviceNote>
+                            <joinLitigationAdviceNote :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='参加诉讼告知书'"></joinLitigationAdviceNote>
                             <sendAddressConfirm :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='送达地址确认书'&&courtId!=15"></sendAddressConfirm>
                             <sendAddressConfirmHuLi :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='送达地址确认书'&&courtId==15"></sendAddressConfirmHuLi>
                             <citationStub :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='传票(存根)'"></citationStub>
                             <phoneNotification :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='电话通知记录表'"></phoneNotification>
-                            <ComponentMembers :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='合议庭组成人员通知书'"></ComponentMembers>
+                            <ComponentMembers :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='合议庭成员告知书'"></ComponentMembers>
                             <proofNotice :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='举证通知书' && userCourtName == '殿前法庭'"></proofNotice>
                             <proofNoticeHl :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='举证通知书' && userCourtName != '殿前法庭'"></proofNoticeHl>
                             <superviseCard :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='廉政监督卡'"></superviseCard>
@@ -768,10 +864,11 @@
                             <verdict :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='口头裁定笔录'"></verdict>
                             <citationOut :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='外出传票'"></citationOut>
                             <citationStubOut :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='外出传票(存根)'"></citationStubOut>
-                            <bulletinJudgment :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告判决书'"></bulletinJudgment>
+                            <bulletinJudgment :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告(裁判文书)'"></bulletinJudgment>
                             <draft :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告稿'"></draft>
                             <draftss :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告稿(保全)'"></draftss>
-                            <notice :backFill="backFill" ref="cita" @model="proNotice" v-else-if="panelList=='公告xin'"></notice>
+                            <notice :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='公告(开庭传票)'"></notice>
+                            <getLawsuit :backFill="backFill" ref="cita" @model="modelIshid" v-else-if="panelList=='领取诉讼文书通知书' && userCourtName == '殿前法庭'"></getLawsuit>
                             <!-- <UE v-if="modal1" :defaultMsg="dip.content || ''" :config="config" :ref="dip.name"></UE> -->
                         </div>
                         <div :style="{marginTop: '10px', textAlign: 'right', width: ueWidth}">
@@ -858,82 +955,361 @@
             :mask-closable="closeM"
             title="案件信息">
             <div v-if="infoMol">
-                    <Row  style="margin-bottom:5px">
-                        <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:15px">
-                            起诉状：
-                        </Col>
-                        <Col span="18" style=" padding-right: 5px;margin-bottom:15px">
-                            <span v-if="qFileName.name == ''">无</span>
-                            <a v-else :href="qFileName.path" download="">{{ qFileName.name }}</a>
-                        </Col>
-                        <Col span="6" style=" padding-right: 5px;text-align: right;">
-                            身份证明材料：
-                        </Col>
-                        <Col span="6" style=" padding-right: 5px">
-                            <span v-if="fileName1.name == ''">无</span>
-                            <a v-else :href="fileName1.path" download="">{{ fileName1.name }}</a>
-                        </Col>
-                        <Col span="5" style=" padding-right: 5px;text-align: right;">
-                            授权委托材料：
-                        </Col>
-                        <Col span="7" style=" padding-right: 5px">
-                            <span v-if="fileName2.name == ''">无</span>
-                            <a v-else :href="fileName2.path" download="">{{ fileName2.name }}</a>
-                        </Col>
-                    </Row>
-                <Row  style="margin-bottom:5px;margin-bottom:10px">
-                    <p class="sdws">
-                        申请书：
-                    </p>
-                    <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        财产保全申请书：
-                    </Col>
-                    <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen1 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen1" download="">{{ fileNameShen1 }}</a>
-                    </Col>
-                    <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        调查取证申请书：
-                    </Col>
-                    <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen2 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen2" download="">{{ fileNameShen2 }}</a>
-                    </Col>
-                    <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        证据保全申请书：
-                    </Col>
-                    <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen3 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen3" download="">{{ fileNameShen3 }}</a>
-                    </Col>
-                    <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        证人出庭申请书：
-                    </Col>
-                    <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen4 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen2" download="">{{ fileNameShen4 }}</a>
-                    </Col>
-                    <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        现场勘验申请书：
-                    </Col>
-                    <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen5 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen5" download="">{{ fileNameShen5 }}</a>
-                    </Col>
-                    <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
-                        鉴定评估申请书：
-                    </Col>
-                    <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
-                        <span v-if="fileNameShen6 == ''">无</span>
-                        <a v-else :href="onlineEAIdShen6" download="">{{ fileNameShen6 }}</a>
-                    </Col>
-                </Row>
-                <div>
-                    <p class="sdws">
-                        证据材料：
-                    </p>
-                    <Table :columns="columnsEvi" :data="EviList"></Table>
-                </div>
+                <Tabs  @on-click="changeTab" >
+                    <TabPane label="案件信息">
+                        <Row  style="margin-bottom:5px">
+                            <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:15px">
+                                起诉状：
+                            </Col>
+                            <Col span="18" style=" padding-right: 5px;margin-bottom:15px">
+                                <span v-if="qFileName.name == ''">无</span>
+                                <a v-else @click="showDipmos(qFileName.path)" download="">{{ qFileName.name }}</a>
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;text-align: right;">
+                                身份证明材料：
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px">
+                                <span v-if="fileName1.name == ''">无</span>
+                                <a v-else @click="showDipmos(fileName1.path)" download="">{{ fileName1.name }}</a>
+                            </Col>
+                            <Col span="5" style=" padding-right: 5px;text-align: right;">
+                                授权委托材料：
+                            </Col>
+                            <Col span="7" style=" padding-right: 5px">
+                                <span v-if="fileName2.name == ''">无</span>
+                                <a v-else @click="showDipmos(fileName2.path)" download="">{{ fileName2.name }}</a>
+                            </Col>
+                        </Row>
+                        <Row  style="margin-bottom:5px;margin-bottom:10px">
+                            <p class="sdws">
+                                申请书：
+                            </p>
+                            <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                财产保全申请书：
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen1 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen1)" download="">{{ fileNameShen1 }}</a>
+                            </Col>
+                            <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                调查取证申请书：
+                            </Col>
+                            <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen2 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen2)" download="">{{ fileNameShen2 }}</a>
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                证据保全申请书：
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen3 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen3)" download="">{{ fileNameShen3 }}</a>
+                            </Col>
+                            <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                证人出庭申请书：
+                            </Col>
+                            <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen4 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen2)" download="">{{ fileNameShen4 }}</a>
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                现场勘验申请书：
+                            </Col>
+                            <Col span="6" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen5 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen5)" download="">{{ fileNameShen5 }}</a>
+                            </Col>
+                            <Col span="5" style=" padding-right: 5px;text-align: right;margin-bottom:10px">
+                                鉴定评估申请书：
+                            </Col>
+                            <Col span="7" style=" padding-right: 5px;margin-bottom:10px">
+                                <span v-if="fileNameShen6 == ''">无</span>
+                                <a v-else @click="showDipmos(onlineEAIdShen6)" download="">{{ fileNameShen6 }}</a>
+                            </Col>
+                        </Row>
+                        <div>
+                            <p class="sdws">
+                                证据材料：
+                            </p>
+                            <Table :columns="columnsEvi" :data="EviList"></Table>
+                        </div>
+                    </TabPane>
+                    <TabPane label="要素信息" v-if="element != 0 ">
+                        <div v-if="element == 1 && elementSw" class="loan-Box">
+                            <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td>合同信息</td>
+                                    <td>
+                                        <Menu @on-select="choice" style="width: 300px;">
+                                            <Submenu name="1">
+                                                <template slot="title">
+                                                    授信合同信息
+                                                </template>
+                                                <MenuItem :name="'c0'+item.id" v-for="(item,index) in creditContract" :key="item.id">{{item.name}}
+                                                </MenuItem>
+                                            </Submenu>
+                                            <Submenu name="2">
+                                                <template slot="title">
+                                                    借款合同信息
+                                                </template>
+                                                <MenuItem :name="'l1'+item.id" v-for="(item,index) in loanContract" :key="item.id">{{item.name}}
+                                                </MenuItem>
+                                            </Submenu>
+                                            <Submenu name="3">
+                                                <template slot="title">
+                                                    保证合同信息
+                                                </template>
+                                                <MenuItem :name="'g2'+item.id" v-for="(item,index) in guaranteeContract" :key="item.id">{{item.name}}
+                                                </MenuItem>
+                                            </Submenu>
+                                            <Submenu name="4">
+                                                <template slot="title">
+                                                    抵押合同信息
+                                                </template>
+                                                <MenuItem :name="'m3'+item.id" v-for="(item,index) in mortgageContract" :key="item.id">{{item.name}}
+                                                </MenuItem>
+                                            </Submenu>
+                                            <Submenu name="5">
+                                                <template slot="title">
+                                                    质押合同信息
+                                                </template>
+                                                <MenuItem :name="'p4'+item.id" v-for="(item,index) in pledgeContract" :key="item.id">{{item.name}}
+                                                </MenuItem>
+                                            </Submenu>
+                                        </Menu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>放款日期</td>
+                                    <td><span>{{litigation.loan}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>实际到期日期</td>
+                                    <td><span>{{litigation.maturity}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>逾期还款日期</td>
+                                    <td><span>{{litigation.overdue}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>欠款最新截至时间</td>
+                                    <td><span>{{litigation.cutoff}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>欠款本金</td>
+                                    <td><span>{{litigation.arrears}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>利息</td>
+                                    <td><span>{{litigation.interest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>罚息</td>
+                                    <td><span>{{litigation.penaltyInterest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>复利</td>
+                                    <td><span>{{litigation.compoundInterest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>最新欠款利息</td>
+                                    <td><span>{{litigation.nInterest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>最新欠款罚息</td>
+                                    <td><span>{{litigation.npInterest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>最新欠款复利</td>
+                                    <td><span>{{litigation.ncdInterest}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>最新欠款利息等</td>
+                                    <td><span>{{litigation.newArrears}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>违约金金额</td>
+                                    <td><span>{{litigation.liquidatedDamages}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>实现债权的费用</td>
+                                    <td><span>{{litigation.claim}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>律师费</td>
+                                    <td><span>{{litigation.lawyerFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>保全费</td>
+                                    <td><span>{{litigation.securityFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>公告费</td>
+                                    <td><span>{{litigation.announcementFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>实现债权其他费用</td>
+                                    <td><span>{{litigation.otherFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>是否支持夫妻共同债</td>
+                                    <td>
+                                        <RadioGroup v-model="litigation.isPublic">
+                                            <Radio disabled label="yes">
+                                                <span>是</span>
+                                            </Radio>
+                                            <Radio disabled label="no">
+                                                <span>否</span>
+                                            </Radio>
+                                        </RadioGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>结婚登记时间</td>
+                                    <td><span>{{litigation.marryTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>离婚登记时间</td>
+                                    <td><span>{{litigation.divorceTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>适用的法律条文</td>
+                                    <td><span>{{litigation.legalProvisions}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>法律法规</td>
+                                    <td><span>{{litigation.regulations}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>诉前保全裁定案号</td>
+                                    <td><span>{{litigation.caseNumber}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>保全被申请人</td>
+                                    <td><span>{{litigation.preservationMan}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>申请保全时间</td>
+                                    <td><span>{{litigation.preservationTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>财产保全金额</td>
+                                    <td><span>{{litigation.preservationMoney}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>财产保全费</td>
+                                    <td><span>{{litigation.preservationFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>作出保全裁定时间</td>
+                                    <td><span>{{litigation.rulingTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>解除保全申请时间</td>
+                                    <td><span>{{litigation.releasePreservation}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>保全财产情况</td>
+                                    <td><span>{{litigation.preservationStatus}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>核对状态</td>
+                                    <td> <Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '已核对' : '未核对'}}</Button></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div v-if="element == 2 && elementSw" class="loan-Box">
+                            <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td>合同名称</td>
+                                    <td>
+                                    <span>{{contract.name}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>合同签订时间</td>
+                                    <td>
+                                    <span>{{contract.time}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>信用卡信息</td>
+                                    <td>
+                                    <Menu @on-select="creditChoice" style="width: 300px;">
+                                        <Submenu name="1">
+                                            <template slot="title">
+                                                点击展开信用卡信息
+                                            </template>
+                                            <MenuItem :name="item.id" v-for="(item,index) in creditInfo" :key="item.id">{{'信用卡（' + item.cardNo + '）'}}</MenuItem>
+                                        </Submenu>
+                                    </Menu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>是否支持夫妻共同债</td>
+                                    <td>
+                                        <RadioGroup v-model="couple.isPublic">
+                                            <Radio disabled label="yes">
+                                                <span>是</span>
+                                            </Radio>
+                                            <Radio disabled label="no">
+                                                <span>否</span>
+                                            </Radio>
+                                        </RadioGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>结婚登记时间</td>
+                                    <td><span>{{couple.marry}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>离婚登记时间</td>
+                                    <td><span>{{couple.divorce}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>请求支付的事实与理由</td>
+                                    <td><span>{{pay.reason}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>申请支付金额（元）</td>
+                                    <td><span>{{pay.money}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>有价证券</td>
+                                    <td><span>{{pay.securities}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>支付令申请费（元）</td>
+                                    <td><span>{{pay.applicationFee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>申请支付令时</td>
+                                    <td><span>{{pay.applyTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>作出支付令时间</td>
+                                    <td><span>{{pay.completeTime}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>终结督促程序申请费（元）</td>
+                                    <td><span>{{endProcess.fee}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>终结督促程序裁定作出时间</td>
+                                    <td><span>{{endProcess.time}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>终结督促程序的原因</td>
+                                    <td><span>{{endProcess.reason}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>核对状态</td>
+                                    <td><Button type="primary" :loading="confirmLoading" @click="checkLawCase">{{lawCaseChecked ? '已核对' : '未核对'}}</Button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </TabPane>
+                </Tabs>
             </div>
             <div slot="footer">
                 <Button @click="closeInfo"  type="dashed" size="large">关闭</Button>
@@ -989,6 +1365,381 @@
             <Button @click="selAR"   type="primary" size="large">选中卷宗</Button>
         </div>
     </Modal>
+    <!-- 证据查看 -->
+    <Modal
+        v-model="viewDipmoseds"
+        title="查看"
+        :mask-closable="false"
+        :styles="{top: '20px'}"
+        :width="modalWidth">
+        <div class="components-container">
+            <zh-viewer :viewerId="'1'" :fileUrls="filePathAry"></zh-viewer>
+        </div>
+        <div slot="footer">
+            <Button @click="viewDipmoseds = false"   type="dashed" size="large">关闭</Button>
+        </div>
+    </Modal>
+    <!-- 查看信用卡信息 -->
+        <Modal
+            v-model="modal5"
+            title="查看信用卡信息"
+            width="700px"
+            >
+            <div class="loan-box">
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0">
+                    <tr>
+                        <td>信用卡卡号</td>
+                        <td><span>{{creditCard.num}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡种类</td>
+                        <td><span>{{creditCard.type}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡申请时间</td>
+                        <td><span>{{creditCard.applyTime}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡核准发卡时间</td>
+                        <td><span>{{creditCard.issueTime}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用额度（元）</td>
+                        <td><span>{{creditCard.quota}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>透支利率</td>
+                        <td><span>{{creditCard.overRate}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡合约名称</td>
+                        <td><span>{{creditCard.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>利息约定</td>
+                        <td><span>{{creditCard.interestAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡欠款最新截至时间</td>
+                        <td><span>{{creditCard.deadline}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡最新欠款本金（元）</td>
+                        <td><span>{{creditCard.principal}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡最新欠款利息（元）</td>
+                        <td><span>{{creditCard.interest}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡最新欠款滞纳金（违约金）（元）</td>
+                        <td><span>{{creditCard.latePayment}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡年费（元）</td>
+                        <td><span>{{creditCard.annualFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡分期手续费（元）</td>
+                        <td><span>{{creditCard.handlingFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>其他费用项目及金额（元）</td>
+                        <td><span>{{creditCard.otherFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>违约金约定</td>
+                        <td><span>{{creditCard.defaultAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>实现债权的费用</td>
+                        <td><span>{{creditCard.agreementFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>实现债权费用的约定</td>
+                        <td><span>{{creditCard.feeAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>律师费（元）</td>
+                        <td><span>{{creditCard.lawyerFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保全费（元）</td>
+                        <td><span>{{creditCard.securityFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>公告费（元）</td>
+                        <td><span>{{creditCard.announcementFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>信用卡取现手续费（元）</td>
+                        <td><span>{{creditCard.cashFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>其他项目费用（年费、取现手续费、分期手续费）的约定</td>
+                        <td><span>{{creditCard.otherProjectFee}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>最新截止时间后利息计算标准</td>
+                        <td><span>{{creditCard.endStandard}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>最新截止时间后违约金（滞纳金）计算标准</td>
+                        <td><span>{{creditCard.endFeeStandard}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>合同信息</td>
+                        <td>
+                            <Menu @on-select="guaranteeChioce" style="width: 300px;">
+                                <Submenu name="1">
+                                    <template slot="title">
+                                        保证合同信息
+                                    </template>
+                                    <MenuItem :name="item.id" v-for="(item,index) in guarantee2" :key="item.id">{{item.name}}
+                                    </MenuItem>
+                                </Submenu>
+                            </Menu>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div slot="footer">
+                <Button @click="modal5 = false"  type="dashed" size="large">关闭</Button>
+            </div>
+        </Modal>
+    <!-- 查看合同信息 -->
+        <Modal
+            v-model="modal6"
+            :title=titleArr[titleIndex]
+            width="700px"
+            >
+            <div>
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0" v-show="titleIndex == 0">
+                    <tr>
+                        <td>授信合同名称</td>
+                        <td><span>{{credit.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>是否诉请解除该授信合同</td>
+                        <td>
+                            <RadioGroup v-model="credit.isRelease">
+                                <Radio disabled label="yes">
+                                    <span>是</span>
+                                </Radio>
+                                <Radio disabled label="no">
+                                    <span>否</span>
+                                </Radio>
+                            </RadioGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>授信人</td>
+                        <td><span>{{credit.creditPeople}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>授信合同签订时间</td>
+                        <td><span>{{credit.creditTime}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>授信合同期间</td>
+                        <td><span>{{credit.creditRange}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>授信金额</td>
+                        <td><span>{{credit.creditMoney}}</span></td>
+                    </tr>
+                </table>   
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0" v-show="titleIndex == 1">
+                    <tr>
+                        <td>借款合同名称</td>
+                        <td><span>{{loan.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>借款人</td>
+                        <td><span>{{loan.creditPeople}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>是否诉请解除该借款合同</td>
+                        <td>
+                            <RadioGroup v-model="loan.isRelease">
+                                <Radio disabled label="yes">
+                                    <span>是</span>
+                                </Radio>
+                                <Radio disabled label="no">
+                                    <span>否</span>
+                                </Radio>
+                            </RadioGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>签订借款合同时间</td>
+                        <td><span>{{loan.time}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>借款本金</td>
+                        <td><span>{{loan.money}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>借款期限</td>
+                        <td><span>{{loan.range}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>还款方式</td>
+                        <td><span>{{loan.methods}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>借款利率</td>
+                        <td><span>{{loan.loanRate}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>罚息利率</td>
+                        <td><span>{{loan.penaltyRate}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>复利利率</td>
+                        <td><span>{{loan.compoundRate}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>罚息/复利约定</td>
+                        <td><span>{{loan.rateAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>解除合同或提前收贷约定</td>
+                        <td><span>{{loan.releaseAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>违约金约定</td>
+                        <td><span>{{loan.defaultAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>实现债权费用的约定</td>
+                        <td><span>{{loan.feeAgreement}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>送达约定</td>
+                        <td><span>{{loan.sendAgreement}}</span></td>
+                    </tr>
+                </table> 
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0" v-show="titleIndex == 2">
+                    <tr>
+                        <td>保证合同名称</td>
+                        <td><span>{{guarantee.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证人</td>
+                        <td><span>{{guarantee.guaranteePeople}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证方式</td>
+                        <td><span>{{guarantee.methods}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证期间</td>
+                        <td><span>{{guarantee.timeRange}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证合同签订时间</td>
+                        <td><span>{{guarantee.time}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证范围</td>
+                        <td><span>{{guarantee.guaranteeRange}}</span></td>
+                    </tr>
+                </table> 
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0" v-show="titleIndex == 3">
+                    <tr>
+                        <td>抵押合同名称</td>
+                        <td><span>{{mortgage.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>抵押合同签订时间</td>
+                        <td><span>{{mortgage.time}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>抵押物权属</td>
+                        <td><span>{{mortgage.ownership}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>抵押物名称</td>
+                        <td><span>{{mortgage.articleName}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>抵押担保范围</td>
+                        <td><span>{{mortgage.range}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>办理抵押登记时间</td>
+                        <td><span>{{mortgage.handletime}}</span></td>
+                    </tr>
+                </table>
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0" v-show="titleIndex == 4">
+                    <tr>
+                        <td>质押合同名称</td>
+                        <td><span>{{pledge.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>质押合同签订时间</td>
+                        <td><span>{{pledge.time}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>质押物权属</td>
+                        <td><span>{{pledge.ownership}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>质押物名称</td>
+                        <td><span>{{pledge.articleName}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>质押担保范围</td>
+                        <td><span>{{pledge.range}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>办理质押登记时间</td>
+                        <td><span>{{pledge.handletime}}</span></td>
+                    </tr>
+                </table> 
+            </div>
+            <div slot="footer">
+                <Button @click="modal6 = false"  type="dashed" size="large">关闭</Button>
+            </div>
+        </Modal>
+        <!-- 保证合同信息 -->
+        <Modal v-model="modal7"
+            title="保证合同信息"
+            width="700px"
+            >
+            <div>
+                <table class="bookbuilding-table" cellspacing="0" cellpadding="0" border="0">
+                    <tr>
+                        <td>保证合同名称</td>
+                        <td><span>{{guaranteeContract2.name}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>合同签订时间</td>
+                        <td><span>{{guaranteeContract2.time}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证人</td>
+                        <td><span>{{guaranteeContract2.people}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证期间</td>
+                        <td><span>{{guaranteeContract2.timeRange}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证方式</td>
+                        <td><span>{{guaranteeContract2.methods}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>保证范围</td>
+                        <td><span>{{guaranteeContract2.range}}</span></td>
+                    </tr>
+                </table> 
+            </div>
+            <div slot="footer">
+                <Button @click="modal7 = false"  type="dashed" size="large">关闭</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -1009,7 +1760,11 @@ import {
   wechatMessageTemplate,
   getWeiXinInfo,
   sendEditLitigant,
-  createElementJudgement
+  createElementJudgement,
+  getCtInfo,
+  checkFactor,
+  getContractInfo,
+  getPart
 } from "../../api/send.js";
 const R = require("ramda");
 import { getBrief, queryCase, queryCaseInfo } from '../../api/global.js';
@@ -1043,20 +1798,180 @@ import bulletinJudgment from '../../components/diplomas/bulletinJudgment.vue';
 import draft from '../../components/diplomas/draft.vue';
 import draftss from '../../components/diplomas/draftss.vue';
 import notice from '../../components/diplomas/notice.vue';
+import acceptCase from '../../components/diplomas/acceptCase.vue';
+import getCosts from '../../components/diplomas/getCosts.vue';
+import getLawsuit from '../../components/diplomas/getLawsuit.vue';
+import costDrawback from '../../components/diplomas/costDrawback.vue';
 import {tools_downLoad} from '@/libs/tools.js';
+import ZhViewer from "@/components/moreFileViewer/moreFileViewer.vue";
 import Vue from 'vue';
-import archive from "@/components/archive/archive.vue";
+import archive from "@/components/archive/archive2.vue";
 
 export default {
-    components: { archive,UE,citation,citationHl,receipt,receiptHl,sendAddressConfirm,joinLitigationAdviceNote,citationStub,citationOut,citationStubOut,phoneNotification,
-    ComponentMembers,draft,draftss,proofNotice,proofNoticeHl,superviseCard,caseAccept,apperanceNotice,apperanceNoticeHl,envelope,envelopeHl,entrustSend,bulletin,verdict,sendAddressConfirmHuLi,bulletinJudgment,notice},
+    components: { costDrawback,getLawsuit,ZhViewer,archive,UE,citation,citationHl,receipt,receiptHl,sendAddressConfirm,joinLitigationAdviceNote,citationStub,citationOut,citationStubOut,phoneNotification,
+    ComponentMembers,draft,draftss,proofNotice,proofNoticeHl,superviseCard,caseAccept,apperanceNotice,apperanceNoticeHl,envelope,envelopeHl,entrustSend,bulletin,verdict,sendAddressConfirmHuLi,bulletinJudgment,notice,
+    acceptCase,getCosts},
     data () {
         var width = window.innerWidth - 200;
         var width2 = window.innerWidth - 100;
         var ueWidth = width - 40 + 'px';
         return {
+            modal5:false,
+            modal6:false,
+            modal7:false,
+            partCardId:"",
+            onlineLawCaseId:"", //诉前案件id
+            titleArr:['查看授信合同信息','查看借款合同信息','查看保证合同信息','查看抵押合同信息','查看质押合同信息'],
+            guarantee2:[],
+            element:0,  //1是金融借款合同，2是信用卡信息,0就不是这两个，就不显示
+            elementSw:false,//要素信息显示开关，避免要素信息过长影响布局
+            creditContract:[],
+            loanContract:[],
+            guaranteeContract:[],
+            mortgageContract:[],
+            pledgeContract:[],
+            lawCaseChecked:false,//要素信息是否已核对
+            confirmLoading:false,//核对按钮加载状态
+            contract:{
+                name:'',
+                time:''
+            },
+            couple:{
+                isPublic:'',
+                marry:'',
+                divorce:''
+            },
+            pay:{
+                reason:'',
+                money:'',
+                securities:'',
+                applicationFee:'',
+                applyTime:'',
+                completeTime:'' 
+            },
+            endProcess:{
+                fee:'',
+                time:'',
+                reason:''
+            },
+            creditInfo:[],
+            litigation:{
+                amount:'',
+                request:'',
+                loan:'',
+                maturity:'',
+                overdue:'',
+                cutoff:'',
+                arrears:'',
+                interest:'',
+                penaltyInterest:'',
+                compoundInterest:'',
+                nInterest:'',
+                npInterest:'',
+                ncdInterest:'',
+                newArrears:'',
+                liquidatedDamages:'',
+                isPublic:'',
+                claim:'',
+                lawyerFee:'',
+                securityFee:'',
+                announcementFee:'',
+                otherFee:'',
+                marryTime:'',
+                divorceTime:'',
+                legalProvisions:'',
+                regulations:'',
+                caseNumber:'',
+                preservationMan:'',
+                preservationTime:'',
+                preservationMoney:'',
+                preservationFee:'',
+                rulingTime:'',
+                releasePreservation:'',
+                preservationStatus:'',
+            },
+            creditCard:{
+                num:'',
+                name:'',
+                interestAgreement:'',
+                deadline:'',
+                principal:'',
+                interest:'',
+                latePayment:'',
+                annualFee:'',
+                handlingFee:'',
+                otherFee:'',
+                defaultAgreement:'',
+                feeAgreement:'',
+                lawyerFee:'',
+                securityFee:'',
+                announcementFee:'',
+                cashFee:'',
+                otherProjectFee:'',
+                endStandard:'',
+                endFeeStandard:''  
+            },
+            credit:{
+                name:'',
+                isRelease:'',
+                creditPeople:'',
+                creditTime:'',
+                creditRange:'',
+                creditMoney:''
+            },
+            loan:{
+                name:'',
+                creditPeople:'',
+                isRelease:'',
+                time:'',
+                money:'',
+                range:'',
+                methods:'',
+                loanRate:'',
+                penaltyRate:'',
+                compoundRate:'',
+                rateAgreement:'',
+                releaseAgreement:'',
+                defaultAgreement:'',
+                feeAgreement:'',
+                sendAgreement:''
+            },
+            guarantee:{
+                name:'',
+                guaranteePeople:'',
+                methods:'',
+                timeRange:'',
+                time:'',
+                guaranteeRange:''
+            },
+            mortgage:{
+                name:'',
+                time:'',
+                ownership:'',
+                articleName:'',
+                range:'',
+                handletime:''
+            },
+            pledge:{
+                name:'',
+                time:'',
+                ownership:'',
+                articleName:'',
+                range:'',
+                handletime:''
+            },
+            guaranteeContract2:{
+                name:'',
+                time:'',
+                people:'',
+                timeRange:'',
+                methods:'',
+                range:''
+            },
+            titleIndex:0,
             infoMol:false,
             viewDipmos:false,
+            viewDipmoseds:false,
             closeM:false,
             qFileName:{
                 name:'',
@@ -1079,6 +1994,7 @@ export default {
             showHistoryModel:false,
             historyInfo:[],
             nist:[],
+            filePathAry:[],
             otherfileNlist:[],
             userCourtName:this.$store.state.app.courtName,
             userName:this.$store.state.name,
@@ -1105,13 +2021,25 @@ export default {
                 {
                 title: "证明对象",
                 key: "proves",
-                width: 170,
+                width: 150,
                 align: "center",
                 },
                 {
                 title: "证明来源",
                 key: "where",
                 align: "center",
+                },
+                {
+                title: "是否有原件",
+                key: "original",
+                align: "center",
+                width: 100,
+                },
+                {
+                title: "是否已核对",
+                key: "checked",
+                align: "center",
+                width: 100,
                 },
                 {
                 title: "附件",
@@ -1121,40 +2049,49 @@ export default {
                 render: (h, params) => {
                     return h("div", [
                         h(
-                            "b",
+                            "span",
                             {
                             props: {
                                 type: "img",
                                 size: "small"
                             },
+                            style:{
+                                cursor:"pointer",
+                                color:"#2d8cf0"
+                            },
                             on: {
                                 click: () => {
                                     var fileStr = params.row.filePa;
-                                    if(fileStr == null){
-                                        this.$Message.info("暂无附件");
-                                        return false;
-                                    }
-                                    // 创建隐藏的可下载链接
-                                    var eleLink = document.createElement("a");
-                                    var strs = fileStr.split("/");
-                                    for (var i = 0; i < strs.length; i++) {
-                                        if (i == strs.length - 1) {
-                                        var filename = strs[i];
-                                        }
-                                    }
-                                    eleLink.download = filename;
-                                    eleLink.style.display = "none";
-                                    // 字符内容转变成blob地址
-                                    eleLink.href = fileStr;
-                                    // 触发点击
-                                    document.body.appendChild(eleLink);
-                                    eleLink.click();
-                                    // 然后移除
-                                    document.body.removeChild(eleLink);
+                                    this.filePathAry = [];
+                                    this.filePathAry.push(fileStr);
+                                    console.log(this.filePathAry)
+                                    this.viewDipmoseds = true;
+                                    // var fileStr = params.row.filePa;
+                                    // if(fileStr == null){
+                                    //     this.$Message.info("暂无附件");
+                                    //     return false;
+                                    // }
+                                    // // 创建隐藏的可下载链接
+                                    // var eleLink = document.createElement("a");
+                                    // var strs = fileStr.split("/");
+                                    // for (var i = 0; i < strs.length; i++) {
+                                    //     if (i == strs.length - 1) {
+                                    //     var filename = strs[i];
+                                    //     }
+                                    // }
+                                    // eleLink.download = filename;
+                                    // eleLink.style.display = "none";
+                                    // // 字符内容转变成blob地址
+                                    // eleLink.href = fileStr;
+                                    // // 触发点击
+                                    // document.body.appendChild(eleLink);
+                                    // eleLink.click();
+                                    // // 然后移除
+                                    // document.body.removeChild(eleLink);
                                 }
                             }
                             },
-                            ""
+                            "查看"
                         ),
                     ]);
                 }
@@ -1302,7 +2239,7 @@ export default {
                     ary.map(item => {
                         d.juefileNlist.push(item)
                     })
-                }else if(st == '民事判决书'){
+                }else if(st == '判决书'){
                     ary.map(item => {
                         d.minShifileNlist.push(item)
                     })
@@ -1348,6 +2285,10 @@ export default {
                     ary.map(item => {
                         d.ZhengJfileNlist.push(item)
                     })
+                }else if(st == '鉴定评估意见书'){
+                    ary.map(item => {
+                        d.mscdsfileNlist.push(item)
+                    })
                 }
                 this.viewDipmos = false;
                 break;
@@ -1387,6 +2328,10 @@ export default {
               }
           })
       },
+      time(time = +new Date()) {//时间戳转换函数
+            var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+            return date.toJSON().substr(0, 19).replace('T', ' ').substring(0,10);
+        },
       showFinace(){
           this.infoMol = true
           if(this.fileInfo == false){
@@ -1439,6 +2384,8 @@ export default {
                             proves:item.eviProve,
                             where:item.eviSource,
                             filePa:item.path,
+                            original:item.original ? "有" : "无",
+                            checked:item.checked ? "已核对" : "未核对",
                             id:item.id
                         }
                         this.EviList.push(data);
@@ -1476,6 +2423,82 @@ export default {
                         // this.qisuShow1 = false;
                     }
                 })
+                this.element = res.data.elementType;
+                this.lawCaseChecked = res.data.editFlag;
+                this.onlineLawCaseId = res.data.onlineLawCaseId;
+                if(this.element === 1){
+                    this.creditContract = [];
+                    this.loanContract = [];
+                    this.guaranteeContract = [];
+                    this.mortgageContract = [];
+                    this.pledgeContract = [];
+                    res.data.loan.creditContractInformationSet == '' ? [] : res.data.loan.creditContractInformationSet.map(item => {
+                        return item.enable == true ? this.creditContract.push(item) : false;
+                    });
+                    res.data.loan.loanContractInformations == '' ? [] : res.data.loan.loanContractInformations.map(item => {
+                        return item.enable == true ? this.loanContract.push(item) : false;
+                    });
+                    res.data.loan.guaranteeContractInformations == '' ? [] : res.data.loan.guaranteeContractInformations.map(item => {
+                        return item.enable == true ? this.guaranteeContract.push(item) : false;
+                    });
+                    res.data.loan.mortgageContractInformations == '' ? [] : res.data.loan.mortgageContractInformations.map(item => {
+                        return item.enable == true ? this.mortgageContract.push(item) : false;
+                    });
+                    res.data.loan.pledgeContractInformations == '' ? [] : res.data.loan.pledgeContractInformations.map(item => {
+                        return item.enable == true ? this.pledgeContract.push(item) : false;
+                    });
+                    this.litigation.loan = res.data.loan.loan == null ? '' : this.time(res.data.loan.loan);
+                    this.litigation.maturity = res.data.loan.payment == null ? '' : this.time(res.data.loan.payment);
+                    this.litigation.overdue = res.data.loan.overdueRepayment == null ? '' : this.time(res.data.loan.overdueRepayment);
+                    this.litigation.cutoff = res.data.loan.latestDeadLineForArrears == null ? '' : this.time(res.data.loan.latestDeadLineForArrears);
+                    this.litigation.arrears = res.data.loan.principalArrears;
+                    this.litigation.interest = res.data.loan.interest;
+                    this.litigation.penaltyInterest = res.data.loan.penaltyInterest;
+                    this.litigation.compoundInterest = res.data.loan.compoundInterest;
+                    this.litigation.nInterest = res.data.loan.nowInterest;
+                    this.litigation.npInterest = res.data.loan.nowPenaltyInterest;
+                    this.litigation.ncdInterest = res.data.loan.nowCompoundInterest;
+                    this.litigation.newArrears = res.data.loan.nowInterestOnArrears;
+                    this.litigation.liquidatedDamages = res.data.loan.liquidatedDamages;
+                    this.litigation.claim = res.data.loan.debtExpense;
+                    this.litigation.lawyerFee = res.data.loan.lawyerFees;
+                    this.litigation.securityFee = res.data.loan.preservationFee;
+                    this.litigation.announcementFee = res.data.loan.announcementFee;
+                    this.litigation.otherFee = res.data.loan.anotherDebtExpense;
+                    this.litigation.isPublic = res.data.loan.jointDebts == true ? 'yes' : 'no';
+                    this.litigation.marryTime = res.data.loan.marriage == null ? '' : this.time(res.data.loan.marriage);
+                    this.litigation.divorceTime = res.data.loan.divorce == null ? '' : this.time(res.data.loan.divorce);
+                    this.litigation.legalProvisions = res.data.loan.legalProvisions;
+                    this.litigation.regulations = res.data.loan.lawAndRegulations;
+                    this.litigation.caseNumber = res.data.loan.preservationCaseNo;
+                    this.litigation.preservationMan = res.data.loan.preservationRespondent;
+                    this.litigation.preservationTime = res.data.loan.applyForPreservation == null ? '' : this.time(res.data.loan.applyForPreservation);
+                    this.litigation.preservationMoney = res.data.loan.preservationAmount;
+                    this.litigation.preservationFee = res.data.loan.preservationAmountFee;
+                    this.litigation.rulingTime = res.data.loan.preservationTime == null ? '' : this.time(res.data.loan.preservationTime);
+                    this.litigation.releasePreservation = res.data.loan.firePreservationTime == null ? '' : this.time(res.data.loan.firePreservationTime);
+                    this.litigation.preservationStatus = res.data.loan.preservationSituation;
+                }else if(this.element === 2){
+                    this.creditInfo = [];
+                    res.data.creditCard.creditCardInformations.map(item => {
+                        return item.enable == true ? this.creditInfo.push(item) : false;
+                    });
+                    this.contract.name = res.data.creditCard.contractName;
+                    this.contract.time = res.data.creditCard.signContractTime == null ? '' : this.time(res.data.creditCard.signContractTime);
+                    this.couple.isPublic = res.data.creditCard.jointdebts == null ? '' : (res.data.creditCard.jointdebts == true ? 'yes' : 'no');
+                    this.couple.marry = res.data.creditCard.marriageTime == null ? '' : this.time(res.data.creditCard.marriageTime);
+                    this.couple.divorce = res.data.creditCard.divorceTime == null ? '' : this.time(res.data.creditCard.divorceTime);
+                    this.pay.reason = res.data.creditCard.reasonContent;
+                    this.pay.money = res.data.creditCard.applyAmount;
+                    this.pay.securities = res.data.creditCard.securities;
+                    this.pay.applicationFee = res.data.creditCard.applyFee;
+                    this.pay.applyTime = res.data.creditCard.applyTime == null ? '' : this.time(res.data.creditCard.applyTime);
+                    this.pay.completeTime = res.data.creditCard.makeApplyTime == null ? '' : this.time(res.data.creditCard.makeApplyTime);
+                    this.endProcess.fee = res.data.creditCard.endApplyFee;
+                    this.endProcess.time = res.data.creditCard.endMakeTime == null ? '' : this.time(res.data.creditCard.endMakeTime);
+                    this.endProcess.reason = res.data.creditCard.endReason;
+                    this.partCardId = res.data.creditCard.id;
+                }
             }
         })
             
@@ -1639,6 +2662,13 @@ export default {
                         break;
                     }
                 }
+            }else if(ob == "鉴定评估意见书"){
+                for(let i=0;i<data.mscdsfileNlist.length;i++){
+                    if(data.mscdsfileNlist[i].name == str){
+                        data.mscdsfileNlist.splice(i,1);
+                        break;
+                    }
+                }
             }
             this.info = JSON.parse(JSON.stringify(this.info));
         },
@@ -1720,6 +2750,25 @@ export default {
                             urlName:res.result
                         }
                         this.info[i].zhizhenfileNlist.push(dat);
+                        break;
+                    }
+                }
+                this.info = JSON.parse(JSON.stringify(this.info));
+            }else{
+                this.$Message.error(res.message);
+            }
+        },
+        uploadSuccessqtsend(res, file){
+            if(res.state == 100){
+                this.$Message.success(res.message);
+                for(let i=0;i<this.info.length;i++){
+                    if(this.info[i].litigantId == res.id){
+                        // this.info[i].zhizhenfileNlist = [];
+                        const dat = {
+                            name:file.name,
+                            urlName:res.result
+                        }
+                        this.info[i].qtsendFilelist.push(dat);
                         break;
                     }
                 }
@@ -1881,6 +2930,46 @@ export default {
             }
             this.info = JSON.parse(JSON.stringify(this.info));
         },
+        uploadSuccessSugges(res, file){
+            if(res.state == 100){
+                this.$Message.success(res.message);
+                for(let i=0;i<this.info.length;i++){
+                    if(this.info[i].litigantId == res.id){
+                        // this.info[i].qifileNlist = [];
+                        const dat = {
+                            name:file.name,
+                            urlName:res.result
+                        }
+                        this.info[i].mscdsfileNlist.push(dat);
+                        break;
+                    }
+                }
+               
+                this.info = JSON.parse(JSON.stringify(this.info));
+            }else{
+                this.$Message.error(res.message);
+            }
+        },
+        uploadSuccessQtiQi(res, file){
+            if(res.state == 100){
+                this.$Message.success(res.message);
+                for(let i=0;i<this.info.length;i++){
+                    if(this.info[i].litigantId == res.id){
+                        // this.info[i].qifileNlist = [];
+                        const dat = {
+                            name:file.name,
+                            urlName:res.result
+                        }
+                        this.info[i].qtfileNlist.push(dat);
+                        break;
+                    }
+                }
+               
+                this.info = JSON.parse(JSON.stringify(this.info));
+            }else{
+                this.$Message.error(res.message);
+            }
+        },
         uploadSuccessQi(res, file){
             if(res.state == 100){
                 this.$Message.success(res.message);
@@ -1905,6 +2994,15 @@ export default {
             for(let i=0;i<data.qifileNlist.length;i++){
                 if(data.qifileNlist[i].name == str){
                     data.qifileNlist.splice(i,1);
+                    break;
+                }
+            }
+            this.info = JSON.parse(JSON.stringify(this.info));
+        },
+        delQisendFile(data,str){
+            for(let i=0;i<data.qtsendFilelist.length;i++){
+                if(data.qtsendFilelist[i].name == str){
+                    data.qtsendFilelist.splice(i,1);
                     break;
                 }
             }
@@ -2007,7 +3105,39 @@ export default {
         prillT(){
             let el = this.elData;
             let arys = JSON.parse(JSON.stringify(el.dipChecked));
-            console.log( el)
+            let isOtherSelected = false;
+            if(arys.length >0){
+                for(let u=0;u<arys.length;u++){
+                    if(arys[u] == '其他'){
+                        isOtherSelected = true;
+                        arys.splice(u,1)
+                    }
+                }
+            }
+            if(isOtherSelected){
+                if(el.otherSendDip == ""){
+                    this.$Message.info('请填写其他文书名字');
+                    this.changeLoading();
+                    return false;
+                }else{
+                    arys.push(el.otherSendDip)
+                }
+                
+            }
+            if(el.otherGroup.length > 0){
+                for(let u=0;u<el.otherGroup.length;u++){
+                    if(el.otherGroup[u] == '其他法律文书'){
+                        if(el.otherLaws == ''){
+                            this.$Message.info('请填写其他文书名字');
+                            this.changeLoading();
+                            return false;
+                        }else{
+                            arys.push(el.otherLaws)
+                        }   
+                    }
+                }
+            }
+            // console.log( el.otherGroup)
             for(let i=0;i<arys.length;i++){
                 if(arys[i] == '送达地址有关事项告知书'){
                     arys[i] = '送达地址告知书'
@@ -2022,13 +3152,21 @@ export default {
                 }
             }
             let newarr = this.noRepeat2(arys);
+            
             if(el.checkBo){
                 newarr.push(el.other)
             }
-            this.loading = true;
-            if(el.checkBo ==true){
-                el.dipChecked.push(el.other)
+            if(el.checkBo1){
+                newarr.push(el.other1)
             }
+            if(el.checkBo2){
+                newarr.push(el.other2)
+            }
+           
+            this.loading = true;
+            // if(el.checkBo ==true){
+            //     el.dipChecked.push(el.other)
+            // }
             var str = "";
                 
                
@@ -2112,14 +3250,34 @@ export default {
             var str = "";
                 
                
-                for(var i=0;i<el.emsAdressList.length;i++){
-                    if(i == el.emsAdressList.length -1){
-                        str = str + el.emsAdressList[i].addressName;
-                    }else{
-                        str = str + el.emsAdressList[i].addressName + ',';
-                    }
-                    
+            for(var i=0;i<el.emsAdressList.length;i++){
+                if(i == el.emsAdressList.length -1){
+                    str = str + el.emsAdressList[i].addressName;
+                }else{
+                    str = str + el.emsAdressList[i].addressName + ',';
                 }
+                
+            }
+            let aryDipcc = JSON.parse(JSON.stringify(el.dipChecked));
+            let isOtherSelected = false;
+            if(aryDipcc.length >0){
+                for(let u=0;u<aryDipcc.length;u++){
+                    if(aryDipcc[u] == '其他'){
+                        isOtherSelected = true;
+                        aryDipcc.splice(u,1)
+                    }
+                }
+            }
+            if(isOtherSelected){
+                if(el.otherSendDip == ""){
+                    this.$Message.info('请填写其他文书名字');
+                    el.sendMELoading = false;
+                    return false;
+                }else{
+                    aryDipcc.push(el.otherSendDip)
+                }
+                
+            }
             var params = {
                 oddNumbers: el.oddNumbers,
                 lawCaseId: el.id,
@@ -2129,7 +3287,7 @@ export default {
                 sendAddress: el.sendType == 6 ? el.courtAdress : str,
                 litigantPhone: el.sendType == 6 ? el.courtPhone : el.litigantPhone,
                 litigantType: el.litigantType,
-                diploms: el.dipChecked
+                diploms: aryDipcc
             };
             printBill(params)
             .then(res => {
@@ -2225,7 +3383,7 @@ export default {
                      }
                 })
             }
-            if(sendType == 2){
+            if(sendType == 2 && this.userCourtName !='殿前法庭'){
                for (var i = 0; i < this.info.length; i++) {
                     const el = this.info[i];
                     if (litigantId == this.info[i].litigantId) {
@@ -2292,10 +3450,15 @@ export default {
                     }
                 }
             }
-            if(sendType == 8){
+            if(sendType == 8 ){
                 for (var i = 0; i < this.info.length; i++){
                     if(litigantId == this.info[i].litigantId){
-                        var ary = ["公告稿"];
+                        if(this.userCourtName != '殿前法庭'){
+                            var ary = ["公告稿"];
+                        }else{
+                            var ary = ["公告(裁判文书)","公告(开庭传票)"];
+                        }
+                        
                         this.info[i].dipChecked = ary;
                         this.info[i].disabledGroup = [];
                         // this.info[i].buttonP = true;
@@ -2359,6 +3522,11 @@ export default {
                 that.caseLoading = false;
             });
         },
+        showDipmos(path){
+            this.filePathAry = [];
+            this.filePathAry.push(path);
+            this.viewDipmoseds = true;
+        },
         getInfo (caseId) {
             this.nist = [];
             this.otherfileNlist = [];
@@ -2381,33 +3549,45 @@ export default {
                     for (let i = 0; i < that.info.length; i++) {
                         var el = that.info[i];
                         el.addressList = [];
+                        console.log(that.userCourtName)
                         console.log(that.courtId)
-                        if (that.courtId!=1) {
+                        //courtId等于1为殿前法院
+                        if (that.courtId!='3f3780181af211e9b39a00163e0af9c6') {
                             if (el.litigationStatusName == '原告') {
-                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,公告,口头裁定笔录,审判流程信息公开告知内容,公告判决书,调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
+                                // el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,公告,口头裁定笔录,审判流程信息公开告知内容,公告判决书,调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
+                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭成员告知书,参加诉讼告知书,举证通知书,受理案件通知书,送达地址有关事项告知书,公告,口头裁定笔录,审判流程信息公开告知内容,公告(裁判文书),调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
                             } else {
-                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,委托送达函,公告,口头裁定笔录,审判流程信息公开告知内容,公告判决书,调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
+                                // el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,委托送达函,公告,口头裁定笔录,审判流程信息公开告知内容,公告判决书,调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
+                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭成员告知书,参加诉讼告知书,举证通知书,受理案件通知书,送达地址有关事项告知书,委托送达函,公告,口头裁定笔录,审判流程信息公开告知内容,公告(裁判文书),调解确认裁定书,领取诉讼文书通知书,公告稿,公告稿(保全)'
                             }
-                        }else{
+                        }else{ //殿前法院
                             if (el.litigationStatusName == '原告') {
-                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,公告,口头裁定笔录,公告判决书,调解确认裁定书,领取诉讼文书通知书'
+                                // el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,公告,口头裁定笔录,公告判决书,调解确认裁定书,领取诉讼文书通知书'
+                                el.diplomsName = '受理案件通知书,收取诉讼费通知书,应诉通知书,诉讼权利义务告知书,参加诉讼告知书,举证通知书,传票,传票(存根),合议庭成员告知书,送达地址有关事项告知书,送达地址确认书,领取诉讼文书通知书,廉政监督卡,公告(审辅),公告(开庭传票),公告(裁判文书),送达回证,口头裁定笔录,诉讼费退款通知书'
                             } else {
-                                el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,委托送达函,公告,口头裁定笔录,公告判决书,调解确认裁定书,领取诉讼文书通知书'
+                                // el.diplomsName = '送达地址确认书,送达回证,诉讼权利义务告知书,应诉通知书,电话通知记录表,传票,传票(存根),外出传票,外出传票(存根),廉政监督卡,合议庭组成人员通知书,参加诉讼通知书,举证通知书,受理案件通知书,送达地址有关事项告知书,委托送达函,公告,口头裁定笔录,公告判决书,调解确认裁定书,领取诉讼文书通知书'
+                                 el.diplomsName = '受理案件通知书,收取诉讼费通知书,应诉通知书,诉讼权利义务告知书,参加诉讼告知书,举证通知书,传票,传票(存根),合议庭成员告知书,送达地址有关事项告知书,送达地址确认书,领取诉讼文书通知书,廉政监督卡,公告(审辅),公告(开庭传票),公告(裁判文书),送达回证,口头裁定笔录,委托送达函,诉讼费退款通知书'
                             }
                         }
-                        
+                        el.litigantPhone = el.litigantPhone ? el.litigantPhone : el.legalManPhone;
                         el.checkAll = false;
                         el.indeterminate = false;
                         el.buttonP = false;
                         el.buttonpf = false;
                         el.checkBo = false;
+                        el.checkBo1 = false;    //湖里法庭新增的其他输入框
+                        el.checkBo2 = false;    //湖里法庭新增的其他输入框
                         el.creatLoading = false;
                         el.sendMELoading = false;
                         el.dipChecked = [];
                         el.oldCkecked = [];
                         el.sendTy = "";
                         el.sendTshow = 0;
-                        el.other = "";
+                        el.other = "";  //用户输入---其他--其他文书
+                        el.other1 = ""; //用户输入---其他--其他文书1
+                        el.other2 = ""; //用户输入---其他--其他文书2
+                        el.otherLaws = "";  //用户输入---其他法律文书--裁决文书
+                        el.otherSendDip = "";   //用户输入--其他--文书列表
                         el.updat = "1";
                         el.adressupdat = "1";
                         el.otherAdress = [];
@@ -2443,8 +3623,9 @@ export default {
                         el.ssfileNlist=[];      //上诉状文件列表
                         el.mscdsfileNlist=[];      //民事裁定书文件列表
                         el.qtfileNlist=[];      //其他文件列表
+                        el.qtsendFilelist=[];   //文书列表。其他文书
                         // el.sczjfileNlist=[];      //上传证据文件列表
-
+                        // el.otherDiplomsList = [];   //上传的其他文书
                         el.otherGroup = [];
                         el.adId = 1;
                         el.noticeNew = {name:"",path:""},  //其他文书：公告 生成的文件列表
@@ -2512,13 +3693,25 @@ export default {
                                     
                                 // }
                                 else  {
-                                    if (ee != '受理案件通知书' && ee != '合议庭组成人员通知书' && ee != "参加诉讼通知书" && ee != "电话通知记录表" && ee != "委托送达函"&& ee != "公告"&& ee != "口头裁定笔录"&& ee != "公告判决书"&& ee != "外出传票"&& ee != "外出传票(存根)" && ee != "调解确认裁定书" && ee != '领取诉讼文书通知书' && ee != '公告稿' && ee != "公告稿(保全)") {
-                                        el.dipChecked.push(ee);
-                                        el.defoultChecked.push(ee);
-                                        if(el.dipChecked.length > 8){
-                                            strs =strs + ee;
-                                        }else{
-                                            strs =strs + ee + ",";
+                                    if (that.courtId=='3f3780181af211e9b39a00163e0af9c6'){
+                                        if (ee != '受理案件通知书' && ee != '收取诉讼费通知书' && ee != '公告(审辅)' && ee != '公告(审辅)' && ee != '公告(开庭传票)' && ee != '送达回证' && ee != '合议庭成员告知书' && ee != "参加诉讼告知书" && ee != "电话通知记录表" && ee != "委托送达函"&& ee != "公告"&& ee != "口头裁定笔录"&& ee != "公告(裁判文书)"&& ee != "外出传票"&& ee != "外出传票(存根)" && ee != "调解确认裁定书" && ee != '领取诉讼文书通知书' && ee != '公告稿' && ee != "公告稿(保全)" && ee != "诉讼费退款通知书") {
+                                            el.dipChecked.push(ee);
+                                            el.defoultChecked.push(ee);
+                                            if(el.dipChecked.length > 8){
+                                                strs =strs + ee;
+                                            }else{
+                                                strs =strs + ee + ",";
+                                            }
+                                        }
+                                    }else{
+                                        if (ee != '受理案件通知书' && ee != '合议庭成员告知书' && ee != "参加诉讼告知书" && ee != "电话通知记录表" && ee != "委托送达函"&& ee != "公告"&& ee != "口头裁定笔录"&& ee != "公告(裁判文书)"&& ee != "外出传票"&& ee != "外出传票(存根)" && ee != "调解确认裁定书" && ee != '领取诉讼文书通知书' && ee != '公告稿' && ee != "公告稿(保全)" && ee != "诉讼费退款通知书") {
+                                            el.dipChecked.push(ee);
+                                            el.defoultChecked.push(ee);
+                                            if(el.dipChecked.length > 8){
+                                                strs =strs + ee;
+                                            }else{
+                                                strs =strs + ee + ",";
+                                            }
                                         }
                                     }
                                     var ary1 = ['证据材料', '起诉状'];
@@ -2542,7 +3735,7 @@ export default {
                     for(let i = 0; i < that.info.length; i++){
                         queryDiplomsIsAdd(that.info[i].litigantId,that.info[i].stars).then(res => {
                             if(res.data.state == 100){
-                                if(res.data.result.length == 0){
+                                if(res.data.result.length == 0 || res.data.result[0] == ""){
                                     that.info[i].buttonP = true;
                                     that.info[i].buttonpf = true;
                                     Vue.set(that.info, i, that.info[i]);
@@ -2932,7 +4125,7 @@ export default {
             console.log(e)
         },
         dipCheckedChange (data,e) {
-            
+            console.log(data.dipChecked)
             if(data.dipChecked.length > 0){
                let aryss =  R.difference(data.oldCkecked,data.dipChecked);
                 if(aryss.length != 0 && aryss[0] == "外出传票"){
@@ -2951,7 +4144,7 @@ export default {
             var str = "";
             let count=0
             for(let i = 0;i<data.dipChecked.length;i++){
-                if(data.dipChecked[i] != "证据材料" && data.dipChecked[i] != "起诉状" && data.dipChecked[i] != "答辩状" && data.dipChecked[i] != "上诉状" && data.dipChecked[i] != "民事裁定书"){
+                if(data.dipChecked[i] != "证据材料" && data.dipChecked[i] != "起诉状" && data.dipChecked[i] != "答辩状" && data.dipChecked[i] != "上诉状" && data.dipChecked[i] != "民事裁定书" && data.dipChecked[i] != "其他"){
                     if(i == data.dipChecked.length - 1){
                         str =str + data.dipChecked[i];
                     }else{
@@ -3034,7 +4227,7 @@ export default {
                     }
                 }else if(res.data.state == 101 && res.data.message == '请选择要查询的文书!'){
                     for(var i = 0;i<this.info.length;i++){
-                        if(this.info[i].litigantId == data.litigantId && data.disabledGroup.length == 0 && data.otherGroup.length == 0){
+                        if(this.info[i].litigantId == data.litigantId && data.disabledGroup.length == 0 && data.otherGroup.length == 0 && data.dipChecked.length == 0){
                             this.info[i].buttonP = false;
                             this.info[i].buttonpf = false;
                             this.buttonPstatus = false;
@@ -3076,6 +4269,7 @@ export default {
             var adressNum = "";
             var isReturn = 0;
             var otherCh = "";
+            let otherSendStr = "";      //送达文书---其他文书
             var evidenceListStr = ""
             if(el.sendType == 1){   //地址
                 for(let i=0;i<el.emsAdressList.length;i++){
@@ -3114,11 +4308,13 @@ export default {
             //         evidenceListStr = evidenceListStr + el.disabledGroup[o] + ",";
             //     }
             // }
-            console.log(el.disabledGroup)
+            console.log(el.otherSendDip)
             if(el.sendType == 0 || el.sendType == 3 || el.sendType == 4 || el.sendType == 9){
                 isReturn = 0;
             }
             let ret = "已传";
+            let otherInputValue = true;     //判断选中其他文书是否有填写对应的名字
+            console.log(el.otherGroup)
             for(let y=0;y<el.otherGroup.length;y++){
                 let strTest = '';
                 if(el.otherGroup[y] == "裁判文书"){
@@ -3228,7 +4424,7 @@ export default {
                     }  
                 }else if(el.otherGroup[y] == "其他法律文书"){
                     if(el.qifileNlist.length == 0){
-                        ret = "请上传其他法律文书";
+                        ret = "请上传其他文书";
                     }
                     for(let u=0;u<el.qifileNlist.length;u++){
                         if(u == el.qifileNlist.length - 1){
@@ -3237,9 +4433,9 @@ export default {
                             strTest = strTest + el.qifileNlist[u].urlName + ";"
                         }   
                     }  
-                }else if(el.otherGroup[y] == "民事判决书"){
+                }else if(el.otherGroup[y] == "判决书"){
                     if(el.minShifileNlist.length == 0){
-                        ret = "请上传民事判决书";
+                        ret = "请上传判决书";
                     }
                     for(let u=0;u<el.minShifileNlist.length;u++){
                         if(u == el.minShifileNlist.length - 1){
@@ -3261,17 +4457,37 @@ export default {
                     }  
                 }
                 if(strTest != ""){
+                    console.log()
                     if(y == el.otherGroup.length - 1){
                         if(el.otherGroup[y] == "支付令证据材料"){
                             otherCh = otherCh + "证据材料" + ";" + strTest;
                         }else{
-                            otherCh = otherCh + el.otherGroup[y] + ";" + strTest;
+                            //裁判文书---其他文书选中
+                            if(el.otherGroup[y] == "其他法律文书"){
+                                if(el.otherLaws == ""){
+                                    otherInputValue = false;
+                                }else{
+                                    otherCh = otherCh + el.otherLaws + ";" + strTest;
+                                }
+                            }else{
+                                otherCh = otherCh + el.otherGroup[y] + ";" + strTest;
+                            }
                         }
                     }else{
                         if(el.otherGroup[y] == "支付令证据材料"){
                             otherCh = otherCh + "证据材料" + ";" + strTest + ",";
                         }else{
-                            otherCh = otherCh + el.otherGroup[y] + ";" + strTest + ",";
+                             //裁判文书---其他文书选中
+                            if(el.otherGroup[y] == "其他法律文书"){
+                                if(el.otherLaws == ""){
+                                    otherInputValue = false;
+                                }else{
+                                    otherCh = otherCh + el.otherLaws + ";" + strTest + ",";
+                                }
+                            }else{
+                                otherCh = otherCh + el.otherGroup[y] + ";" + strTest + ",";
+                            }
+                            
                         }
                     }
                     
@@ -3281,17 +4497,43 @@ export default {
                         if(el.otherGroup[y] == "支付令证据材料"){
                             otherCh = otherCh + "证据材料";
                         }else{
-                            otherCh = otherCh + el.otherGroup[y];
+                            //裁判文书---其他文书选中
+                            if(el.otherGroup[y] == "其他法律文书"){
+                                if(el.otherLaws == ""){
+                                    otherInputValue = false;
+                                }else{
+                                    otherCh = otherCh + el.otherLaws;
+                                }
+                            }else{
+                                otherCh = otherCh + el.otherGroup[y];
+                            }
+                            
                         }
                         
                     }else{
                         if(el.otherGroup[y] == "支付令证据材料"){
                             otherCh = otherCh + "证据材料" + ",";
                         }else{
-                            otherCh = otherCh + el.otherGroup[y] + ",";
+                            //裁判文书---其他文书选中
+                            if(el.otherGroup[y] == "其他法律文书"){
+                                if(el.otherLaws == ""){
+                                    otherInputValue = false;
+                                }else{
+                                    otherCh = otherCh + el.otherLaws+ ",";
+                                }
+                            }else{
+                                otherCh = otherCh + el.otherGroup[y] + ",";
+                            }
+                            
                         }
                     }
                 }
+            }
+            console.log(otherCh)
+            if(!otherInputValue){
+                this.$Message.info('请填写其他文书名字');
+                el.sendMELoading = false;
+                return false;
             }
             if(ret != "已传"){
                 this.$Message.info(ret);
@@ -3308,8 +4550,41 @@ export default {
                 el.sendMELoading = false;
                 return false;
             }
-            console.log(otherCh)
+            
             var q = "'";
+            let aryDipcc = JSON.parse(JSON.stringify(el.dipChecked));
+            let isOtherSelected = false;
+            if(aryDipcc.length >0){
+                for(let u=0;u<aryDipcc.length;u++){
+                    if(aryDipcc[u] == '其他'){
+                        isOtherSelected = true;
+                        aryDipcc.splice(u,1)
+                    }
+                }
+            }
+            //选中文书列表其他文书
+            if(isOtherSelected){
+                if(el.otherSendDip == ""){
+                    this.$Message.info('请填写其他文书名字');
+                    el.sendMELoading = false;
+                    return false;
+                }else{
+                    if(el.qtsendFilelist.length == 0){
+                         this.$Message.info('请上传其他文书');
+                        el.sendMELoading = false;
+                        return false;
+                    }else{
+                        otherSendStr = el.otherSendDip + ";";
+                        for(let y=0;y<el.qtsendFilelist.length;y++){
+                            if(y == el.qtsendFilelist.length - 1){
+                                otherSendStr = otherSendStr + el.qtsendFilelist[y].urlName;
+                            }else{
+                                otherSendStr = otherSendStr + el.qtsendFilelist[y].urlName + ","
+                            }
+                        }
+                    }
+                }
+            }
             var pramas = {
                 lawCaseId:el.id,                                        //案件id
                 litigantId:el.litigantId,                               //当事人id
@@ -3325,11 +4600,12 @@ export default {
                 isUpdateCourtInfo:el.updat == 1 ? true : false,         //委托送达法信息是否更新
                 nativePlace:el.nativePlace ? el.nativePlace : "",       //当事人户籍地址
                 isUpdateNativePlace:el.adressupdat == 1 ? true : false,  //当事人户籍地址是否更新
-                diplmosList:el.dipChecked ? el.dipChecked.join(",") : "",         //文书名称列表使用
+                diplmosList:aryDipcc ? aryDipcc.join(",") : "",         //文书名称列表使用
                 excuteDiplomsList:otherCh ? otherCh : "",               //裁判文书列表
                 evidenceList:evidenceListStr,    //其他文书列表
                 wechatNumber:typeof(el.wechatNumber) == 'number' ? "" : el.wechatNumber,    //微信号
-                weixinModelId:el.weixinModelId ? el.weixinModelId : "",    //其他文书列表
+                weixinModelId:el.weixinModelId ? el.weixinModelId : "",    //微信模板id
+                otherDiplomsList:otherSendStr ? otherSendStr : "",     //其他文书文书列表--其他选项
             }
             var str =
                 (el.litigantId || "") +
@@ -3450,6 +4726,7 @@ export default {
             })
         },
         getevStr(ary,data){
+            console.log(ary)
             let allStr = "";
             for(let i=0;i<ary.length;i++){
                let strTest = ''; 
@@ -3503,7 +4780,7 @@ export default {
                             }
                         }
                    }
-               }else if(ary[i] == "民事裁定书"){
+               }else if(ary[i] == "民事裁定书" || ary[i] == "鉴定评估意见书"){
                    if(data.mscdsfileNlist.length != 0){
                        for(let u=0;u<data.mscdsfileNlist.length;u++){
                             if(u == data.mscdsfileNlist.length - 1){
@@ -3761,10 +5038,10 @@ export default {
         },
         // 编辑
         editor(value,item){
-            if(value == '领取诉讼文书通知书'){
-                this.$Message.info('领取诉讼文书通知书暂时不可编辑！')
-                return false;
-            }
+            // if(value == '领取诉讼文书通知书'){
+            //     this.$Message.info('领取诉讼文书通知书暂时不可编辑！')
+            //     return false;
+            // }
             console.log(value)
             this.panelList = '';
            this.panelList = value
@@ -3792,6 +5069,153 @@ export default {
                     }
         })
 
+        },
+        changeTab(e){
+            this.elementSw = false;
+            if(e ==1){
+                this.elementSw = true;
+                
+            }
+        },
+        choice(name){
+            this.titleIndex = name[1];
+            let infoid = name.substring(2);
+            switch(name.substring(0,2)){
+                case 'c0':
+                    getCtInfo('cc',infoid).then(res => {
+                        this.credit.name = res.data.data.name;
+                        this.credit.isRelease = res.data.data.relieve == true ? 'yes' : 'no';
+                        this.credit.creditPeople = res.data.data.creditGrantor;
+                        this.credit.creditTime = res.data.data.sign == null ? '' : this.time(res.data.data.sign);
+                        this.credit.creditRange = res.data.data.periodRange == null ? '' :res.data.data.periodRange.replace('至',' - ');
+                        this.credit.creditMoney = res.data.data.amount;
+                        this.modal6 = true;
+                    })
+                break;
+                case 'l1':
+                    getCtInfo('lc',infoid).then(res => {
+                        console.log(res.data.data);
+                        this.loan.name = res.data.data.name;
+                        this.loan.creditPeople = res.data.data.borrower;
+                        this.loan.isRelease = res.data.data.relieve == true ? 'yes' : 'no';
+                        this.loan.time = res.data.data.signTime == null ? '' : this.time(res.data.data.signTime);
+                        this.loan.money = res.data.data.amount;
+                        this.loan.range = res.data.data.askTime == null ? '' : res.data.data.askTime.replace('至',' - ');
+                        this.loan.methods = res.data.data.repaymentMethod;
+                        this.loan.loanRate = res.data.data.borrowingRate;
+                        this.loan.penaltyRate = res.data.data.penaltyRate;
+                        this.loan.compoundRate = res.data.data.compoundRate;
+                        this.loan.rateAgreement = res.data.data.penaltyAndCompoundAppointment;
+                        this.loan.releaseAgreement = res.data.data.relieveAndPayLoanAppointment;
+                        this.loan.defaultAgreement = res.data.data.violationFundAppointment;
+                        this.loan.feeAgreement = res.data.data.bondFeeAppointment;
+                        this.loan.sendAgreement = res.data.data.sendAppointment;
+                        this.modal6 = true;
+                    })
+                break;
+                case 'g2':
+                    getCtInfo('gc',infoid).then(res => {
+                        this.guarantee.name = res.data.data.name;
+                        this.guarantee.guaranteePeople = res.data.data.guarantor;
+                        this.guarantee.methods = res.data.data.guarantorMethod;
+                        this.guarantee.timeRange = res.data.data.guarantorDate == null ? '' : res.data.data.guarantorDate.replace('至',' - ');
+                        this.guarantee.time = res.data.data.signTime == null ? '' : this.time(res.data.data.signTime);
+                        this.guarantee.guaranteeRange = res.data.data.guaranteeScope;
+                        this.modal6 = true;
+                    })
+                break;
+                case 'm3':
+                    getCtInfo('mc',infoid).then(res => {
+                            this.mortgage.name = res.data.data.name;
+                            this.mortgage.time = res.data.data.signTime == null ? '' : this.time(res.data.data.signTime);
+                            this.mortgage.ownership = res.data.data.ownership;
+                            this.mortgage.articleName = res.data.data.collateral;
+                            this.mortgage.range = res.data.data.mortgageRange;
+                            this.mortgage.handletime = res.data.data.mortgageTime == null ? '' : this.time(res.data.data.mortgageTime);
+                            this.modal6 = true;
+                        })
+                break;
+                case 'p4':
+                    getCtInfo('pc',infoid).then(res => {
+                        console.log(res.data.data);
+                        this.pledge.name = res.data.data.name;
+                        this.pledge.time = res.data.data.signTime == null ? '' : this.time(res.data.data.signTime);
+                        this.pledge.ownership = res.data.data.ownership;
+                        this.pledge.articleName = res.data.data.pledge;
+                        this.pledge.range = res.data.data.pledgeRange;
+                        this.pledge.handletime = res.data.data.pledgeTime == null ? '' : this.time(res.data.data.pledgeTime);
+                        this.modal6 = true;
+                    })
+                break;
+            }
+        },
+        checkLawCase(){
+            let checked = 0;
+            if(this.lawCaseChecked){
+                checked = 1;
+            }else{
+                checked = 0;
+            }
+            this.confirmLoading = true;
+            checkFactor(this.cased,checked).then(res => {
+                this.confirmLoading = false;
+                if(res.data.state == 100){
+                    this.$Message.success(res.data.message);
+                    this.lawCaseChecked = !this.lawCaseChecked;
+                }else if(res.data.state == 101){
+                    this.$Message.error(res.data.message);
+                }
+            })
+        },
+        creditChoice(name){
+            getCtInfo('cdInfo',name).then(res => {
+                if(res.data.state == 100){
+                    this.creditCard.num = res.data.data.cardNo;
+                    this.creditCard.name = res.data.data.contractName;
+                    this.creditCard.interestAgreement = res.data.data.interestAgreement;
+                    this.creditCard.deadline = res.data.data.latestDeadLineForArrears == null ? '' : this.time(res.data.data.latestDeadLineForArrears);
+                    this.creditCard.principal = res.data.data.nowArrearsAmount;
+                    this.creditCard.interest = res.data.data.nowArrearsInterest;
+                    this.creditCard.latePayment = res.data.data.nowLateFee;
+                    this.creditCard.annualFee = res.data.data.annualFee;
+                    this.creditCard.handlingFee = res.data.data.byStagesFee;
+                    this.creditCard.otherFee = res.data.data.proAndFee;
+                    this.creditCard.defaultAgreement = res.data.data.lateFeeAppointment;
+                    this.creditCard.feeAgreement = res.data.data.bondFeeAppointment;
+                    this.creditCard.lawyerFee = res.data.data.lawyerFee;
+                    this.creditCard.securityFee = res.data.data.preservationFee;
+                    this.creditCard.announcementFee = res.data.data.announcementFee;
+                    this.creditCard.cashFee = res.data.data.enchashmentFee;
+                    this.creditCard.otherProjectFee = res.data.data.anotherApponintment;
+                    this.creditCard.endStandard = res.data.data.nowInterestStandard;
+                    this.creditCard.endFeeStandard = res.data.data.nowLateFeeStandard;
+                    this.creditCard.type = res.data.data.cardType;
+                    this.creditCard.applyTime = res.data.data.applyCardDate == null ? '' : this.time(res.data.data.applyCardDate);
+                    this.creditCard.issueTime = res.data.data.auditDate == null ? '' : this.time(res.data.data.auditDate);
+                    this.creditCard.overRate = res.data.data.overdrawRate;
+                    this.creditCard.agreementFee = res.data.data.bondFee;
+                    this.creditCard.quota = res.data.data.lineOfCredit;
+                    this.modal5 = true;
+                }else{
+                    this.$Message.error(res.data.message);
+                }
+            })
+            getContractInfo(this.onlineLawCaseId,this.partCardId,'gc',name).then(res => {
+                if(res.data.state == 100){
+                    this.guarantee2 = res.data.nameList;
+                }
+            })
+        },
+        guaranteeChioce(name){
+            getCtInfo('gc',name).then(res => {
+                this.guaranteeContract2.name = res.data.data.name;
+                this.guaranteeContract2.time = res.data.data.signTime == null ? '' : this.time(res.data.data.signTime);
+                this.guaranteeContract2.people = res.data.data.guarantor;
+                this.guaranteeContract2.timeRange = res.data.data.guarantorDate == null ? '' : res.data.data.guarantorDate.replace('至',' - ');
+                this.guaranteeContract2.methods = res.data.data.guarantorMethod;
+                this.guaranteeContract2.range = res.data.data.guaranteeScope;
+                this.modal7 = true;
+            })
         },
         // 生成
         produceDip(panelList,value,litigantId){
@@ -3988,4 +5412,43 @@ export default {
     border-left: 1px solid #e9eaec;
     border-bottom: 1px solid #e9eaec;
 }
+.bookbuilding-table {
+  width: 100%;
+  min-width: 600px;
+  margin-bottom: 10px;
+  border: 1px solid #e9eaec;
+  tr {
+    td {
+      border-left: 1px solid #e9eaec;
+      border-bottom: 1px solid #e9eaec;
+      line-height: 37px;
+      text-align: left;
+      padding-left: 8px;
+    }
+    td:first-child {
+      border: 1px solid #e9eaec;
+      border-right: none;
+      border-bottom: none;
+      width: 25%;
+    //   text-align: center
+    }
+    td:nth-child(2) {
+      width: 75%;
+      padding:3px 0px 3px 8px;
+    }
+    // td:nth-child(3) {
+    //   width: 20%;
+    // }
+    td:nth-of-type(odd) {
+      background: #f8f8f9;
+    }
+  }
+  tr:last-child {
+    td {
+      border-bottom: none;
+    }
+  }
+  
+} 
+
 </style>

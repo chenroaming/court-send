@@ -1058,7 +1058,8 @@ export default {
                     .catch(() => {});
 
                     // 当事人关系
-      
+                    this.plaintiffRelation = [];
+                    this.$refs.revertsList1.getRelation(this.plaintiffRelation);
                      litigantRelation(id,'原告').then(res => {
                          if(res.data.state == 100){
                              console.log(res.data.litigantRelations)
@@ -1082,7 +1083,8 @@ export default {
                                 // console.log('原告'+this.plaintiffRelation);
                         }
                      }).catch(() => {});
-
+                        this.defendantRelation = [];
+                        this.$refs.revertsList2.getRelation(this.defendantRelation);
                       litigantRelation(id,'被告').then(res => {
                         if(res.data.state == 100){
                             var defendantRelation = res.data.litigantRelations;
@@ -1106,7 +1108,8 @@ export default {
                             
                         }
                      }).catch(() => {});
-
+                        this.thirdRelation = [];
+                        this.$refs.revertsList3.getRelation(this.thirdRelation);  
                       litigantRelation(id,'第三人').then(res => {
                           if(res.data.state == 100){
                               const thirdRelation= res.data.litigantRelations

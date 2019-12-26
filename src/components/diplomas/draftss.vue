@@ -26,7 +26,8 @@
                     <div style="width:35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.briefName"></div>
                     一案，现依法向你公告送达起诉状副本、证据副本、诉讼权利义务告知书、应诉通知书、举证通知书、告知合议庭组成人员通知书、审判流程信息公开告知内容、廉政监督卡、
                     <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.civilRulingPaper"></div>
-                    及开庭传票。自公告之日起经过六十日，即视为送达。提出答辩状和举证的期限为公告期满后的十五日内（最后一日遇节假日顺延）。并定于举证期满后的次日上午八时三十分（遇节假日顺延），在本院
+                    及开庭传票。自公告之日起经过
+                    <div style="width:15%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.serviceDeadline"></div>日，即视为送达。提出答辩状和举证的期限<div style="width:25%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.limitTime"></div>（最后一日遇节假日顺延）。并定于举证期满后的次日上午八时三十分（遇节假日顺延），在本院
                     <div style="width: 35%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.tribunalAddress"></div>
                     公开开庭审理。逾期将依法缺席裁判。
                 </div>
@@ -38,6 +39,13 @@
                 <Row>
                     <Col span="8" push="18" class="maininfo-col headerCase">
                         <p>{{backFill.noticeTime}}</p>
+                    </Col>
+                </Row>
+                <br/>
+                <br/>
+                <Row>
+                    <Col span="24"  class="maininfo-col headerCase">
+                        邮寄地址：<div style="width:50%; display:inline-block;border-bottom:1px solid black;"><input type="text" v-model="backFill.judgeAddress"></div>
                     </Col>
                 </Row>
                 
@@ -81,6 +89,8 @@ export default {
                     litigantId:litigantId.toString(),
                     name:panelList,
                     caseNo:this.backFill.caseNo,
+                    judgeAddress:this.backFill.judgeAddress,
+                    serviceDeadline:this.backFill.serviceDeadline,
                     briefName:this.backFill.briefName,
                     litigantName:this.backFill.litigantName,
                     startTime:this.backFill.startTime,
@@ -114,6 +124,7 @@ export default {
                     civilRulingPaper:this.backFill.civilRulingPaper,
                     programType:"6",
                     type:'add',
+                    limitTime:this.backFill.limitTime,
                 } 
               dbList(
                   data

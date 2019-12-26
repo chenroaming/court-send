@@ -6,7 +6,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700;margin-bottom:10px">电话拨打记录查询</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -34,9 +34,9 @@
                             </Select>
                         </FormItem>
                         <div style="display: inline-block;padding-right: 30px;float: right;">
-                            <Button @click="getList(1)" type="ghost">查询</Button>
-                            <Button @click="clean" style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
+                            <Button @click="getList(1)" >查询</Button>
+                            <Button @click="clean" style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
                         </div>
                     </Form>
                 </Col>
@@ -268,7 +268,7 @@ export default {
                       if(params.row.recordAddress != null){
                           this.$Modal.confirm({
                                 title: '提示',
-                                content: '<p>确定要下载么</p>',
+                                content: '<p>确定下载录音文件</p>',
                                 onOk: () => {
                                   if(params.row.recordAddress.indexOf("http") != -1){
                                     var msg = this.$Message.loading({

@@ -4,26 +4,61 @@
     <Card class="side-bar">
         <p slot="title">
             <Icon type="navicon"></Icon>
+            <!-- <span>{{isHistory ? "案件搜索" : "历史案件搜索"}}</span>   -->
             案件搜索
-            <span class="close-icon">
-                <!-- <Icon type="close-round"></Icon> -->
+            <span v-show="isHistory" @click="showHis" class="right-texts">
+                <Icon type="md-arrow-dropright-circle" size="18"/>
+                历史案号
+            </span>
+            <span v-show="!isHistory" @click="showHis" class="right-texts">
+                <Icon type="md-arrow-dropleft-circle" size="18"/>
+                退出
             </span>
         </p>
-        <div class="card-content">
+        <div v-show="isHistory" class="card-content">
             <Form :model="searchData" :label-width="40" @keydown.native.enter.prevent="searchList">
                 <FormItem label="案号">
                     <Input v-model="searchData.caseNo" placeholder="请输入案号" />
                 </FormItem>
                 <FormItem style="text-align: right;">
-                    <Button type="ghost" @click="resetSearch">重置</Button>
+                    <Button @click="resetSearch">重置</Button>
                     <Button type="primary" style="margin-left: 8px" @click="searchList">查询</Button>
                 </FormItem>
             </Form>
+            <!-- <Tabs >
+                <TabPane label="案号检索">案号检索</TabPane>
+                <TabPane label="历史案号检索">历史案号检索</TabPane>
+            </Tabs> -->
             <div class="search-list">
                 <li v-for="item in searchContent" @click="selectCase(item.id)">案号：<br>{{ item.caseNo }}</li>
                 <Page @on-change="pageChange" :current="pageData.pageNumber" :total="pageData.total" :page-size="pageData.pageSize" simple style="position:absolute;bottom:10px;left: 50%;margin-left: -80px;"></Page>
             </div>
             <div v-show="emptyData" style="text-align: center;color:#999;">暂无数据</div>
+        </div>
+        <div v-show="!isHistory" class="card-content">
+            <Form :model="searchData2" :label-width="70" @keydown.native.enter.prevent="searchList2">
+                <FormItem label="历史案号">
+                    <Input v-model="searchData2.caseNo" placeholder="请输入历史案号" />
+                </FormItem>
+                <FormItem style="text-align: right;">
+                    <Button @click="resetSearch2">重置</Button>
+                    <Button type="primary" style="margin-left: 8px" @click="searchList2">查询</Button>
+                </FormItem>
+            </Form>
+            <!-- <Tabs >
+                <TabPane label="案号检索">案号检索</TabPane>
+                <TabPane label="历史案号检索">历史案号检索</TabPane>
+            </Tabs> -->
+            <div v-show="isHistory" class="search-list">
+                <li v-for="item in searchContent" @click="selectCase(item.id)">案号：<br>{{ item.caseNo }}</li>
+                <Page @on-change="pageChange" :current="pageData.pageNumber" :total="pageData.total" :page-size="pageData.pageSize" simple style="position:absolute;bottom:10px;left: 50%;margin-left: -80px;"></Page>
+            </div>
+            <div v-show="!isHistory" class="search-list">
+                <li v-for="item in searchContent2" @click="selectCase(item.id)">案号：<br>{{ item.caseNo }}</li>
+                <Page @on-change="pageChange2" :current="pageData2.pageNumber" :total="pageData2.total" :page-size="pageData2.pageSize" simple style="position:absolute;bottom:10px;left: 50%;margin-left: -80px;"></Page>
+            </div>
+            <div v-show="emptyData && isHistory" style="text-align: center;color:#999;">暂无数据</div>
+            <div v-show="emptyData2 && !isHistory" style="text-align: center;color:#999;">暂无数据</div>
         </div>
     </Card>
     </Affix>
@@ -33,7 +68,7 @@
         <!--startprint-->
         <div class="title">案号: {{ caseNo }} </div>
         <mySteps :current="2" direction="vertical" v-show="stepList.length > 0">
-            <myStep v-for="(item, index) in stepList" :icon="index == 0 ? 'compose' : '' " :status="index == 0 ? 'process' : 'finish'" :title="item.createDate | formatStartDate" :content="item.operatorContent" :people="item.operatorName"></myStep>
+            <myStep v-for="(item, index) in stepList" :icon="index == 0 ? 'ios-create-outline' : '' " :status="index == 0 ? 'process' : 'finish'" :title="item.createDate | formatStartDate" :content="item.operatorContent" :people="item.operatorName"></myStep>
         </mySteps>
         <div v-show="stepList.length == 0" style="text-align: center;color:#999;">
           暂无数据
@@ -41,7 +76,7 @@
         <!--endprint-->
       </Card>
     </div>
-    
+
   </div>
 </template>
 
@@ -49,7 +84,7 @@
 import myStep from "@/components/step";
 import mySteps from "@/components/steps";
 import { queryProcessNote } from "@/api/global.js";
-import { queryCaseNo } from "@/api/case.js";
+import { queryCaseNo,queryHistoryNo } from "@/api/case.js";
 import { formatDate } from "@/libs/date";
 export default {
   components: {
@@ -62,14 +97,25 @@ export default {
       searchData: {
         caseNo: this.$store.getters.caseNo
       },
+      searchData2: {
+        caseNo: ''
+      },
       pageData: {
+        pageNumber: 1,
+        pageSize: 5,
+        total: 0
+      },
+      pageData2: {
         pageNumber: 1,
         pageSize: 5,
         total: 0
       },
       caseNo:'',
       emptyData: false,
+      emptyData2:false,
       searchContent: [],
+      searchContent2:[],
+      isHistory:true,
       // loading
       selectCaseComplete: false
     };
@@ -78,6 +124,9 @@ export default {
     this.searchList();
   },
   methods: {
+    showHis(){
+      this.isHistory = !this.isHistory;
+    },
     searchList() {
       this.pageData.pageSize = 5;
       this.searchContent = [];
@@ -104,13 +153,47 @@ export default {
         }
       });
     },
+    searchList2(){
+      this.pageData2.pageSize = 5;
+      this.searchContent2 = [];
+      // this.$store.commit("SET_CASENO", this.searchData.caseNo);
+      queryHistoryNo(this.searchData2.caseNo, this.pageData2).then(res => {
+        if (res.data.state == 100) {
+          
+          if (res.data.content.length == 0) {
+            this.emptyData2 = true;
+          } else {
+            this.emptyData2 = false;
+            this.pageData2.total = res.data.total;
+            res.data.content.map((item, index) => {
+              let contentData = {
+                id: item.id,
+                caseNo: item.caseNo
+              };
+              this.searchContent2.push(contentData);
+            });
+            this.selectCase(res.data.content[0].id);
+          }
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
     resetSearch() {
       this.searchData.caseNo = "";
       this.searchContent = [];
     },
+    resetSearch2() {
+      this.searchData2.caseNo = "";
+      this.searchContent2 = [];
+    },
     pageChange(pageNum) {
       this.pageData.pageNumber = pageNum;
       this.searchList();
+    },
+    pageChange2(pageNum) {
+      this.pageData2.pageNumber = pageNum;
+      this.searchList2();
     },
     printF() {
       let subOutputRankPrint = document.getElementById("printArea");
@@ -241,5 +324,11 @@ export default {
   font-size: 20px;
   font-weight: 600;
   padding: 0px 15px 10px;
+}
+.right-texts{
+  cursor: pointer;
+  float:right;
+  font-size: 14px;
+  line-height: 26px;
 }
 </style>

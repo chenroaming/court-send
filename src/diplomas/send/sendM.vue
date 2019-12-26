@@ -6,7 +6,7 @@
                     <span style="color:#464c5b;font-size:16px;font-weight:700">文书送达管理</span>
                 </Col>
                 <Col span="21">
-                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" type="ghost">
+                    <Button v-show="!show1" @click.native="show1 = true" style="margin-left: 10px" >
                         查询展开
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
@@ -16,7 +16,7 @@
                         </FormItem>
                         <FormItem label="案由：">
                             <Select style="width: 128px" v-model="formItem.briefName" filterable>
-                                <Option v-for="b in briefList" :value="b.brief" :key="b.brief">{{ b.brief }}</Option>
+                                <Option style="max-width:200px" v-for="b in briefList" :value="b.brief" :key="b.brief">{{ b.brief }}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="当事人：">
@@ -30,9 +30,7 @@
                                 <Option value="2">未送达成功</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label="立案时间：">
-                            <DatePicker type="daterange"  placement="bottom-end":options="options" v-model="formItem.daterange" placeholder="请选择您要查询的时间范围" style="width: 190px"></DatePicker>
-                        </FormItem>
+                        
                         <!-- <FormItem label="庭审次数：">
                             <Input style="width: 128px" v-model="formItem.courtNumber"/>
                         </FormItem> -->
@@ -41,11 +39,14 @@
                                 <Option v-for="(s, k) in sendTypes" :value="k" :key="k">{{ s }}</Option>
                             </Select>
                         </FormItem>
+                        <FormItem label="立案时间：">
+                            <DatePicker type="daterange"  placement="bottom-end":options="options" v-model="formItem.daterange" placeholder="请选择要查询的时间范围" style="width: 190px"></DatePicker>
+                        </FormItem>
                         <FormItem>
-                            <Button @click="query()" type="ghost">查询</Button>
-                            <Button @click="formItem = {}" style="margin-left: 10px" type="ghost">清空</Button>
-                            <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button>
-                            <Button @click="expressDetail()" style="margin-left: 10px" type="ghost">查看快递详情</Button>
+                            <Button @click="query()" >查询</Button>
+                            <Button @click="formItem = {}" style="margin-left: 10px" >清空</Button>
+                            <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button>
+                            <Button @click="expressDetail()" style="margin-left: 10px" >查看快递详情</Button>
                         </FormItem>
                     </Form>
                 </Col>
@@ -114,15 +115,15 @@
                             </Select>
                         </FormItem>
                         <FormItem>
-                            <Button @click="expressDetailQuery()" type="ghost">查询</Button>
-                            <Button @click="formItemExpress = {}" style="margin-left: 10px" type="ghost">清空</Button>
-                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" type="ghost">关闭</Button> -->
+                            <Button @click="expressDetailQuery()" >查询</Button>
+                            <Button @click="formItemExpress = {}" style="margin-left: 10px" >清空</Button>
+                            <!-- <Button @click.native="show1 = false" style="margin-left: 10px" >关闭</Button> -->
                         </FormItem>
                     </Form>
             <Button @click="downloadPath()" style="margin-bottom:10px;    margin-bottom: 10px;
     position: absolute;
     right: 20px;
-    top: 65px;" type="ghost">下载</Button>
+    top: 65px;" >下载</Button>
             <Table border :columns="sendDetailCol" :data="this.queryLawCaseSendInfoList" @on-selection-change="tableCheck" highlight-row>
               <Spin size="large" fix v-if="SendInfoListShow"></Spin>
             </Table>
@@ -293,24 +294,27 @@ export default {
             return h("span", params.row.litigantType ? "法人" : "自然人");
           }
         },
-        {
-          title: "性别",
-          key: "litigantSex",
-          align: "center",
-          width: 80,
-          render: (h, params) => {
-            if (params.row.litigantType) {
-              return h("span", "无");
-            } else {
-              return h("span", params.row.litigantSex ? "女" : "男");
-            }
-          }
-        },
+        // {
+        //   title: "性别",
+        //   key: "litigantSex",
+        //   align: "center",
+        //   width: 80,
+        //   render: (h, params) => {
+        //     if (params.row.litigantType) {
+        //       return h("span", "无");
+        //     } else {
+        //       return h("span", params.row.litigantSex ? "女" : "男");
+        //     }
+        //   }
+        // },
         {
           title: "手机号码",
           key: "litigantPhone",
           align: "center",
-          width: 120
+          width: 120,
+          render: (h, params) => {
+            return h("span", params.row.litigantPhone ? params.row.litigantPhone : params.row.legalManPhone);
+          }
         },
         {
           title: "座机号码",
